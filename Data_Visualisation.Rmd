@@ -7,6 +7,7 @@ output: html_notebook
 # Libraries
 library(ggplot2)
 library(readr)
+library(usethis)
 # library(maps)
 
 ```
@@ -26,10 +27,19 @@ ewnupdates_tweets <- read_rds("Data/ewnupdates_tweets")
 
 # Preview dataframes
 head(News24_tweets$text)
+head(TimesLIVE_tweets$text)
 head(eNCA_tweets$text)
+head(IOL_tweets$text)
+head(SABCNews_tweets$text)
+head(ewnupdates_tweets$text)
 
 # See variables 
-names(News24_tweets)
+#names(News24_tweets)
+#names(TimesLIVE_tweets)
+#names(eNCA_tweets)
+#names(IOL_tweets)
+#names(SABCNews_tweets)
+#names(ewnupdates_tweets)
 
 
 ```
