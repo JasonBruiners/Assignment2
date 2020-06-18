@@ -1,0 +1,85 @@
+---
+title: "Analysis and Visualisation"
+output: html_notebook
+---
+
+```{r}
+# Libraries
+library(ggplot2)
+library(readr)
+# library(maps)
+
+```
+
+## Load extracted data 
+```{r}
+News24_tweets <- read_rds("Data/News24_tweets.rds")
+TimesLIVE_tweets <- read_rds("Data/TimesLIVE_tweets.rds")
+eNCA_tweets <- read_rds("Data/eNCA_tweets.rds")
+IOL_tweets <- read_rds("Data/IOL_tweets.rds")
+SABCNews_tweets <- read_rds("Data/SABCNews_tweets.rds")
+ewnupdates_tweets <- read_rds("Data/ewnupdates_tweets")
+```
+
+
+```{r}
+
+# Preview dataframes
+head(News24_tweets$text)
+head(eNCA_tweets$text)
+
+# See variables 
+names(News24_tweets)
+
+
+```
+
+## Analysis
+```{r}
+# Analyse and evaluate data
+
+# restrict geo location to united states and english tweets
+nk_tweets <- search_tweets("korea",
+  "lang:en", geocode = lookup_coords("usa"), 
+  n = 1000, type="recent", include_rts=FALSE
+  )
+
+# getting 5 latest tweets from sanders
+sanders_tweets <- get_timelines(c("sensanders"), n = 5)
+head(sanders_tweets$text)
+
+
+# identify the Tweets Sanders has recently “liked"
+sanders_favorites<-get_favorites("sensanders", n=5)
+sanders_favorites$text
+
+# We can also get a list of the people who Sanders follows like this:
+sanders_follows<-get_followers("sensanders")
+
+
+# trending topics in new york
+get_trends("New York")
+
+```
+
+## Generating visuals
+```{r}
+
+# plot of the frequency of tweets
+ts_plot(NEWS24_tweets, "3 hours") +
+  ggplot2::theme_minimal() +
+  ggplot2::theme(plot.title = ggplot2::element_text(face = "bold")) +
+  ggplot2::labs(
+    x = NULL, y = NULL,
+    title = "Frequency of Tweets",
+    subtitle = "Twitter status (tweet) counts aggregated using three-hour intervals",
+    caption = "\nSource: Data collected from Twitter's REST API via rtweet"
+  )
+
+# plot tweet locations
+par(mar = c(0, 0, 0, 0))
+maps::map("state", lwd = .25)
+with(geocoded, points(lng, lat, pch = 20, cex = .75, col = rgb(0, .3, .7, .75)))
+
+```
+

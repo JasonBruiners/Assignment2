@@ -1,0 +1,84 @@
+---
+title: "Data Extraction"
+output: html_notebook
+---
+
+```{r}
+#install_github("mkearney/rtweet")
+
+#Packages
+library(devtools)
+library(rtweet)
+library(readr)
+library(usethis)
+
+```
+
+```{r}
+
+#Define credentials
+app_name<-""
+consumer_key<-""
+consumer_secret<-""
+access_token<-""
+access_token_secret<-""
+
+
+```
+
+## checking rate limits
+```{r}
+# see rate limits
+rate_limits<-rate_limit()
+head(rate_limits[,1:4])
+```
+
+```{r}
+
+```
+
+
+```{r}
+#
+create_token(app=app_name,
+             consumer_key=consumer_key, consumer_secret=consumer_secret,
+             access_token = access_token, access_secret = access_token_secret)
+
+
+#Extracts 3000 tweets with appropriate hashtag
+NEWS24_tweets<-search_tweets("", n=50, include_rts = FALSE)
+ENCA_tweets<-search_tweets("", n=50, include_rts = FALSE)
+#TOPIC_tweets<-search_tweets("", n=50, include_rts = FALSE)
+
+```
+
+## Searching for tweets...
+### Collect first batch of tweets
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+
+News24_tweets <- get_timelines(c("News24"), n = 3200)
+TimesLIVE_tweets <- get_timelines(c("TimesLIVE"), n = 3200)
+eNCA_tweets <- get_timelines(c("eNCA"), n = 3200)
+
+```
+
+### Collect second batch of tweets
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+IOL_tweets <- get_timelines(c("IOL"), n=3200)
+SABCNews_tweets <- get_timelines(c("SABCNews"), n=3200)
+ewnupdates_tweets <- get_timelines(c("ewnupdates"), n=3200)
+```
+
+## finished collecting tweets!
+
+# Exporting results
+```{r echo=TRUE}
+write_rds(News24_tweets, "Data/News24_tweets.rds")
+write_rds(TimesLIVE_tweets, "Data/TimesLIVE_tweets.rds")
+write_rds(eNCA_tweets, "Data/eNCA_tweets.rds")
+write_rds(IOL_tweets,"Data/IOL_tweets.rds")
+write_rds(SABCNews_tweets,"Data/SABCNews_tweets.rds")
+write_rds(ewnupdates_tweets,"Data/ewnupdates_tweets")
+```
+
+
