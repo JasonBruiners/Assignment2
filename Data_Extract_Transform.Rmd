@@ -91,7 +91,7 @@ write_rds(SABCNews_tweets,"Data/SABCNews_tweets.rds")
 write_rds(ewnupdates_tweets,"Data/ewnupdates_tweets")
 ```
 
-# Perorming transformations
+# Performing transformations
 ```{r}
 # Sentiment Analysis
 ```
