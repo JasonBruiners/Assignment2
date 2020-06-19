@@ -22,9 +22,6 @@ SABCNews_tweets <- read_rds("Data/SABCNews_tweets.rds")
 ewnupdates_tweets <- read_rds("Data/ewnupdates_tweets")
 ```
 
-```{r}
-# I FUCKING HATE GITHUB, IT CAN DIE OF AIDS AND COVID
-```
 
 ```{r}
 
