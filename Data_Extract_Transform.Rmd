@@ -82,7 +82,29 @@ trend_tweets
 
 ## finished collecting tweets!
 
-# Exporting pulled tweets
+
+# Performing transformations
+```{r}
+# Sentiment Analysis
+
+
+```
+
+```{r}
+# Topic Analysis
+
+
+```
+
+```{r}
+# Other Analysis
+
+
+```
+
+## Done
+
+# Exporting results
 ```{r echo=TRUE}
 write_rds(News24_tweets, "Data/News24_tweets.rds")
 write_rds(TimesLIVE_tweets, "Data/TimesLIVE_tweets.rds")
@@ -92,21 +114,14 @@ write_rds(SABCNews_tweets,"Data/SABCNews_tweets.rds")
 write_rds(ewnupdates_tweets,"Data/ewnupdates_tweets")
 ```
 
-# Performing transformations
 ```{r}
-# Sentiment Analysis
+
+
+
+
 ```
 
-```{r}
-# Topic Analysis
-```
 
-```{r}
-# Other Analysis
-```
-
-## Done
-```{r}
 
 ```
 
