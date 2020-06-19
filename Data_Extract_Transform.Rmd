@@ -11,7 +11,7 @@ library(devtools)
 library(rtweet)
 library(readr)
 library(usethis)
-
+library(topicmodels)
 ```
 
 ```{r}
@@ -67,6 +67,16 @@ eNCA_tweets <- get_timelines(c("eNCA"), n = 3200)
 IOL_tweets <- get_timelines(c("IOL"), n=3200)
 SABCNews_tweets <- get_timelines(c("SABCNews"), n=3200)
 ewnupdates_tweets <- get_timelines(c("ewnupdates"), n=3200)
+```
+
+### Collect third batch of tweets
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+trend_tweets <- get_trends("South Africa")
+```
+
+### Collect fourth batch of tweets
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+
 ```
 
 ## finished collecting tweets!
