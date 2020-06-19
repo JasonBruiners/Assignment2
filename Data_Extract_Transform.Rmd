@@ -71,7 +71,7 @@ ewnupdates_tweets <- get_timelines(c("ewnupdates"), n=3200)
 
 ## finished collecting tweets!
 
-# Exporting results
+# Exporting pulled tweets
 ```{r echo=TRUE}
 write_rds(News24_tweets, "Data/News24_tweets.rds")
 write_rds(TimesLIVE_tweets, "Data/TimesLIVE_tweets.rds")
@@ -81,4 +81,26 @@ write_rds(SABCNews_tweets,"Data/SABCNews_tweets.rds")
 write_rds(ewnupdates_tweets,"Data/ewnupdates_tweets")
 ```
 
+# Perorming transformations
+```{r}
+# Sentiment Analysis
+```
+
+```{r}
+# Topic Analysis
+```
+
+```{r}
+# Other Analysis
+```
+
+## Done
+```{r}
+
+```
+
+## Exporting results
+```{r}
+
+```
 
