@@ -7,12 +7,14 @@ output: html_notebook
 #install_github("mkearney/rtweet")
 
 #Packages
+library(usethis)
 library(devtools)
 library(rtweet)
 library(readr)
-library(usethis)
 library(topicmodels)
+library(maps)
 ```
+
 
 ```{r}
 
@@ -34,40 +36,32 @@ rate_limits<-rate_limit()
 head(rate_limits[,1:4])
 ```
 
-```{r}
-
-```
-
 
 ```{r}
 #
-create_token(app=app_name,
-             consumer_key=consumer_key, consumer_secret=consumer_secret,
-             access_token = access_token, access_secret = access_token_secret)
-
-
-#Extracts 3000 tweets with appropriate hashtag
-NEWS24_tweets<-search_tweets("", n=50, include_rts = FALSE)
-ENCA_tweets<-search_tweets("", n=50, include_rts = FALSE)
-#TOPIC_tweets<-search_tweets("", n=50, include_rts = FALSE)
+#create_token(app=app_name,
+#             consumer_key=consumer_key, consumer_secret=consumer_secret,
+#             access_token = access_token, access_secret = access_token_secret)
 
 ```
+
 
 ## Searching for tweets...
 ### Collect first batch of tweets
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
-
-News24_tweets <- get_timelines(c("News24"), n = 3200)
-TimesLIVE_tweets <- get_timelines(c("TimesLIVE"), n = 3200)
-eNCA_tweets <- get_timelines(c("eNCA"), n = 3200)
+#PULL FINAL VERSION ON MONDAY OR TUESDAY
+News24_tweets <- get_timelines(c("News24"), n = 3200, include_rts=FALSE)
+TimesLIVE_tweets <- get_timelines(c("TimesLIVE"), n = 3200, include_rts=FALSE)
+eNCA_tweets <- get_timelines(c("eNCA"), n = 3200, include_rts=FALSE)
 
 ```
 
+
 ### Collect second batch of tweets
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
-IOL_tweets <- get_timelines(c("IOL"), n=3200)
-SABCNews_tweets <- get_timelines(c("SABCNews"), n=3200)
-ewnupdates_tweets <- get_timelines(c("ewnupdates"), n=3200)
+IOL_tweets <- get_timelines(c("IOL"), n=3200, include_rts=FALSE)
+SABCNews_tweets <- get_timelines(c("SABCNews"), n=3200, include_rts=FALSE)
+ewnupdates_tweets <- get_timelines(c("ewnupdates"), n=3200, include_rts=FALSE)
 ```
 
 ### Collect third batch of tweets
@@ -78,30 +72,67 @@ ewnupdates_tweets <- get_timelines(c("ewnupdates"), n=3200)
 ```
 
 ### Collect fourth batch of tweets
-```{r echo=TRUE, message=FALSE, warning=FALSE}
-#Collecting last 18000 tweets for South Africa
-#Jason_API_KEY: AIzaSyAcv6Z7aq_EqHUcviFVetycH64MmLrQMu0
-covid_geo_tweets <- search_tweets("coronavirus",
-  "lang:en", geocode = lookup_coords("usa"), 
-  n = 3000, type="recent", include_rts=FALSE
-  )
+```{r}
+#Define terms to search by
+q1 <- "Covid OR Corona OR Covid-19 OR Covid19 OR Coronavirus OR SARS-CoV-2 OR SARS-CoV"
+q2 <- "OR #Covid OR #Corona OR #Covid-19 OR #Covid19 OR #Coronavirus OR #SARS-CoV-2 OR #SARS-CoV"
+q <- paste(q1,q2)
 ```
 
-### Collect fifth batch of tweets
-```{r echo=TRUE, message=FALSE, warning=FALSE}
-#Collecting last 18000 tweets with the Corona list search terms for South Africa
+
+```{r}
+#Collecting tweets for South Africa
+tweets_za_13 <- search_tweets(q,geocode = lookup_coords("South Africa"), since="2020-06-13", until="2020-06-14", type="recent", include_rts=FALSE, n=18000)
+
+#Collecting tweets for largest city in each province
+tweets_bloem_13 <- search_tweets(q,geocode = lookup_coords("Bloemfontein"), since="2020-06-13", until="2020-06-14", type="recent", include_rts=FALSE, n=18000)
+tweets_cpt_13 <- search_tweets(q,geocode = lookup_coords("Cape Town"), since="2020-06-13", until="2020-06-14", type="recent", include_rts=FALSE, n=18000)
+tweets_durb_13 <- search_tweets(q,geocode = lookup_coords("Durban"), since="2020-06-13", until="2020-06-14", type="recent", include_rts=FALSE, n=18000)
+tweets_jhb_13 <- search_tweets(q,geocode = lookup_coords("Johannesburg"), since="2020-06-13", until="2020-06-14", type="recent", include_rts=FALSE, n=18000)
+tweets_kim_13 <- search_tweets(q,geocode = lookup_coords("Kimberley"), since="2020-06-13", until="2020-06-14", type="recent", include_rts=FALSE, n=18000)
+tweets_klerk_13 <- search_tweets(q,geocode = lookup_coords("Klerksdorp"), since="2020-06-13", until="2020-06-14", type="recent", include_rts=FALSE, n=18000)
+tweets_mbomb_13 <- search_tweets(q,geocode = lookup_coords("Mbombela"), since="2020-06-13", until="2020-06-14", type="recent", include_rts=FALSE, n=18000)
+tweets_polo_13 <- search_tweets(q,geocode = lookup_coords("Polokwane"), since="2020-06-13", until="2020-06-14", type="recent", include_rts=FALSE, n=18000)
+tweets_pe_13 <- search_tweets(q,geocode = lookup_coords("Port Elizabeth"), since="2020-06-13", until="2020-06-14", type="recent", include_rts=FALSE, n=18000)
+```
+
+```{r}
+#Get Friends & Followers
 ```
 
 ## finished collecting tweets!
 
-# Exporting raw results
+
+# Exporting Tweets to .rds
+```{r}
+#Export Filtered Data for 13/06/2020
+write_rds(tweets_za_13, "Data/Raw_Filtered_Data/tweets_za_13.rds")
+write_rds(tweets_bloem_13, "Data/Raw_Filtered_Data/tweets_bloem_13.rds")
+write_rds(tweets_cpt_13, "Data/Raw_Filtered_Data/tweets_cpt_13.rds")
+write_rds(tweets_durb_13, "Data/Raw_Filtered_Data/tweets_durb_13.rds")
+write_rds(tweets_jhb_13, "Data/Raw_Filtered_Data/tweets_jhb_13.rds")
+write_rds(tweets_kim_13, "Data/Raw_Filtered_Data/tweets_kim_13.rds")
+write_rds(tweets_klerk_13, "Data/Raw_Filtered_Data/tweets_klerk_13.rds")
+write_rds(tweets_mbomb_13, "Data/Raw_Filtered_Data/tweets_mbomb_13.rds")
+write_rds(tweets_polo_13, "Data/Raw_Filtered_Data/tweets_polo_13")
+write_rds(tweets_pe_13, "Data/Raw_Filtered_Data/tweets_pe_13")
+
+#Export All Tweet Data for 13/06/2020
+```
+
+
+
+
+
 ```{r echo=TRUE}
-write_rds(News24_tweets, "Data/News24_tweets.rds")
-write_rds(TimesLIVE_tweets, "Data/TimesLIVE_tweets.rds")
-write_rds(eNCA_tweets, "Data/eNCA_tweets.rds")
-write_rds(IOL_tweets,"Data/IOL_tweets.rds")
-write_rds(SABCNews_tweets,"Data/SABCNews_tweets.rds")
-write_rds(ewnupdates_tweets,"Data/ewnupdates_tweets")
+# Exporting raw results
+
+write_rds(News24_tweets, "Data/Raw_Timeline_Data/News24_tweets.rds")
+write_rds(TimesLIVE_tweets, "Data/Raw_Timeline_Data/TimesLIVE_tweets.rds")
+write_rds(eNCA_tweets, "Data/Raw_Timeline_Data/eNCA_tweets.rds")
+write_rds(IOL_tweets,"Data/Raw_Timeline_Data/IOL_tweets.rds")
+write_rds(SABCNews_tweets,"Data/Raw_Timeline_Data/SABCNews_tweets.rds")
+write_rds(ewnupdates_tweets,"Data/Raw_Timeline_Data/ewnupdates_tweets")
 ```
 
 

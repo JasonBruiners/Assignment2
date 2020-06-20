@@ -1,0 +1,31 @@
+---
+title: "Data Transformation"
+output: html_notebook
+---
+
+```{r}
+#install_github("mkearney/rtweet")
+
+#Packages
+library(usethis)
+library(devtools)
+library(rtweet)
+library(readr)
+library(topicmodels)
+library(maps)
+```
+
+## Load extracted data 
+```{r}
+News24_tweets <- read_rds("Data/Raw_Timeline_Data/News24_tweets.rds")
+TimesLIVE_tweets <- read_rds("Data/Raw_Timeline_Data/TimesLIVE_tweets.rds")
+eNCA_tweets <- read_rds("Data/Raw_Timeline_Data/eNCA_tweets.rds")
+IOL_tweets <- read_rds("Data/Raw_Timeline_Data/IOL_tweets.rds")
+SABCNews_tweets <- read_rds("Data/Raw_Timeline_Data/SABCNews_tweets.rds")
+ewnupdates_tweets <- read_rds("Data/Raw_Timeline_Data/ewnupdates_tweets")
+```
+
+```{r}
+
+```
+
