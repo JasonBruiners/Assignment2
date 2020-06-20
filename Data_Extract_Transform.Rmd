@@ -80,6 +80,11 @@ ewnupdates_tweets <- get_timelines(c("ewnupdates"), n=3200)
 ### Collect fourth batch of tweets
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 #Collecting last 18000 tweets for South Africa
+#Jason_API_KEY: AIzaSyAcv6Z7aq_EqHUcviFVetycH64MmLrQMu0
+covid_geo_tweets <- search_tweets("coronavirus",
+  "lang:en", geocode = lookup_coords("usa"), 
+  n = 3000, type="recent", include_rts=FALSE
+  )
 ```
 
 ### Collect fifth batch of tweets
@@ -88,6 +93,16 @@ ewnupdates_tweets <- get_timelines(c("ewnupdates"), n=3200)
 ```
 
 ## finished collecting tweets!
+
+# Exporting raw results
+```{r echo=TRUE}
+write_rds(News24_tweets, "Data/News24_tweets.rds")
+write_rds(TimesLIVE_tweets, "Data/TimesLIVE_tweets.rds")
+write_rds(eNCA_tweets, "Data/eNCA_tweets.rds")
+write_rds(IOL_tweets,"Data/IOL_tweets.rds")
+write_rds(SABCNews_tweets,"Data/SABCNews_tweets.rds")
+write_rds(ewnupdates_tweets,"Data/ewnupdates_tweets")
+```
 
 
 # Performing transformations
@@ -111,14 +126,14 @@ ewnupdates_tweets <- get_timelines(c("ewnupdates"), n=3200)
 
 ## Done
 
-# Exporting results
+# Exporting transformation results
 ```{r echo=TRUE}
-write_rds(News24_tweets, "Data/News24_tweets.rds")
-write_rds(TimesLIVE_tweets, "Data/TimesLIVE_tweets.rds")
-write_rds(eNCA_tweets, "Data/eNCA_tweets.rds")
-write_rds(IOL_tweets,"Data/IOL_tweets.rds")
-write_rds(SABCNews_tweets,"Data/SABCNews_tweets.rds")
-write_rds(ewnupdates_tweets,"Data/ewnupdates_tweets")
+#write_rds(News24_tweets, "Results/News24_tweets.rds")
+#write_rds(TimesLIVE_tweets, "Results/TimesLIVE_tweets.rds")
+#write_rds(eNCA_tweets, "Results/eNCA_tweets.rds")
+#write_rds(IOL_tweets,"Results/IOL_tweets.rds")
+#write_rds(SABCNews_tweets,"Results/SABCNews_tweets.rds")
+#write_rds(ewnupdates_tweets,"Results/ewnupdates_tweets")
 ```
 
 ```{r}
