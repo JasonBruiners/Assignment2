@@ -29,6 +29,7 @@ access_token_secret<-""
 ## checking rate limits
 ```{r}
 # see rate limits
+# The rate limit for the standard search API is 18,000 tweets per fifteen minutes. With a bearer token, the rate limit is 45,000 tweets per fifteen minutes. 
 rate_limits<-rate_limit()
 head(rate_limits[,1:4])
 ```
@@ -71,13 +72,19 @@ ewnupdates_tweets <- get_timelines(c("ewnupdates"), n=3200)
 
 ### Collect third batch of tweets
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
-trend_tweets <- get_trends("South Africa")
-trend_tweets
+#Not useful
+#trend_tweets <- get_trends("South Africa")
+#trend_tweets
 ```
 
 ### Collect fourth batch of tweets
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
-#Test
+#Collecting last 18000 tweets for South Africa
+```
+
+### Collect fifth batch of tweets
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+#Collecting last 18000 tweets with the Corona list search terms for South Africa
 ```
 
 ## finished collecting tweets!
