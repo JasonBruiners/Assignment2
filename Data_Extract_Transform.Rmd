@@ -152,6 +152,20 @@ write_rds(ewnupdates_tweets,"Data/Raw_Timeline_Data/ewnupdates_tweets")
 ```{r}
 # Other Analysis
 
+# Frequency of tweets
+News24_freq <- separate(News24_tweets, created_at, into=c("date","time"), sep=" ") %>% select(date, screen_name)
+
+timesLIVE_freq <- separate(TimesLIVE_tweets, created_at, into=c("date","time"), sep=" ") %>% select(date, screen_name)
+
+Ewnupdate_freq <- separate(News24_tweets, created_at, into=c("date","time"), sep=" ") %>% select(date, screen_name)
+
+IOL_freq <- separate(IOL_tweets, created_at, into=c("date","time"), sep=" ") %>% select(date, screen_name)
+
+eNCA_freq <- separate(ewnupdates_tweets, created_at, into=c("date","time"), sep=" ") %>% select(date, screen_name)
+
+SABC_freq <- separate(SABCNews_tweets, created_at, into=c("date","time"), sep=" ") %>% select(date, screen_name)
+
+# sum days and join together, then send to visualisation
 
 ```
 
