@@ -3,7 +3,7 @@ title: "Data Extraction"
 output: html_notebook
 ---
 
-```{r}
+```{r message=FALSE, warning=FALSE, include=FALSE}
 #install_github("mkearney/rtweet")
 
 #Packages
@@ -16,7 +16,7 @@ library(maps)
 ```
 
 
-```{r}
+```{r eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
 
 #Define credentials
 app_name<-""
@@ -127,7 +127,6 @@ write_rds(tweets_pe_14, "Data/Raw_Filtered_Data/tweets_pe_14.rds")
 
 ```{r echo=TRUE}
 # Exporting raw results
-
 write_rds(News24_tweets, "Data/Raw_Timeline_Data/News24_tweets.rds")
 write_rds(TimesLIVE_tweets, "Data/Raw_Timeline_Data/TimesLIVE_tweets.rds")
 write_rds(eNCA_tweets, "Data/Raw_Timeline_Data/eNCA_tweets.rds")
@@ -135,7 +134,3 @@ write_rds(IOL_tweets,"Data/Raw_Timeline_Data/IOL_tweets.rds")
 write_rds(SABCNews_tweets,"Data/Raw_Timeline_Data/SABCNews_tweets.rds")
 write_rds(ewnupdates_tweets,"Data/Raw_Timeline_Data/ewnupdates_tweets")
 ```
-
-
-
-
