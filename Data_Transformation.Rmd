@@ -26,9 +26,129 @@ ewnupdates_tweets <- read_rds("Data/Raw_Timeline_Data/ewnupdates_tweets")
 ```
 
 ```{r}
+tweets_za_13 <- read_rds("Data/Raw_Filtered_Data/tweets_za_13.rds")
+tweets_za_14 <- read_rds("Data/Raw_Filtered_Data/tweets_za_14.rds")
+#tweets_za_15
+```
+
+```{r}
+tweets_bloem_13 <- read_rds("Data/Raw_Filtered_Data/tweets_bloem_13.rds")
+tweets_bloem_14 <- read_rds("Data/Raw_Filtered_Data/tweets_bloem_14.rds")
+```
+
+```{r}
+tweets_cpt_13 <- read_rds("Data/Raw_Filtered_Data/tweets_cpt_13.rds")
+tweets_cpt_14 <- read_rds("Data/Raw_Filtered_Data/tweets_cpt_14.rds")
+```
+
+```{r}
+tweets_durb_13 <- read_rds("Data/Raw_Filtered_Data/tweets_durb_13.rds")
+tweets_durb_14 <- read_rds("Data/Raw_Filtered_Data/tweets_durb_14.rds")
+```
+
+```{r}
+tweets_jhb_13 <- read_rds("Data/Raw_Filtered_Data/tweets_jhb_13.rds")
+tweets_jhb_14 <- read_rds("Data/Raw_Filtered_Data/tweets_jhb_14.rds")
+```
+
+```{r}
+tweets_kim_13 <- read_rds("Data/Raw_Filtered_Data/tweets_kim_13.rds")
+tweets_kim_14 <- read_rds("Data/Raw_Filtered_Data/tweets_kim_14.rds")
+```
+
+```{r}
+tweets_klerk_13 <- read_rds("Data/Raw_Filtered_Data/tweets_klerk_13.rds")
+tweets_klerk_14 <- read_rds("Data/Raw_Filtered_Data/tweets_klerk_14.rds")
+```
+
+```{r}
+tweets_mbomb_13 <- read_rds("Data/Raw_Filtered_Data/tweets_mbomb_13.rds")
+tweets_mbomb_14 <- read_rds("Data/Raw_Filtered_Data/tweets_mbomb_14.rds")
+```
+
+```{r}
+tweets_polo_13 <- read_rds("Data/Raw_Filtered_Data/tweets_polo_13.rds")
+tweets_polo_14 <- read_rds("Data/Raw_Filtered_Data/tweets_polo_14.rds")
+```
+
+```{r}
+tweets_pe_13 <- read_rds("Data/Raw_Filtered_Data/tweets_pe_13.rds")
+tweets_pe_14 <- read_rds("Data/Raw_Filtered_Data/tweets_pe_14.rds")
+```
+
+# Bind Dataframes
+```{r}
+tweets_za <-rbind(tweets_za_14,tweets_za_13)
+tweets_bloem <-rbind(tweets_bloem_14,tweets_bloem_13)
+tweets_cpt <-rbind(tweets_cpt_14,tweets_cpt_13)
+tweets_durb <-rbind(tweets_durb_14,tweets_durb_13)
+tweets_jhb <-rbind(tweets_jhb_14,tweets_jhb_13)
+tweets_kim <-rbind(tweets_kim_14,tweets_kim_13)
+tweets_klerk <-rbind(tweets_klerk_14,tweets_klerk_13)
+tweets_mbomb <-rbind(tweets_mbomb_14,tweets_mbomb_13)
+tweets_polo <-rbind(tweets_polo_14,tweets_polo_13)
+tweets_pe <-rbind(tweets_pe_14,tweets_pe_13)
+
+```
+
+
+# Performing transformations
+```{r}
+# Sentiment Analysis
+
+
+```
+
+```{r}
+# Topic Analysis
+
+
+```
+
+```{r}
+# Other Analysis
+
+# Frequency of tweets
+News24_freq <- separate(News24_tweets, created_at, into=c("date","time"), sep=" ") %>% select(date, screen_name)
+
+timesLIVE_freq <- separate(TimesLIVE_tweets, created_at, into=c("date","time"), sep=" ") %>% select(date, screen_name)
+
+Ewnupdate_freq <- separate(News24_tweets, created_at, into=c("date","time"), sep=" ") %>% select(date, screen_name)
+
+IOL_freq <- separate(IOL_tweets, created_at, into=c("date","time"), sep=" ") %>% select(date, screen_name)
+
+eNCA_freq <- separate(ewnupdates_tweets, created_at, into=c("date","time"), sep=" ") %>% select(date, screen_name)
+
+SABC_freq <- separate(SABCNews_tweets, created_at, into=c("date","time"), sep=" ") %>% select(date, screen_name)
+
+# sum days and join together, then send to visualisation
+
+```
+
+## Done
+
+# Exporting transformation results
+```{r echo=TRUE}
+#write_rds(News24_tweets, "Results/News24_tweets.rds")
+#write_rds(TimesLIVE_tweets, "Results/TimesLIVE_tweets.rds")
+#write_rds(eNCA_tweets, "Results/eNCA_tweets.rds")
+#write_rds(IOL_tweets,"Results/IOL_tweets.rds")
+#write_rds(SABCNews_tweets,"Results/SABCNews_tweets.rds")
+#write_rds(ewnupdates_tweets,"Results/ewnupdates_tweets")
+```
+
+```{r}
+
+
+
 
 ```
 
 
 
+```
 
+## Exporting results
+```{r}
+
+```
