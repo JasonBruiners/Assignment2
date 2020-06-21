@@ -29,3 +29,185 @@ ewnupdates_tweets <- read_rds("Data/Raw_Timeline_Data/ewnupdates_tweets")
 
 ```
 
+
+
+
+```{r}
+#install_github("mkearney/rtweet")
+
+#Packages
+library(usethis)
+library(devtools)
+library(rtweet)
+library(readr)
+library(topicmodels)
+library(maps)
+```
+
+
+```{r}
+
+#Define credentials
+app_name<-""
+consumer_key<-""
+consumer_secret<-""
+access_token<-""
+access_token_secret<-""
+
+
+```
+
+## checking rate limits
+```{r}
+# see rate limits
+# The rate limit for the standard search API is 18,000 tweets per fifteen minutes. With a bearer token, the rate limit is 45,000 tweets per fifteen minutes. 
+rate_limits<-rate_limit()
+head(rate_limits[,1:4])
+```
+
+
+```{r}
+#
+#create_token(app=app_name,
+#             consumer_key=consumer_key, consumer_secret=consumer_secret,
+#             access_token = access_token, access_secret = access_token_secret)
+
+```
+
+
+## Searching for tweets...
+### Collect first batch of tweets
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+#PULL FINAL VERSION ON MONDAY OR TUESDAY
+News24_tweets <- get_timelines(c("News24"), n = 3200, include_rts=FALSE)
+TimesLIVE_tweets <- get_timelines(c("TimesLIVE"), n = 3200, include_rts=FALSE)
+eNCA_tweets <- get_timelines(c("eNCA"), n = 3200, include_rts=FALSE)
+
+```
+
+
+### Collect second batch of tweets
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+IOL_tweets <- get_timelines(c("IOL"), n=3200, include_rts=FALSE)
+SABCNews_tweets <- get_timelines(c("SABCNews"), n=3200, include_rts=FALSE)
+ewnupdates_tweets <- get_timelines(c("ewnupdates"), n=3200, include_rts=FALSE)
+```
+
+### Collect third batch of tweets
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+#Not useful
+#trend_tweets <- get_trends("South Africa")
+#trend_tweets
+```
+
+### Collect fourth batch of tweets
+```{r}
+#Define terms to search by
+q1 <- "Covid OR Corona OR Covid-19 OR Covid19 OR Coronavirus OR SARS-CoV-2 OR SARS-CoV"
+q2 <- "OR #Covid OR #Corona OR #Covid-19 OR #Covid19 OR #Coronavirus OR #SARS-CoV-2 OR #SARS-CoV"
+q <- paste(q1,q2)
+```
+
+
+```{r}
+#Collecting tweets for South Africa
+tweets_za_13 <- search_tweets(q,geocode = lookup_coords("South Africa"), since="2020-06-13", until="2020-06-14", type="recent", include_rts=FALSE, n=18000)
+
+#Collecting tweets for largest city in each province
+tweets_bloem_13 <- search_tweets(q,geocode = lookup_coords("Bloemfontein"), since="2020-06-13", until="2020-06-14", type="recent", include_rts=FALSE, n=18000)
+tweets_cpt_13 <- search_tweets(q,geocode = lookup_coords("Cape Town"), since="2020-06-13", until="2020-06-14", type="recent", include_rts=FALSE, n=18000)
+tweets_durb_13 <- search_tweets(q,geocode = lookup_coords("Durban"), since="2020-06-13", until="2020-06-14", type="recent", include_rts=FALSE, n=18000)
+tweets_jhb_13 <- search_tweets(q,geocode = lookup_coords("Johannesburg"), since="2020-06-13", until="2020-06-14", type="recent", include_rts=FALSE, n=18000)
+tweets_kim_13 <- search_tweets(q,geocode = lookup_coords("Kimberley"), since="2020-06-13", until="2020-06-14", type="recent", include_rts=FALSE, n=18000)
+tweets_klerk_13 <- search_tweets(q,geocode = lookup_coords("Klerksdorp"), since="2020-06-13", until="2020-06-14", type="recent", include_rts=FALSE, n=18000)
+tweets_mbomb_13 <- search_tweets(q,geocode = lookup_coords("Mbombela"), since="2020-06-13", until="2020-06-14", type="recent", include_rts=FALSE, n=18000)
+tweets_polo_13 <- search_tweets(q,geocode = lookup_coords("Polokwane"), since="2020-06-13", until="2020-06-14", type="recent", include_rts=FALSE, n=18000)
+tweets_pe_13 <- search_tweets(q,geocode = lookup_coords("Port Elizabeth"), since="2020-06-13", until="2020-06-14", type="recent", include_rts=FALSE, n=18000)
+```
+
+```{r}
+#Get Friends & Followers
+```
+
+## finished collecting tweets!
+
+
+# Exporting Tweets to .rds
+```{r}
+#Export Filtered Data for 13/06/2020
+write_rds(tweets_za_13, "Data/Raw_Filtered_Data/tweets_za_13.rds")
+write_rds(tweets_bloem_13, "Data/Raw_Filtered_Data/tweets_bloem_13.rds")
+write_rds(tweets_cpt_13, "Data/Raw_Filtered_Data/tweets_cpt_13.rds")
+write_rds(tweets_durb_13, "Data/Raw_Filtered_Data/tweets_durb_13.rds")
+write_rds(tweets_jhb_13, "Data/Raw_Filtered_Data/tweets_jhb_13.rds")
+write_rds(tweets_kim_13, "Data/Raw_Filtered_Data/tweets_kim_13.rds")
+write_rds(tweets_klerk_13, "Data/Raw_Filtered_Data/tweets_klerk_13.rds")
+write_rds(tweets_mbomb_13, "Data/Raw_Filtered_Data/tweets_mbomb_13.rds")
+write_rds(tweets_polo_13, "Data/Raw_Filtered_Data/tweets_polo_13")
+write_rds(tweets_pe_13, "Data/Raw_Filtered_Data/tweets_pe_13")
+
+#Export All Tweet Data for 13/06/2020
+```
+
+
+
+
+
+```{r echo=TRUE}
+# Exporting raw results
+
+write_rds(News24_tweets, "Data/Raw_Timeline_Data/News24_tweets.rds")
+write_rds(TimesLIVE_tweets, "Data/Raw_Timeline_Data/TimesLIVE_tweets.rds")
+write_rds(eNCA_tweets, "Data/Raw_Timeline_Data/eNCA_tweets.rds")
+write_rds(IOL_tweets,"Data/Raw_Timeline_Data/IOL_tweets.rds")
+write_rds(SABCNews_tweets,"Data/Raw_Timeline_Data/SABCNews_tweets.rds")
+write_rds(ewnupdates_tweets,"Data/Raw_Timeline_Data/ewnupdates_tweets")
+```
+
+
+# Performing transformations
+```{r}
+# Sentiment Analysis
+
+
+```
+
+```{r}
+# Topic Analysis
+
+
+```
+
+```{r}
+# Other Analysis
+
+
+```
+
+## Done
+
+# Exporting transformation results
+```{r echo=TRUE}
+#write_rds(News24_tweets, "Results/News24_tweets.rds")
+#write_rds(TimesLIVE_tweets, "Results/TimesLIVE_tweets.rds")
+#write_rds(eNCA_tweets, "Results/eNCA_tweets.rds")
+#write_rds(IOL_tweets,"Results/IOL_tweets.rds")
+#write_rds(SABCNews_tweets,"Results/SABCNews_tweets.rds")
+#write_rds(ewnupdates_tweets,"Results/ewnupdates_tweets")
+```
+
+```{r}
+
+
+
+
+```
+
+
+
+```
+
+## Exporting results
+```{r}
+
+```

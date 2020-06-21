@@ -1783,9 +1783,236 @@ ewnupdates_tweets &lt;- read_rds(&quot;Data/Raw_Timeline_Data/ewnupdates_tweets&
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI2luc3RhbGxfZ2l0aHViKFwibWtlYXJuZXkvcnR3ZWV0XCIpXG5cbiNQYWNrYWdlc1xubGlicmFyeSh1c2V0aGlzKVxubGlicmFyeShkZXZ0b29scylcbmxpYnJhcnkocnR3ZWV0KVxubGlicmFyeShyZWFkcilcbmxpYnJhcnkodG9waWNtb2RlbHMpXG5saWJyYXJ5KG1hcHMpXG5gYGAifQ== -->
+<pre class="r"><code>#install_github(&quot;mkearney/rtweet&quot;)
+
+#Packages
+library(usethis)
+library(devtools)
+library(rtweet)
+library(readr)
+library(topicmodels)
+library(maps)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuXG4jRGVmaW5lIGNyZWRlbnRpYWxzXG5hcHBfbmFtZTwtXCJcIlxuY29uc3VtZXJfa2V5PC1cIlwiXG5jb25zdW1lcl9zZWNyZXQ8LVwiXCJcbmFjY2Vzc190b2tlbjwtXCJcIlxuYWNjZXNzX3Rva2VuX3NlY3JldDwtXCJcIlxuXG5cbmBgYCJ9 -->
+<pre class="r"><code>
+#Define credentials
+app_name&lt;-&quot;&quot;
+consumer_key&lt;-&quot;&quot;
+consumer_secret&lt;-&quot;&quot;
+access_token&lt;-&quot;&quot;
+access_token_secret&lt;-&quot;&quot;
+</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+</div>
+<div id="checking-rate-limits" class="section level2">
+<h2>checking rate limits</h2>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBzZWUgcmF0ZSBsaW1pdHNcbiMgVGhlIHJhdGUgbGltaXQgZm9yIHRoZSBzdGFuZGFyZCBzZWFyY2ggQVBJIGlzIDE4LDAwMCB0d2VldHMgcGVyIGZpZnRlZW4gbWludXRlcy4gV2l0aCBhIGJlYXJlciB0b2tlbiwgdGhlIHJhdGUgbGltaXQgaXMgNDUsMDAwIHR3ZWV0cyBwZXIgZmlmdGVlbiBtaW51dGVzLiBcbnJhdGVfbGltaXRzPC1yYXRlX2xpbWl0KClcbmhlYWQocmF0ZV9saW1pdHNbLDE6NF0pXG5gYGAifQ== -->
+<pre class="r"><code># see rate limits
+# The rate limit for the standard search API is 18,000 tweets per fifteen minutes. With a bearer token, the rate limit is 45,000 tweets per fifteen minutes. 
+rate_limits&lt;-rate_limit()
+head(rate_limits[,1:4])</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI1xuI2NyZWF0ZV90b2tlbihhcHA9YXBwX25hbWUsXG4jICAgICAgICAgICAgIGNvbnN1bWVyX2tleT1jb25zdW1lcl9rZXksIGNvbnN1bWVyX3NlY3JldD1jb25zdW1lcl9zZWNyZXQsXG4jICAgICAgICAgICAgIGFjY2Vzc190b2tlbiA9IGFjY2Vzc190b2tlbiwgYWNjZXNzX3NlY3JldCA9IGFjY2Vzc190b2tlbl9zZWNyZXQpXG5cbmBgYCJ9 -->
+<pre class="r"><code>#
+#create_token(app=app_name,
+#             consumer_key=consumer_key, consumer_secret=consumer_secret,
+#             access_token = access_token, access_secret = access_token_secret)
+</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+</div>
+<div id="searching-for-tweets" class="section level2">
+<h2>Searching for tweets…</h2>
+<div id="collect-first-batch-of-tweets" class="section level3">
+<h3>Collect first batch of tweets</h3>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI1BVTEwgRklOQUwgVkVSU0lPTiBPTiBNT05EQVkgT1IgVFVFU0RBWVxuTmV3czI0X3R3ZWV0cyA8LSBnZXRfdGltZWxpbmVzKGMoXCJOZXdzMjRcIiksIG4gPSAzMjAwLCBpbmNsdWRlX3J0cz1GQUxTRSlcblRpbWVzTElWRV90d2VldHMgPC0gZ2V0X3RpbWVsaW5lcyhjKFwiVGltZXNMSVZFXCIpLCBuID0gMzIwMCwgaW5jbHVkZV9ydHM9RkFMU0UpXG5lTkNBX3R3ZWV0cyA8LSBnZXRfdGltZWxpbmVzKGMoXCJlTkNBXCIpLCBuID0gMzIwMCwgaW5jbHVkZV9ydHM9RkFMU0UpXG5cbmBgYCJ9 -->
+<pre class="r"><code>#PULL FINAL VERSION ON MONDAY OR TUESDAY
+News24_tweets &lt;- get_timelines(c(&quot;News24&quot;), n = 3200, include_rts=FALSE)
+TimesLIVE_tweets &lt;- get_timelines(c(&quot;TimesLIVE&quot;), n = 3200, include_rts=FALSE)
+eNCA_tweets &lt;- get_timelines(c(&quot;eNCA&quot;), n = 3200, include_rts=FALSE)
+</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+</div>
+<div id="collect-second-batch-of-tweets" class="section level3">
+<h3>Collect second batch of tweets</h3>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuSU9MX3R3ZWV0cyA8LSBnZXRfdGltZWxpbmVzKGMoXCJJT0xcIiksIG49MzIwMCwgaW5jbHVkZV9ydHM9RkFMU0UpXG5TQUJDTmV3c190d2VldHMgPC0gZ2V0X3RpbWVsaW5lcyhjKFwiU0FCQ05ld3NcIiksIG49MzIwMCwgaW5jbHVkZV9ydHM9RkFMU0UpXG5ld251cGRhdGVzX3R3ZWV0cyA8LSBnZXRfdGltZWxpbmVzKGMoXCJld251cGRhdGVzXCIpLCBuPTMyMDAsIGluY2x1ZGVfcnRzPUZBTFNFKVxuYGBgIn0= -->
+<pre class="r"><code>IOL_tweets &lt;- get_timelines(c(&quot;IOL&quot;), n=3200, include_rts=FALSE)
+SABCNews_tweets &lt;- get_timelines(c(&quot;SABCNews&quot;), n=3200, include_rts=FALSE)
+ewnupdates_tweets &lt;- get_timelines(c(&quot;ewnupdates&quot;), n=3200, include_rts=FALSE)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+</div>
+<div id="collect-third-batch-of-tweets" class="section level3">
+<h3>Collect third batch of tweets</h3>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI05vdCB1c2VmdWxcbiN0cmVuZF90d2VldHMgPC0gZ2V0X3RyZW5kcyhcIlNvdXRoIEFmcmljYVwiKVxuI3RyZW5kX3R3ZWV0c1xuYGBgIn0= -->
+<pre class="r"><code>#Not useful
+#trend_tweets &lt;- get_trends(&quot;South Africa&quot;)
+#trend_tweets</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+</div>
+<div id="collect-fourth-batch-of-tweets" class="section level3">
+<h3>Collect fourth batch of tweets</h3>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI0RlZmluZSB0ZXJtcyB0byBzZWFyY2ggYnlcbnExIDwtIFwiQ292aWQgT1IgQ29yb25hIE9SIENvdmlkLTE5IE9SIENvdmlkMTkgT1IgQ29yb25hdmlydXMgT1IgU0FSUy1Db1YtMiBPUiBTQVJTLUNvVlwiXG5xMiA8LSBcIk9SICNDb3ZpZCBPUiAjQ29yb25hIE9SICNDb3ZpZC0xOSBPUiAjQ292aWQxOSBPUiAjQ29yb25hdmlydXMgT1IgI1NBUlMtQ29WLTIgT1IgI1NBUlMtQ29WXCJcbnEgPC0gcGFzdGUocTEscTIpXG5gYGAifQ== -->
+<pre class="r"><code>#Define terms to search by
+q1 &lt;- &quot;Covid OR Corona OR Covid-19 OR Covid19 OR Coronavirus OR SARS-CoV-2 OR SARS-CoV&quot;
+q2 &lt;- &quot;OR #Covid OR #Corona OR #Covid-19 OR #Covid19 OR #Coronavirus OR #SARS-CoV-2 OR #SARS-CoV&quot;
+q &lt;- paste(q1,q2)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI0NvbGxlY3RpbmcgdHdlZXRzIGZvciBTb3V0aCBBZnJpY2FcbnR3ZWV0c196YV8xMyA8LSBzZWFyY2hfdHdlZXRzKHEsZ2VvY29kZSA9IGxvb2t1cF9jb29yZHMoXCJTb3V0aCBBZnJpY2FcIiksIHNpbmNlPVwiMjAyMC0wNi0xM1wiLCB1bnRpbD1cIjIwMjAtMDYtMTRcIiwgdHlwZT1cInJlY2VudFwiLCBpbmNsdWRlX3J0cz1GQUxTRSwgbj0xODAwMClcblxuI0NvbGxlY3RpbmcgdHdlZXRzIGZvciBsYXJnZXN0IGNpdHkgaW4gZWFjaCBwcm92aW5jZVxudHdlZXRzX2Jsb2VtXzEzIDwtIHNlYXJjaF90d2VldHMocSxnZW9jb2RlID0gbG9va3VwX2Nvb3JkcyhcIkJsb2VtZm9udGVpblwiKSwgc2luY2U9XCIyMDIwLTA2LTEzXCIsIHVudGlsPVwiMjAyMC0wNi0xNFwiLCB0eXBlPVwicmVjZW50XCIsIGluY2x1ZGVfcnRzPUZBTFNFLCBuPTE4MDAwKVxudHdlZXRzX2NwdF8xMyA8LSBzZWFyY2hfdHdlZXRzKHEsZ2VvY29kZSA9IGxvb2t1cF9jb29yZHMoXCJDYXBlIFRvd25cIiksIHNpbmNlPVwiMjAyMC0wNi0xM1wiLCB1bnRpbD1cIjIwMjAtMDYtMTRcIiwgdHlwZT1cInJlY2VudFwiLCBpbmNsdWRlX3J0cz1GQUxTRSwgbj0xODAwMClcbnR3ZWV0c19kdXJiXzEzIDwtIHNlYXJjaF90d2VldHMocSxnZW9jb2RlID0gbG9va3VwX2Nvb3JkcyhcIkR1cmJhblwiKSwgc2luY2U9XCIyMDIwLTA2LTEzXCIsIHVudGlsPVwiMjAyMC0wNi0xNFwiLCB0eXBlPVwicmVjZW50XCIsIGluY2x1ZGVfcnRzPUZBTFNFLCBuPTE4MDAwKVxudHdlZXRzX2poYl8xMyA8LSBzZWFyY2hfdHdlZXRzKHEsZ2VvY29kZSA9IGxvb2t1cF9jb29yZHMoXCJKb2hhbm5lc2J1cmdcIiksIHNpbmNlPVwiMjAyMC0wNi0xM1wiLCB1bnRpbD1cIjIwMjAtMDYtMTRcIiwgdHlwZT1cInJlY2VudFwiLCBpbmNsdWRlX3J0cz1GQUxTRSwgbj0xODAwMClcbnR3ZWV0c19raW1fMTMgPC0gc2VhcmNoX3R3ZWV0cyhxLGdlb2NvZGUgPSBsb29rdXBfY29vcmRzKFwiS2ltYmVybGV5XCIpLCBzaW5jZT1cIjIwMjAtMDYtMTNcIiwgdW50aWw9XCIyMDIwLTA2LTE0XCIsIHR5cGU9XCJyZWNlbnRcIiwgaW5jbHVkZV9ydHM9RkFMU0UsIG49MTgwMDApXG50d2VldHNfa2xlcmtfMTMgPC0gc2VhcmNoX3R3ZWV0cyhxLGdlb2NvZGUgPSBsb29rdXBfY29vcmRzKFwiS2xlcmtzZG9ycFwiKSwgc2luY2U9XCIyMDIwLTA2LTEzXCIsIHVudGlsPVwiMjAyMC0wNi0xNFwiLCB0eXBlPVwicmVjZW50XCIsIGluY2x1ZGVfcnRzPUZBTFNFLCBuPTE4MDAwKVxudHdlZXRzX21ib21iXzEzIDwtIHNlYXJjaF90d2VldHMocSxnZW9jb2RlID0gbG9va3VwX2Nvb3JkcyhcIk1ib21iZWxhXCIpLCBzaW5jZT1cIjIwMjAtMDYtMTNcIiwgdW50aWw9XCIyMDIwLTA2LTE0XCIsIHR5cGU9XCJyZWNlbnRcIiwgaW5jbHVkZV9ydHM9RkFMU0UsIG49MTgwMDApXG50d2VldHNfcG9sb18xMyA8LSBzZWFyY2hfdHdlZXRzKHEsZ2VvY29kZSA9IGxvb2t1cF9jb29yZHMoXCJQb2xva3dhbmVcIiksIHNpbmNlPVwiMjAyMC0wNi0xM1wiLCB1bnRpbD1cIjIwMjAtMDYtMTRcIiwgdHlwZT1cInJlY2VudFwiLCBpbmNsdWRlX3J0cz1GQUxTRSwgbj0xODAwMClcbnR3ZWV0c19wZV8xMyA8LSBzZWFyY2hfdHdlZXRzKHEsZ2VvY29kZSA9IGxvb2t1cF9jb29yZHMoXCJQb3J0IEVsaXphYmV0aFwiKSwgc2luY2U9XCIyMDIwLTA2LTEzXCIsIHVudGlsPVwiMjAyMC0wNi0xNFwiLCB0eXBlPVwicmVjZW50XCIsIGluY2x1ZGVfcnRzPUZBTFNFLCBuPTE4MDAwKVxuYGBgIn0= -->
+<pre class="r"><code>#Collecting tweets for South Africa
+tweets_za_13 &lt;- search_tweets(q,geocode = lookup_coords(&quot;South Africa&quot;), since=&quot;2020-06-13&quot;, until=&quot;2020-06-14&quot;, type=&quot;recent&quot;, include_rts=FALSE, n=18000)
+
+#Collecting tweets for largest city in each province
+tweets_bloem_13 &lt;- search_tweets(q,geocode = lookup_coords(&quot;Bloemfontein&quot;), since=&quot;2020-06-13&quot;, until=&quot;2020-06-14&quot;, type=&quot;recent&quot;, include_rts=FALSE, n=18000)
+tweets_cpt_13 &lt;- search_tweets(q,geocode = lookup_coords(&quot;Cape Town&quot;), since=&quot;2020-06-13&quot;, until=&quot;2020-06-14&quot;, type=&quot;recent&quot;, include_rts=FALSE, n=18000)
+tweets_durb_13 &lt;- search_tweets(q,geocode = lookup_coords(&quot;Durban&quot;), since=&quot;2020-06-13&quot;, until=&quot;2020-06-14&quot;, type=&quot;recent&quot;, include_rts=FALSE, n=18000)
+tweets_jhb_13 &lt;- search_tweets(q,geocode = lookup_coords(&quot;Johannesburg&quot;), since=&quot;2020-06-13&quot;, until=&quot;2020-06-14&quot;, type=&quot;recent&quot;, include_rts=FALSE, n=18000)
+tweets_kim_13 &lt;- search_tweets(q,geocode = lookup_coords(&quot;Kimberley&quot;), since=&quot;2020-06-13&quot;, until=&quot;2020-06-14&quot;, type=&quot;recent&quot;, include_rts=FALSE, n=18000)
+tweets_klerk_13 &lt;- search_tweets(q,geocode = lookup_coords(&quot;Klerksdorp&quot;), since=&quot;2020-06-13&quot;, until=&quot;2020-06-14&quot;, type=&quot;recent&quot;, include_rts=FALSE, n=18000)
+tweets_mbomb_13 &lt;- search_tweets(q,geocode = lookup_coords(&quot;Mbombela&quot;), since=&quot;2020-06-13&quot;, until=&quot;2020-06-14&quot;, type=&quot;recent&quot;, include_rts=FALSE, n=18000)
+tweets_polo_13 &lt;- search_tweets(q,geocode = lookup_coords(&quot;Polokwane&quot;), since=&quot;2020-06-13&quot;, until=&quot;2020-06-14&quot;, type=&quot;recent&quot;, include_rts=FALSE, n=18000)
+tweets_pe_13 &lt;- search_tweets(q,geocode = lookup_coords(&quot;Port Elizabeth&quot;), since=&quot;2020-06-13&quot;, until=&quot;2020-06-14&quot;, type=&quot;recent&quot;, include_rts=FALSE, n=18000)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI0dldCBGcmllbmRzICYgRm9sbG93ZXJzXG5gYGAifQ== -->
+<pre class="r"><code>#Get Friends &amp; Followers</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+</div>
+</div>
+<div id="finished-collecting-tweets" class="section level2">
+<h2>finished collecting tweets!</h2>
+</div>
+<div id="exporting-tweets-to-.rds" class="section level1">
+<h1>Exporting Tweets to .rds</h1>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI0V4cG9ydCBGaWx0ZXJlZCBEYXRhIGZvciAxMy8wNi8yMDIwXG53cml0ZV9yZHModHdlZXRzX3phXzEzLCBcIkRhdGEvUmF3X0ZpbHRlcmVkX0RhdGEvdHdlZXRzX3phXzEzLnJkc1wiKVxud3JpdGVfcmRzKHR3ZWV0c19ibG9lbV8xMywgXCJEYXRhL1Jhd19GaWx0ZXJlZF9EYXRhL3R3ZWV0c19ibG9lbV8xMy5yZHNcIilcbndyaXRlX3Jkcyh0d2VldHNfY3B0XzEzLCBcIkRhdGEvUmF3X0ZpbHRlcmVkX0RhdGEvdHdlZXRzX2NwdF8xMy5yZHNcIilcbndyaXRlX3Jkcyh0d2VldHNfZHVyYl8xMywgXCJEYXRhL1Jhd19GaWx0ZXJlZF9EYXRhL3R3ZWV0c19kdXJiXzEzLnJkc1wiKVxud3JpdGVfcmRzKHR3ZWV0c19qaGJfMTMsIFwiRGF0YS9SYXdfRmlsdGVyZWRfRGF0YS90d2VldHNfamhiXzEzLnJkc1wiKVxud3JpdGVfcmRzKHR3ZWV0c19raW1fMTMsIFwiRGF0YS9SYXdfRmlsdGVyZWRfRGF0YS90d2VldHNfa2ltXzEzLnJkc1wiKVxud3JpdGVfcmRzKHR3ZWV0c19rbGVya18xMywgXCJEYXRhL1Jhd19GaWx0ZXJlZF9EYXRhL3R3ZWV0c19rbGVya18xMy5yZHNcIilcbndyaXRlX3Jkcyh0d2VldHNfbWJvbWJfMTMsIFwiRGF0YS9SYXdfRmlsdGVyZWRfRGF0YS90d2VldHNfbWJvbWJfMTMucmRzXCIpXG53cml0ZV9yZHModHdlZXRzX3BvbG9fMTMsIFwiRGF0YS9SYXdfRmlsdGVyZWRfRGF0YS90d2VldHNfcG9sb18xM1wiKVxud3JpdGVfcmRzKHR3ZWV0c19wZV8xMywgXCJEYXRhL1Jhd19GaWx0ZXJlZF9EYXRhL3R3ZWV0c19wZV8xM1wiKVxuXG4jRXhwb3J0IEFsbCBUd2VldCBEYXRhIGZvciAxMy8wNi8yMDIwXG5gYGAifQ== -->
+<pre class="r"><code>#Export Filtered Data for 13/06/2020
+write_rds(tweets_za_13, &quot;Data/Raw_Filtered_Data/tweets_za_13.rds&quot;)
+write_rds(tweets_bloem_13, &quot;Data/Raw_Filtered_Data/tweets_bloem_13.rds&quot;)
+write_rds(tweets_cpt_13, &quot;Data/Raw_Filtered_Data/tweets_cpt_13.rds&quot;)
+write_rds(tweets_durb_13, &quot;Data/Raw_Filtered_Data/tweets_durb_13.rds&quot;)
+write_rds(tweets_jhb_13, &quot;Data/Raw_Filtered_Data/tweets_jhb_13.rds&quot;)
+write_rds(tweets_kim_13, &quot;Data/Raw_Filtered_Data/tweets_kim_13.rds&quot;)
+write_rds(tweets_klerk_13, &quot;Data/Raw_Filtered_Data/tweets_klerk_13.rds&quot;)
+write_rds(tweets_mbomb_13, &quot;Data/Raw_Filtered_Data/tweets_mbomb_13.rds&quot;)
+write_rds(tweets_polo_13, &quot;Data/Raw_Filtered_Data/tweets_polo_13&quot;)
+write_rds(tweets_pe_13, &quot;Data/Raw_Filtered_Data/tweets_pe_13&quot;)
+
+#Export All Tweet Data for 13/06/2020</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBFeHBvcnRpbmcgcmF3IHJlc3VsdHNcblxud3JpdGVfcmRzKE5ld3MyNF90d2VldHMsIFwiRGF0YS9SYXdfVGltZWxpbmVfRGF0YS9OZXdzMjRfdHdlZXRzLnJkc1wiKVxud3JpdGVfcmRzKFRpbWVzTElWRV90d2VldHMsIFwiRGF0YS9SYXdfVGltZWxpbmVfRGF0YS9UaW1lc0xJVkVfdHdlZXRzLnJkc1wiKVxud3JpdGVfcmRzKGVOQ0FfdHdlZXRzLCBcIkRhdGEvUmF3X1RpbWVsaW5lX0RhdGEvZU5DQV90d2VldHMucmRzXCIpXG53cml0ZV9yZHMoSU9MX3R3ZWV0cyxcIkRhdGEvUmF3X1RpbWVsaW5lX0RhdGEvSU9MX3R3ZWV0cy5yZHNcIilcbndyaXRlX3JkcyhTQUJDTmV3c190d2VldHMsXCJEYXRhL1Jhd19UaW1lbGluZV9EYXRhL1NBQkNOZXdzX3R3ZWV0cy5yZHNcIilcbndyaXRlX3Jkcyhld251cGRhdGVzX3R3ZWV0cyxcIkRhdGEvUmF3X1RpbWVsaW5lX0RhdGEvZXdudXBkYXRlc190d2VldHNcIilcbmBgYCJ9 -->
+<pre class="r"><code># Exporting raw results
+
+write_rds(News24_tweets, &quot;Data/Raw_Timeline_Data/News24_tweets.rds&quot;)
+write_rds(TimesLIVE_tweets, &quot;Data/Raw_Timeline_Data/TimesLIVE_tweets.rds&quot;)
+write_rds(eNCA_tweets, &quot;Data/Raw_Timeline_Data/eNCA_tweets.rds&quot;)
+write_rds(IOL_tweets,&quot;Data/Raw_Timeline_Data/IOL_tweets.rds&quot;)
+write_rds(SABCNews_tweets,&quot;Data/Raw_Timeline_Data/SABCNews_tweets.rds&quot;)
+write_rds(ewnupdates_tweets,&quot;Data/Raw_Timeline_Data/ewnupdates_tweets&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+</div>
+<div id="performing-transformations" class="section level1">
+<h1>Performing transformations</h1>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBTZW50aW1lbnQgQW5hbHlzaXNcblxuXG5gYGAifQ== -->
+<pre class="r"><code># Sentiment Analysis
+</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBUb3BpYyBBbmFseXNpc1xuXG5cbmBgYCJ9 -->
+<pre class="r"><code># Topic Analysis
+</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBPdGhlciBBbmFseXNpc1xuXG5cbmBgYCJ9 -->
+<pre class="r"><code># Other Analysis
+</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<div id="done" class="section level2">
+<h2>Done</h2>
+</div>
+</div>
+<div id="exporting-transformation-results" class="section level1">
+<h1>Exporting transformation results</h1>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI3dyaXRlX3JkcyhOZXdzMjRfdHdlZXRzLCBcIlJlc3VsdHMvTmV3czI0X3R3ZWV0cy5yZHNcIilcbiN3cml0ZV9yZHMoVGltZXNMSVZFX3R3ZWV0cywgXCJSZXN1bHRzL1RpbWVzTElWRV90d2VldHMucmRzXCIpXG4jd3JpdGVfcmRzKGVOQ0FfdHdlZXRzLCBcIlJlc3VsdHMvZU5DQV90d2VldHMucmRzXCIpXG4jd3JpdGVfcmRzKElPTF90d2VldHMsXCJSZXN1bHRzL0lPTF90d2VldHMucmRzXCIpXG4jd3JpdGVfcmRzKFNBQkNOZXdzX3R3ZWV0cyxcIlJlc3VsdHMvU0FCQ05ld3NfdHdlZXRzLnJkc1wiKVxuI3dyaXRlX3Jkcyhld251cGRhdGVzX3R3ZWV0cyxcIlJlc3VsdHMvZXdudXBkYXRlc190d2VldHNcIilcbmBgYCJ9 -->
+<pre class="r"><code>#write_rds(News24_tweets, &quot;Results/News24_tweets.rds&quot;)
+#write_rds(TimesLIVE_tweets, &quot;Results/TimesLIVE_tweets.rds&quot;)
+#write_rds(eNCA_tweets, &quot;Results/eNCA_tweets.rds&quot;)
+#write_rds(IOL_tweets,&quot;Results/IOL_tweets.rds&quot;)
+#write_rds(SABCNews_tweets,&quot;Results/SABCNews_tweets.rds&quot;)
+#write_rds(ewnupdates_tweets,&quot;Results/ewnupdates_tweets&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>```</p>
+<div id="exporting-results" class="section level2">
+<h2>Exporting results</h2>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-chunk-end -->
+</div>
 </div>
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogIkRhdGEgVHJhbnNmb3JtYXRpb24iDQpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sNCi0tLQ0KDQpgYGB7cn0NCiNpbnN0YWxsX2dpdGh1YigibWtlYXJuZXkvcnR3ZWV0IikNCg0KI1BhY2thZ2VzDQpsaWJyYXJ5KHVzZXRoaXMpDQpsaWJyYXJ5KGRldnRvb2xzKQ0KbGlicmFyeShydHdlZXQpDQpsaWJyYXJ5KHJlYWRyKQ0KbGlicmFyeSh0b3BpY21vZGVscykNCmxpYnJhcnkobWFwcykNCmBgYA0KDQojIyBMb2FkIGV4dHJhY3RlZCBkYXRhIA0KYGBge3J9DQpOZXdzMjRfdHdlZXRzIDwtIHJlYWRfcmRzKCJEYXRhL1Jhd19UaW1lbGluZV9EYXRhL05ld3MyNF90d2VldHMucmRzIikNClRpbWVzTElWRV90d2VldHMgPC0gcmVhZF9yZHMoIkRhdGEvUmF3X1RpbWVsaW5lX0RhdGEvVGltZXNMSVZFX3R3ZWV0cy5yZHMiKQ0KZU5DQV90d2VldHMgPC0gcmVhZF9yZHMoIkRhdGEvUmF3X1RpbWVsaW5lX0RhdGEvZU5DQV90d2VldHMucmRzIikNCklPTF90d2VldHMgPC0gcmVhZF9yZHMoIkRhdGEvUmF3X1RpbWVsaW5lX0RhdGEvSU9MX3R3ZWV0cy5yZHMiKQ0KU0FCQ05ld3NfdHdlZXRzIDwtIHJlYWRfcmRzKCJEYXRhL1Jhd19UaW1lbGluZV9EYXRhL1NBQkNOZXdzX3R3ZWV0cy5yZHMiKQ0KZXdudXBkYXRlc190d2VldHMgPC0gcmVhZF9yZHMoIkRhdGEvUmF3X1RpbWVsaW5lX0RhdGEvZXdudXBkYXRlc190d2VldHMiKQ0KYGBgDQoNCmBgYHtyfQ0KDQpgYGANCg0K</div>
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIkRhdGEgVHJhbnNmb3JtYXRpb24iDQpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sNCi0tLQ0KDQpgYGB7cn0NCiNpbnN0YWxsX2dpdGh1YigibWtlYXJuZXkvcnR3ZWV0IikNCg0KI1BhY2thZ2VzDQpsaWJyYXJ5KHVzZXRoaXMpDQpsaWJyYXJ5KGRldnRvb2xzKQ0KbGlicmFyeShydHdlZXQpDQpsaWJyYXJ5KHJlYWRyKQ0KbGlicmFyeSh0b3BpY21vZGVscykNCmxpYnJhcnkobWFwcykNCmBgYA0KDQojIyBMb2FkIGV4dHJhY3RlZCBkYXRhIA0KYGBge3J9DQpOZXdzMjRfdHdlZXRzIDwtIHJlYWRfcmRzKCJEYXRhL1Jhd19UaW1lbGluZV9EYXRhL05ld3MyNF90d2VldHMucmRzIikNClRpbWVzTElWRV90d2VldHMgPC0gcmVhZF9yZHMoIkRhdGEvUmF3X1RpbWVsaW5lX0RhdGEvVGltZXNMSVZFX3R3ZWV0cy5yZHMiKQ0KZU5DQV90d2VldHMgPC0gcmVhZF9yZHMoIkRhdGEvUmF3X1RpbWVsaW5lX0RhdGEvZU5DQV90d2VldHMucmRzIikNCklPTF90d2VldHMgPC0gcmVhZF9yZHMoIkRhdGEvUmF3X1RpbWVsaW5lX0RhdGEvSU9MX3R3ZWV0cy5yZHMiKQ0KU0FCQ05ld3NfdHdlZXRzIDwtIHJlYWRfcmRzKCJEYXRhL1Jhd19UaW1lbGluZV9EYXRhL1NBQkNOZXdzX3R3ZWV0cy5yZHMiKQ0KZXdudXBkYXRlc190d2VldHMgPC0gcmVhZF9yZHMoIkRhdGEvUmF3X1RpbWVsaW5lX0RhdGEvZXdudXBkYXRlc190d2VldHMiKQ0KYGBgDQoNCmBgYHtyfQ0KDQpgYGANCg0KDQoNCg0KYGBge3J9DQojaW5zdGFsbF9naXRodWIoIm1rZWFybmV5L3J0d2VldCIpDQoNCiNQYWNrYWdlcw0KbGlicmFyeSh1c2V0aGlzKQ0KbGlicmFyeShkZXZ0b29scykNCmxpYnJhcnkocnR3ZWV0KQ0KbGlicmFyeShyZWFkcikNCmxpYnJhcnkodG9waWNtb2RlbHMpDQpsaWJyYXJ5KG1hcHMpDQpgYGANCg0KDQpgYGB7cn0NCg0KI0RlZmluZSBjcmVkZW50aWFscw0KYXBwX25hbWU8LSIiDQpjb25zdW1lcl9rZXk8LSIiDQpjb25zdW1lcl9zZWNyZXQ8LSIiDQphY2Nlc3NfdG9rZW48LSIiDQphY2Nlc3NfdG9rZW5fc2VjcmV0PC0iIg0KDQoNCmBgYA0KDQojIyBjaGVja2luZyByYXRlIGxpbWl0cw0KYGBge3J9DQojIHNlZSByYXRlIGxpbWl0cw0KIyBUaGUgcmF0ZSBsaW1pdCBmb3IgdGhlIHN0YW5kYXJkIHNlYXJjaCBBUEkgaXMgMTgsMDAwIHR3ZWV0cyBwZXIgZmlmdGVlbiBtaW51dGVzLiBXaXRoIGEgYmVhcmVyIHRva2VuLCB0aGUgcmF0ZSBsaW1pdCBpcyA0NSwwMDAgdHdlZXRzIHBlciBmaWZ0ZWVuIG1pbnV0ZXMuIA0KcmF0ZV9saW1pdHM8LXJhdGVfbGltaXQoKQ0KaGVhZChyYXRlX2xpbWl0c1ssMTo0XSkNCmBgYA0KDQoNCmBgYHtyfQ0KIw0KI2NyZWF0ZV90b2tlbihhcHA9YXBwX25hbWUsDQojICAgICAgICAgICAgIGNvbnN1bWVyX2tleT1jb25zdW1lcl9rZXksIGNvbnN1bWVyX3NlY3JldD1jb25zdW1lcl9zZWNyZXQsDQojICAgICAgICAgICAgIGFjY2Vzc190b2tlbiA9IGFjY2Vzc190b2tlbiwgYWNjZXNzX3NlY3JldCA9IGFjY2Vzc190b2tlbl9zZWNyZXQpDQoNCmBgYA0KDQoNCiMjIFNlYXJjaGluZyBmb3IgdHdlZXRzLi4uDQojIyMgQ29sbGVjdCBmaXJzdCBiYXRjaCBvZiB0d2VldHMNCmBgYHtyIGVjaG89VFJVRSwgbWVzc2FnZT1GQUxTRSwgd2FybmluZz1GQUxTRX0NCiNQVUxMIEZJTkFMIFZFUlNJT04gT04gTU9OREFZIE9SIFRVRVNEQVkNCk5ld3MyNF90d2VldHMgPC0gZ2V0X3RpbWVsaW5lcyhjKCJOZXdzMjQiKSwgbiA9IDMyMDAsIGluY2x1ZGVfcnRzPUZBTFNFKQ0KVGltZXNMSVZFX3R3ZWV0cyA8LSBnZXRfdGltZWxpbmVzKGMoIlRpbWVzTElWRSIpLCBuID0gMzIwMCwgaW5jbHVkZV9ydHM9RkFMU0UpDQplTkNBX3R3ZWV0cyA8LSBnZXRfdGltZWxpbmVzKGMoImVOQ0EiKSwgbiA9IDMyMDAsIGluY2x1ZGVfcnRzPUZBTFNFKQ0KDQpgYGANCg0KDQojIyMgQ29sbGVjdCBzZWNvbmQgYmF0Y2ggb2YgdHdlZXRzDQpgYGB7ciBlY2hvPVRSVUUsIG1lc3NhZ2U9RkFMU0UsIHdhcm5pbmc9RkFMU0V9DQpJT0xfdHdlZXRzIDwtIGdldF90aW1lbGluZXMoYygiSU9MIiksIG49MzIwMCwgaW5jbHVkZV9ydHM9RkFMU0UpDQpTQUJDTmV3c190d2VldHMgPC0gZ2V0X3RpbWVsaW5lcyhjKCJTQUJDTmV3cyIpLCBuPTMyMDAsIGluY2x1ZGVfcnRzPUZBTFNFKQ0KZXdudXBkYXRlc190d2VldHMgPC0gZ2V0X3RpbWVsaW5lcyhjKCJld251cGRhdGVzIiksIG49MzIwMCwgaW5jbHVkZV9ydHM9RkFMU0UpDQpgYGANCg0KIyMjIENvbGxlY3QgdGhpcmQgYmF0Y2ggb2YgdHdlZXRzDQpgYGB7ciBlY2hvPVRSVUUsIG1lc3NhZ2U9RkFMU0UsIHdhcm5pbmc9RkFMU0V9DQojTm90IHVzZWZ1bA0KI3RyZW5kX3R3ZWV0cyA8LSBnZXRfdHJlbmRzKCJTb3V0aCBBZnJpY2EiKQ0KI3RyZW5kX3R3ZWV0cw0KYGBgDQoNCiMjIyBDb2xsZWN0IGZvdXJ0aCBiYXRjaCBvZiB0d2VldHMNCmBgYHtyfQ0KI0RlZmluZSB0ZXJtcyB0byBzZWFyY2ggYnkNCnExIDwtICJDb3ZpZCBPUiBDb3JvbmEgT1IgQ292aWQtMTkgT1IgQ292aWQxOSBPUiBDb3JvbmF2aXJ1cyBPUiBTQVJTLUNvVi0yIE9SIFNBUlMtQ29WIg0KcTIgPC0gIk9SICNDb3ZpZCBPUiAjQ29yb25hIE9SICNDb3ZpZC0xOSBPUiAjQ292aWQxOSBPUiAjQ29yb25hdmlydXMgT1IgI1NBUlMtQ29WLTIgT1IgI1NBUlMtQ29WIg0KcSA8LSBwYXN0ZShxMSxxMikNCmBgYA0KDQoNCmBgYHtyfQ0KI0NvbGxlY3RpbmcgdHdlZXRzIGZvciBTb3V0aCBBZnJpY2ENCnR3ZWV0c196YV8xMyA8LSBzZWFyY2hfdHdlZXRzKHEsZ2VvY29kZSA9IGxvb2t1cF9jb29yZHMoIlNvdXRoIEFmcmljYSIpLCBzaW5jZT0iMjAyMC0wNi0xMyIsIHVudGlsPSIyMDIwLTA2LTE0IiwgdHlwZT0icmVjZW50IiwgaW5jbHVkZV9ydHM9RkFMU0UsIG49MTgwMDApDQoNCiNDb2xsZWN0aW5nIHR3ZWV0cyBmb3IgbGFyZ2VzdCBjaXR5IGluIGVhY2ggcHJvdmluY2UNCnR3ZWV0c19ibG9lbV8xMyA8LSBzZWFyY2hfdHdlZXRzKHEsZ2VvY29kZSA9IGxvb2t1cF9jb29yZHMoIkJsb2VtZm9udGVpbiIpLCBzaW5jZT0iMjAyMC0wNi0xMyIsIHVudGlsPSIyMDIwLTA2LTE0IiwgdHlwZT0icmVjZW50IiwgaW5jbHVkZV9ydHM9RkFMU0UsIG49MTgwMDApDQp0d2VldHNfY3B0XzEzIDwtIHNlYXJjaF90d2VldHMocSxnZW9jb2RlID0gbG9va3VwX2Nvb3JkcygiQ2FwZSBUb3duIiksIHNpbmNlPSIyMDIwLTA2LTEzIiwgdW50aWw9IjIwMjAtMDYtMTQiLCB0eXBlPSJyZWNlbnQiLCBpbmNsdWRlX3J0cz1GQUxTRSwgbj0xODAwMCkNCnR3ZWV0c19kdXJiXzEzIDwtIHNlYXJjaF90d2VldHMocSxnZW9jb2RlID0gbG9va3VwX2Nvb3JkcygiRHVyYmFuIiksIHNpbmNlPSIyMDIwLTA2LTEzIiwgdW50aWw9IjIwMjAtMDYtMTQiLCB0eXBlPSJyZWNlbnQiLCBpbmNsdWRlX3J0cz1GQUxTRSwgbj0xODAwMCkNCnR3ZWV0c19qaGJfMTMgPC0gc2VhcmNoX3R3ZWV0cyhxLGdlb2NvZGUgPSBsb29rdXBfY29vcmRzKCJKb2hhbm5lc2J1cmciKSwgc2luY2U9IjIwMjAtMDYtMTMiLCB1bnRpbD0iMjAyMC0wNi0xNCIsIHR5cGU9InJlY2VudCIsIGluY2x1ZGVfcnRzPUZBTFNFLCBuPTE4MDAwKQ0KdHdlZXRzX2tpbV8xMyA8LSBzZWFyY2hfdHdlZXRzKHEsZ2VvY29kZSA9IGxvb2t1cF9jb29yZHMoIktpbWJlcmxleSIpLCBzaW5jZT0iMjAyMC0wNi0xMyIsIHVudGlsPSIyMDIwLTA2LTE0IiwgdHlwZT0icmVjZW50IiwgaW5jbHVkZV9ydHM9RkFMU0UsIG49MTgwMDApDQp0d2VldHNfa2xlcmtfMTMgPC0gc2VhcmNoX3R3ZWV0cyhxLGdlb2NvZGUgPSBsb29rdXBfY29vcmRzKCJLbGVya3Nkb3JwIiksIHNpbmNlPSIyMDIwLTA2LTEzIiwgdW50aWw9IjIwMjAtMDYtMTQiLCB0eXBlPSJyZWNlbnQiLCBpbmNsdWRlX3J0cz1GQUxTRSwgbj0xODAwMCkNCnR3ZWV0c19tYm9tYl8xMyA8LSBzZWFyY2hfdHdlZXRzKHEsZ2VvY29kZSA9IGxvb2t1cF9jb29yZHMoIk1ib21iZWxhIiksIHNpbmNlPSIyMDIwLTA2LTEzIiwgdW50aWw9IjIwMjAtMDYtMTQiLCB0eXBlPSJyZWNlbnQiLCBpbmNsdWRlX3J0cz1GQUxTRSwgbj0xODAwMCkNCnR3ZWV0c19wb2xvXzEzIDwtIHNlYXJjaF90d2VldHMocSxnZW9jb2RlID0gbG9va3VwX2Nvb3JkcygiUG9sb2t3YW5lIiksIHNpbmNlPSIyMDIwLTA2LTEzIiwgdW50aWw9IjIwMjAtMDYtMTQiLCB0eXBlPSJyZWNlbnQiLCBpbmNsdWRlX3J0cz1GQUxTRSwgbj0xODAwMCkNCnR3ZWV0c19wZV8xMyA8LSBzZWFyY2hfdHdlZXRzKHEsZ2VvY29kZSA9IGxvb2t1cF9jb29yZHMoIlBvcnQgRWxpemFiZXRoIiksIHNpbmNlPSIyMDIwLTA2LTEzIiwgdW50aWw9IjIwMjAtMDYtMTQiLCB0eXBlPSJyZWNlbnQiLCBpbmNsdWRlX3J0cz1GQUxTRSwgbj0xODAwMCkNCmBgYA0KDQpgYGB7cn0NCiNHZXQgRnJpZW5kcyAmIEZvbGxvd2Vycw0KYGBgDQoNCiMjIGZpbmlzaGVkIGNvbGxlY3RpbmcgdHdlZXRzIQ0KDQoNCiMgRXhwb3J0aW5nIFR3ZWV0cyB0byAucmRzDQpgYGB7cn0NCiNFeHBvcnQgRmlsdGVyZWQgRGF0YSBmb3IgMTMvMDYvMjAyMA0Kd3JpdGVfcmRzKHR3ZWV0c196YV8xMywgIkRhdGEvUmF3X0ZpbHRlcmVkX0RhdGEvdHdlZXRzX3phXzEzLnJkcyIpDQp3cml0ZV9yZHModHdlZXRzX2Jsb2VtXzEzLCAiRGF0YS9SYXdfRmlsdGVyZWRfRGF0YS90d2VldHNfYmxvZW1fMTMucmRzIikNCndyaXRlX3Jkcyh0d2VldHNfY3B0XzEzLCAiRGF0YS9SYXdfRmlsdGVyZWRfRGF0YS90d2VldHNfY3B0XzEzLnJkcyIpDQp3cml0ZV9yZHModHdlZXRzX2R1cmJfMTMsICJEYXRhL1Jhd19GaWx0ZXJlZF9EYXRhL3R3ZWV0c19kdXJiXzEzLnJkcyIpDQp3cml0ZV9yZHModHdlZXRzX2poYl8xMywgIkRhdGEvUmF3X0ZpbHRlcmVkX0RhdGEvdHdlZXRzX2poYl8xMy5yZHMiKQ0Kd3JpdGVfcmRzKHR3ZWV0c19raW1fMTMsICJEYXRhL1Jhd19GaWx0ZXJlZF9EYXRhL3R3ZWV0c19raW1fMTMucmRzIikNCndyaXRlX3Jkcyh0d2VldHNfa2xlcmtfMTMsICJEYXRhL1Jhd19GaWx0ZXJlZF9EYXRhL3R3ZWV0c19rbGVya18xMy5yZHMiKQ0Kd3JpdGVfcmRzKHR3ZWV0c19tYm9tYl8xMywgIkRhdGEvUmF3X0ZpbHRlcmVkX0RhdGEvdHdlZXRzX21ib21iXzEzLnJkcyIpDQp3cml0ZV9yZHModHdlZXRzX3BvbG9fMTMsICJEYXRhL1Jhd19GaWx0ZXJlZF9EYXRhL3R3ZWV0c19wb2xvXzEzIikNCndyaXRlX3Jkcyh0d2VldHNfcGVfMTMsICJEYXRhL1Jhd19GaWx0ZXJlZF9EYXRhL3R3ZWV0c19wZV8xMyIpDQoNCiNFeHBvcnQgQWxsIFR3ZWV0IERhdGEgZm9yIDEzLzA2LzIwMjANCmBgYA0KDQoNCg0KDQoNCmBgYHtyIGVjaG89VFJVRX0NCiMgRXhwb3J0aW5nIHJhdyByZXN1bHRzDQoNCndyaXRlX3JkcyhOZXdzMjRfdHdlZXRzLCAiRGF0YS9SYXdfVGltZWxpbmVfRGF0YS9OZXdzMjRfdHdlZXRzLnJkcyIpDQp3cml0ZV9yZHMoVGltZXNMSVZFX3R3ZWV0cywgIkRhdGEvUmF3X1RpbWVsaW5lX0RhdGEvVGltZXNMSVZFX3R3ZWV0cy5yZHMiKQ0Kd3JpdGVfcmRzKGVOQ0FfdHdlZXRzLCAiRGF0YS9SYXdfVGltZWxpbmVfRGF0YS9lTkNBX3R3ZWV0cy5yZHMiKQ0Kd3JpdGVfcmRzKElPTF90d2VldHMsIkRhdGEvUmF3X1RpbWVsaW5lX0RhdGEvSU9MX3R3ZWV0cy5yZHMiKQ0Kd3JpdGVfcmRzKFNBQkNOZXdzX3R3ZWV0cywiRGF0YS9SYXdfVGltZWxpbmVfRGF0YS9TQUJDTmV3c190d2VldHMucmRzIikNCndyaXRlX3Jkcyhld251cGRhdGVzX3R3ZWV0cywiRGF0YS9SYXdfVGltZWxpbmVfRGF0YS9ld251cGRhdGVzX3R3ZWV0cyIpDQpgYGANCg0KDQojIFBlcmZvcm1pbmcgdHJhbnNmb3JtYXRpb25zDQpgYGB7cn0NCiMgU2VudGltZW50IEFuYWx5c2lzDQoNCg0KYGBgDQoNCmBgYHtyfQ0KIyBUb3BpYyBBbmFseXNpcw0KDQoNCmBgYA0KDQpgYGB7cn0NCiMgT3RoZXIgQW5hbHlzaXMNCg0KDQpgYGANCg0KIyMgRG9uZQ0KDQojIEV4cG9ydGluZyB0cmFuc2Zvcm1hdGlvbiByZXN1bHRzDQpgYGB7ciBlY2hvPVRSVUV9DQojd3JpdGVfcmRzKE5ld3MyNF90d2VldHMsICJSZXN1bHRzL05ld3MyNF90d2VldHMucmRzIikNCiN3cml0ZV9yZHMoVGltZXNMSVZFX3R3ZWV0cywgIlJlc3VsdHMvVGltZXNMSVZFX3R3ZWV0cy5yZHMiKQ0KI3dyaXRlX3JkcyhlTkNBX3R3ZWV0cywgIlJlc3VsdHMvZU5DQV90d2VldHMucmRzIikNCiN3cml0ZV9yZHMoSU9MX3R3ZWV0cywiUmVzdWx0cy9JT0xfdHdlZXRzLnJkcyIpDQojd3JpdGVfcmRzKFNBQkNOZXdzX3R3ZWV0cywiUmVzdWx0cy9TQUJDTmV3c190d2VldHMucmRzIikNCiN3cml0ZV9yZHMoZXdudXBkYXRlc190d2VldHMsIlJlc3VsdHMvZXdudXBkYXRlc190d2VldHMiKQ0KYGBgDQoNCmBgYHtyfQ0KDQoNCg0KDQpgYGANCg0KDQoNCmBgYA0KDQojIyBFeHBvcnRpbmcgcmVzdWx0cw0KYGBge3J9DQoNCmBgYA==</div>
 
 
 

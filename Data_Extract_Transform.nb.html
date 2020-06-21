@@ -1751,16 +1751,15 @@ summary {
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI2luc3RhbGxfZ2l0aHViKFwibWtlYXJuZXkvcnR3ZWV0XCIpXG5cbiNQYWNrYWdlc1xubGlicmFyeSh1c2V0aGlzKVxubGlicmFyeShkZXZ0b29scylcbmxpYnJhcnkocnR3ZWV0KVxubGlicmFyeShyZWFkcilcbmxpYnJhcnkodG9waWNtb2RlbHMpXG5saWJyYXJ5KG1hcHMpXG5gYGAifQ== -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI2luc3RhbGxfZ2l0aHViKFwibWtlYXJuZXkvcnR3ZWV0XCIpXG5cbiNQYWNrYWdlc1xubGlicmFyeShkZXZ0b29scylcbmxpYnJhcnkocnR3ZWV0KVxubGlicmFyeShyZWFkcilcbmxpYnJhcnkodXNldGhpcylcbmxpYnJhcnkodG9waWNtb2RlbHMpXG5gYGAifQ== -->
 <pre class="r"><code>#install_github(&quot;mkearney/rtweet&quot;)
 
 #Packages
-library(usethis)
 library(devtools)
 library(rtweet)
 library(readr)
-library(topicmodels)
-library(maps)</code></pre>
+library(usethis)
+library(topicmodels)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
@@ -1792,11 +1791,21 @@ head(rate_limits[,1:4])</code></pre>
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI1xuI2NyZWF0ZV90b2tlbihhcHA9YXBwX25hbWUsXG4jICAgICAgICAgICAgIGNvbnN1bWVyX2tleT1jb25zdW1lcl9rZXksIGNvbnN1bWVyX3NlY3JldD1jb25zdW1lcl9zZWNyZXQsXG4jICAgICAgICAgICAgIGFjY2Vzc190b2tlbiA9IGFjY2Vzc190b2tlbiwgYWNjZXNzX3NlY3JldCA9IGFjY2Vzc190b2tlbl9zZWNyZXQpXG5cbmBgYCJ9 -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI1xuY3JlYXRlX3Rva2VuKGFwcD1hcHBfbmFtZSxcbiAgICAgICAgICAgICBjb25zdW1lcl9rZXk9Y29uc3VtZXJfa2V5LCBjb25zdW1lcl9zZWNyZXQ9Y29uc3VtZXJfc2VjcmV0LFxuICAgICAgICAgICAgIGFjY2Vzc190b2tlbiA9IGFjY2Vzc190b2tlbiwgYWNjZXNzX3NlY3JldCA9IGFjY2Vzc190b2tlbl9zZWNyZXQpXG5cblxuI0V4dHJhY3RzIDMwMDAgdHdlZXRzIHdpdGggYXBwcm9wcmlhdGUgaGFzaHRhZ1xuTkVXUzI0X3R3ZWV0czwtc2VhcmNoX3R3ZWV0cyhcIlwiLCBuPTUwLCBpbmNsdWRlX3J0cyA9IEZBTFNFKVxuRU5DQV90d2VldHM8LXNlYXJjaF90d2VldHMoXCJcIiwgbj01MCwgaW5jbHVkZV9ydHMgPSBGQUxTRSlcbiNUT1BJQ190d2VldHM8LXNlYXJjaF90d2VldHMoXCJcIiwgbj01MCwgaW5jbHVkZV9ydHMgPSBGQUxTRSlcblxuYGBgIn0= -->
 <pre class="r"><code>#
-#create_token(app=app_name,
-#             consumer_key=consumer_key, consumer_secret=consumer_secret,
-#             access_token = access_token, access_secret = access_token_secret)
+create_token(app=app_name,
+             consumer_key=consumer_key, consumer_secret=consumer_secret,
+             access_token = access_token, access_secret = access_token_secret)
+
+
+#Extracts 3000 tweets with appropriate hashtag
+NEWS24_tweets&lt;-search_tweets(&quot;&quot;, n=50, include_rts = FALSE)
+ENCA_tweets&lt;-search_tweets(&quot;&quot;, n=50, include_rts = FALSE)
+#TOPIC_tweets&lt;-search_tweets(&quot;&quot;, n=50, include_rts = FALSE)
 </code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
@@ -1822,11 +1831,10 @@ eNCA_tweets &lt;- get_timelines(c(&quot;eNCA&quot;), n = 3200)
 <h3>Collect second batch of tweets</h3>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuXG5JT0xfdHdlZXRzIDwtIGdldF90aW1lbGluZXMoYyhcIklPTFwiKSwgbj0zMjAwLCBpbmNsdWRlX3J0cz1GQUxTRSlcblNBQkNOZXdzX3R3ZWV0cyA8LSBnZXRfdGltZWxpbmVzKGMoXCJTQUJDTmV3c1wiKSwgbj0zMjAwLCBpbmNsdWRlX3J0cz1GQUxTRSlcbmV3bnVwZGF0ZXNfdHdlZXRzIDwtIGdldF90aW1lbGluZXMoYyhcImV3bnVwZGF0ZXNcIiksIG49MzIwMCwgaW5jbHVkZV9ydHM9RkFMU0UpXG5gYGAifQ== -->
-<pre class="r"><code>
-IOL_tweets &lt;- get_timelines(c(&quot;IOL&quot;), n=3200, include_rts=FALSE)
-SABCNews_tweets &lt;- get_timelines(c(&quot;SABCNews&quot;), n=3200, include_rts=FALSE)
-ewnupdates_tweets &lt;- get_timelines(c(&quot;ewnupdates&quot;), n=3200, include_rts=FALSE)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuSU9MX3R3ZWV0cyA8LSBnZXRfdGltZWxpbmVzKGMoXCJJT0xcIiksIG49MzIwMClcblNBQkNOZXdzX3R3ZWV0cyA8LSBnZXRfdGltZWxpbmVzKGMoXCJTQUJDTmV3c1wiKSwgbj0zMjAwKVxuZXdudXBkYXRlc190d2VldHMgPC0gZ2V0X3RpbWVsaW5lcyhjKFwiZXdudXBkYXRlc1wiKSwgbj0zMjAwKVxuYGBgIn0= -->
+<pre class="r"><code>IOL_tweets &lt;- get_timelines(c(&quot;IOL&quot;), n=3200)
+SABCNews_tweets &lt;- get_timelines(c(&quot;SABCNews&quot;), n=3200)
+ewnupdates_tweets &lt;- get_timelines(c(&quot;ewnupdates&quot;), n=3200)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
@@ -1847,183 +1855,26 @@ ewnupdates_tweets &lt;- get_timelines(c(&quot;ewnupdates&quot;), n=3200, include
 <h3>Collect fourth batch of tweets</h3>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI0RlZmluZSB0ZXJtcyB0byBzZWFyY2ggYnlcbnExIDwtIFwiQ292aWQgT1IgQ29yb25hIE9SIENvdmlkLTE5IE9SIENvdmlkMTkgT1IgQ29yb25hdmlydXMgT1IgU0FSUy1Db1YtMiBPUiBTQVJTLUNvVlwiXG5xMiA8LSBcIk9SICNDb3ZpZCBPUiAjQ29yb25hIE9SICNDb3ZpZC0xOSBPUiAjQ292aWQxOSBPUiAjQ29yb25hdmlydXMgT1IgI1NBUlMtQ29WLTIgT1IgI1NBUlMtQ29WXCJcbnEgPC0gcGFzdGUocTEscTIpXG5gYGAifQ== -->
-<pre class="r"><code>#Define terms to search by
-q1 &lt;- &quot;Covid OR Corona OR Covid-19 OR Covid19 OR Coronavirus OR SARS-CoV-2 OR SARS-CoV&quot;
-q2 &lt;- &quot;OR #Covid OR #Corona OR #Covid-19 OR #Covid19 OR #Coronavirus OR #SARS-CoV-2 OR #SARS-CoV&quot;
-q &lt;- paste(q1,q2)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI1NlbnRpbWVudCBhbmFseXNpc1xudHdlZXRzX3phXzEzIDwtIHNlYXJjaF90d2VldHMocSxnZW9jb2RlID0gbG9va3VwX2Nvb3JkcyhcIlNvdXRoIEFmcmljYVwiKSwgc2luY2U9XCIyMDIwLTA2LTEzXCIsIHVudGlsPVwiMjAyMC0wNi0xNFwiLCB0eXBlPVwicmVjZW50XCIsIGluY2x1ZGVfcnRzPUZBTFNFLCBuPTE4MDAwKVxuYGBgIn0= -->
-<pre class="r"><code>#Sentiment analysis
-tweets_za_13 &lt;- search_tweets(q,geocode = lookup_coords(&quot;South Africa&quot;), since=&quot;2020-06-13&quot;, until=&quot;2020-06-14&quot;, type=&quot;recent&quot;, include_rts=FALSE, n=18000)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiXG5Eb3dubG9hZGluZyBbLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS1dICAgMSVcbkRvd25sb2FkaW5nIFs+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLV0gICAyJVxuRG93bmxvYWRpbmcgWz4tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tXSAgIDMlXG5Eb3dubG9hZGluZyBbPT4tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS1dICAgNCVcbkRvd25sb2FkaW5nIFs9Pi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLV0gICA1JVxuRG93bmxvYWRpbmcgWz0+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tXSAgIDYlXG5Eb3dubG9hZGluZyBbPT0+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS1dICAgNiVcbkRvd25sb2FkaW5nIFs9PT4tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLV0gICA3JVxuRG93bmxvYWRpbmcgWz09Pi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tXSAgIDglXG5Eb3dubG9hZGluZyBbPT09Pi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS1dICAgOSVcbkRvd25sb2FkaW5nIFs9PT0+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLV0gIDEwJVxuRG93bmxvYWRpbmcgWz09PT4tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tXSAgMTElXG5Eb3dubG9hZGluZyBbPT09PT4tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS1dICAxMSVcbkRvd25sb2FkaW5nIFs9PT09Pi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLV0gIDEyJVxuRG93bmxvYWRpbmcgWz09PT0+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tXSAgMTMlXG5Eb3dubG9hZGluZyBbPT09PT0+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS1dICAxNCVcbkRvd25sb2FkaW5nIFs9PT09PT4tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLV0gIDE1JVxuRG93bmxvYWRpbmcgWz09PT09Pi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tXSAgMTYlXG5Eb3dubG9hZGluZyBbPT09PT09Pi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS1dICAxNiVcbkRvd25sb2FkaW5nIFs9PT09PT0+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLV0gIDE3JVxuRG93bmxvYWRpbmcgWz09PT09PT4tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tXSAgMTglXG5Eb3dubG9hZGluZyBbPT09PT09PT4tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS1dICAxOCVcbkRvd25sb2FkaW5nIFs9PT09PT09Pi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLV0gIDE5JVxuRG93bmxvYWRpbmcgWz09PT09PT0+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tXSAgMjAlXG5Eb3dubG9hZGluZyBbPT09PT09PT4tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS1dICAyMSVcbkRvd25sb2FkaW5nIFs9PT09PT09PT4tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLV0gIDIxJVxuRG93bmxvYWRpbmcgWz09PT09PT09Pi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tXSAgMjIlXG5Eb3dubG9hZGluZyBbPT09PT09PT0+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS1dICAyMyVcbkRvd25sb2FkaW5nIFs9PT09PT09PT0+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLV0gIDIzJVxuRG93bmxvYWRpbmcgWz09PT09PT09PT4tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tXSAgMjQlXG5Eb3dubG9hZGluZyBbPT09PT09PT09Pi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS1dICAyNSVcbkRvd25sb2FkaW5nIFs9PT09PT09PT0+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLV0gIDI2JVxuRG93bmxvYWRpbmcgWz09PT09PT09PT0+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tXSAgMjYlXG5Eb3dubG9hZGluZyBbPT09PT09PT09PT4tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS1dICAyNyVcbkRvd25sb2FkaW5nIFs9PT09PT09PT09Pi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLV0gIDI4JVxuRG93bmxvYWRpbmcgWz09PT09PT09PT09Pi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tXSAgMjglXG5Eb3dubG9hZGluZyBbPT09PT09PT09PT0+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS1dICAyOSVcbkRvd25sb2FkaW5nIFs9PT09PT09PT09PT4tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLV0gIDMwJVxuIn0= -->
-<pre><code>
-Downloading [-----------------------------------------]   1%
-Downloading [&gt;----------------------------------------]   2%
-Downloading [&gt;----------------------------------------]   3%
-Downloading [=&gt;---------------------------------------]   4%
-Downloading [=&gt;---------------------------------------]   5%
-Downloading [=&gt;---------------------------------------]   6%
-Downloading [==&gt;--------------------------------------]   6%
-Downloading [==&gt;--------------------------------------]   7%
-Downloading [==&gt;--------------------------------------]   8%
-Downloading [===&gt;-------------------------------------]   9%
-Downloading [===&gt;-------------------------------------]  10%
-Downloading [===&gt;-------------------------------------]  11%
-Downloading [====&gt;------------------------------------]  11%
-Downloading [====&gt;------------------------------------]  12%
-Downloading [====&gt;------------------------------------]  13%
-Downloading [=====&gt;-----------------------------------]  14%
-Downloading [=====&gt;-----------------------------------]  15%
-Downloading [=====&gt;-----------------------------------]  16%
-Downloading [======&gt;----------------------------------]  16%
-Downloading [======&gt;----------------------------------]  17%
-Downloading [======&gt;----------------------------------]  18%
-Downloading [=======&gt;---------------------------------]  18%
-Downloading [=======&gt;---------------------------------]  19%
-Downloading [=======&gt;---------------------------------]  20%
-Downloading [=======&gt;---------------------------------]  21%
-Downloading [========&gt;--------------------------------]  21%
-Downloading [========&gt;--------------------------------]  22%
-Downloading [========&gt;--------------------------------]  23%
-Downloading [=========&gt;-------------------------------]  23%
-Downloading [=========&gt;-------------------------------]  24%
-Downloading [=========&gt;-------------------------------]  25%
-Downloading [=========&gt;-------------------------------]  26%
-Downloading [==========&gt;------------------------------]  26%
-Downloading [==========&gt;------------------------------]  27%
-Downloading [==========&gt;------------------------------]  28%
-Downloading [===========&gt;-----------------------------]  28%
-Downloading [===========&gt;-----------------------------]  29%
-Downloading [===========&gt;-----------------------------]  30%</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudHdlZXRzX2Jsb2VtXzEzIDwtIHNlYXJjaF90d2VldHMocSxnZW9jb2RlID0gbG9va3VwX2Nvb3JkcyhcIkJsb2VtZm9udGVpblwiKSwgc2luY2U9XCIyMDIwLTA2LTEzXCIsIHVudGlsPVwiMjAyMC0wNi0xNFwiLCB0eXBlPVwicmVjZW50XCIsIGluY2x1ZGVfcnRzPUZBTFNFLCBuPTE4MDAwKVxuYGBgIn0= -->
-<pre class="r"><code>tweets_bloem_13 &lt;- search_tweets(q,geocode = lookup_coords(&quot;Bloemfontein&quot;), since=&quot;2020-06-13&quot;, until=&quot;2020-06-14&quot;, type=&quot;recent&quot;, include_rts=FALSE, n=18000)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiXG5Eb3dubG9hZGluZyBbLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS1dICAgMSVcbiJ9 -->
-<pre><code>
-Downloading [-----------------------------------------]   1%</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudHdlZXRzX2NwdF8xMyA8LSBzZWFyY2hfdHdlZXRzKHEsZ2VvY29kZSA9IGxvb2t1cF9jb29yZHMoXCJDYXBlIFRvd25cIiksIHNpbmNlPVwiMjAyMC0wNi0xM1wiLCB1bnRpbD1cIjIwMjAtMDYtMTRcIiwgdHlwZT1cInJlY2VudFwiLCBpbmNsdWRlX3J0cz1GQUxTRSwgbj0xODAwMClcbmBgYCJ9 -->
-<pre class="r"><code>tweets_cpt_13 &lt;- search_tweets(q,geocode = lookup_coords(&quot;Cape Town&quot;), since=&quot;2020-06-13&quot;, until=&quot;2020-06-14&quot;, type=&quot;recent&quot;, include_rts=FALSE, n=18000)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiXG5Eb3dubG9hZGluZyBbLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS1dICAgMSVcbkRvd25sb2FkaW5nIFs+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLV0gICAyJVxuRG93bmxvYWRpbmcgWz4tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tXSAgIDMlXG4ifQ== -->
-<pre><code>
-Downloading [-----------------------------------------]   1%
-Downloading [&gt;----------------------------------------]   2%
-Downloading [&gt;----------------------------------------]   3%</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudHdlZXRzX2R1cmJfMTMgPC0gc2VhcmNoX3R3ZWV0cyhxLGdlb2NvZGUgPSBsb29rdXBfY29vcmRzKFwiRHVyYmFuXCIpLCBzaW5jZT1cIjIwMjAtMDYtMTNcIiwgdW50aWw9XCIyMDIwLTA2LTE0XCIsIHR5cGU9XCJyZWNlbnRcIiwgaW5jbHVkZV9ydHM9RkFMU0UsIG49MTgwMDApXG5gYGAifQ== -->
-<pre class="r"><code>tweets_durb_13 &lt;- search_tweets(q,geocode = lookup_coords(&quot;Durban&quot;), since=&quot;2020-06-13&quot;, until=&quot;2020-06-14&quot;, type=&quot;recent&quot;, include_rts=FALSE, n=18000)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiXG5Eb3dubG9hZGluZyBbLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS1dICAgMSVcbiJ9 -->
-<pre><code>
-Downloading [-----------------------------------------]   1%</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudHdlZXRzX2poYl8xMyA8LSBzZWFyY2hfdHdlZXRzKHEsZ2VvY29kZSA9IGxvb2t1cF9jb29yZHMoXCJKb2hhbm5lc2J1cmdcIiksIHNpbmNlPVwiMjAyMC0wNi0xM1wiLCB1bnRpbD1cIjIwMjAtMDYtMTRcIiwgdHlwZT1cInJlY2VudFwiLCBpbmNsdWRlX3J0cz1GQUxTRSwgbj0xODAwMClcbmBgYCJ9 -->
-<pre class="r"><code>tweets_jhb_13 &lt;- search_tweets(q,geocode = lookup_coords(&quot;Johannesburg&quot;), since=&quot;2020-06-13&quot;, until=&quot;2020-06-14&quot;, type=&quot;recent&quot;, include_rts=FALSE, n=18000)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiXG5Eb3dubG9hZGluZyBbLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS1dICAgMSVcbkRvd25sb2FkaW5nIFs+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLV0gICAyJVxuRG93bmxvYWRpbmcgWz4tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tXSAgIDMlXG5Eb3dubG9hZGluZyBbPT4tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS1dICAgNCVcbkRvd25sb2FkaW5nIFs9Pi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLV0gICA1JVxuRG93bmxvYWRpbmcgWz0+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tXSAgIDYlXG4ifQ== -->
-<pre><code>
-Downloading [-----------------------------------------]   1%
-Downloading [&gt;----------------------------------------]   2%
-Downloading [&gt;----------------------------------------]   3%
-Downloading [=&gt;---------------------------------------]   4%
-Downloading [=&gt;---------------------------------------]   5%
-Downloading [=&gt;---------------------------------------]   6%</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudHdlZXRzX2tpbV8xMyA8LSBzZWFyY2hfdHdlZXRzKHEsZ2VvY29kZSA9IGxvb2t1cF9jb29yZHMoXCJLaW1iZXJsZXlcIiksIHNpbmNlPVwiMjAyMC0wNi0xM1wiLCB1bnRpbD1cIjIwMjAtMDYtMTRcIiwgdHlwZT1cInJlY2VudFwiLCBpbmNsdWRlX3J0cz1GQUxTRSwgbj0xODAwMClcbmBgYCJ9 -->
-<pre class="r"><code>tweets_kim_13 &lt;- search_tweets(q,geocode = lookup_coords(&quot;Kimberley&quot;), since=&quot;2020-06-13&quot;, until=&quot;2020-06-14&quot;, type=&quot;recent&quot;, include_rts=FALSE, n=18000)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiXG5Eb3dubG9hZGluZyBbLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS1dICAgMSVcbiJ9 -->
-<pre><code>
-Downloading [-----------------------------------------]   1%</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudHdlZXRzX2tsZXJrXzEzIDwtIHNlYXJjaF90d2VldHMocSxnZW9jb2RlID0gbG9va3VwX2Nvb3JkcyhcIktsZXJrc2RvcnBcIiksIHNpbmNlPVwiMjAyMC0wNi0xM1wiLCB1bnRpbD1cIjIwMjAtMDYtMTRcIiwgdHlwZT1cInJlY2VudFwiLCBpbmNsdWRlX3J0cz1GQUxTRSwgbj0xODAwMClcbmBgYCJ9 -->
-<pre class="r"><code>tweets_klerk_13 &lt;- search_tweets(q,geocode = lookup_coords(&quot;Klerksdorp&quot;), since=&quot;2020-06-13&quot;, until=&quot;2020-06-14&quot;, type=&quot;recent&quot;, include_rts=FALSE, n=18000)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiXG5Eb3dubG9hZGluZyBbLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS1dICAgMSVcbiJ9 -->
-<pre><code>
-Downloading [-----------------------------------------]   1%</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudHdlZXRzX21ib21iXzEzIDwtIHNlYXJjaF90d2VldHMocSxnZW9jb2RlID0gbG9va3VwX2Nvb3JkcyhcIk1ib21iZWxhXCIpLCBzaW5jZT1cIjIwMjAtMDYtMTNcIiwgdW50aWw9XCIyMDIwLTA2LTE0XCIsIHR5cGU9XCJyZWNlbnRcIiwgaW5jbHVkZV9ydHM9RkFMU0UsIG49MTgwMDApXG5gYGAifQ== -->
-<pre class="r"><code>tweets_mbomb_13 &lt;- search_tweets(q,geocode = lookup_coords(&quot;Mbombela&quot;), since=&quot;2020-06-13&quot;, until=&quot;2020-06-14&quot;, type=&quot;recent&quot;, include_rts=FALSE, n=18000)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiXG5Eb3dubG9hZGluZyBbLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS1dICAgMSVcbiJ9 -->
-<pre><code>
-Downloading [-----------------------------------------]   1%</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudHdlZXRzX3BvbG9fMTMgPC0gc2VhcmNoX3R3ZWV0cyhxLGdlb2NvZGUgPSBsb29rdXBfY29vcmRzKFwiUG9sb2t3YW5lXCIpLCBzaW5jZT1cIjIwMjAtMDYtMTNcIiwgdW50aWw9XCIyMDIwLTA2LTE0XCIsIHR5cGU9XCJyZWNlbnRcIiwgaW5jbHVkZV9ydHM9RkFMU0UsIG49MTgwMDApXG5gYGAifQ== -->
-<pre class="r"><code>tweets_polo_13 &lt;- search_tweets(q,geocode = lookup_coords(&quot;Polokwane&quot;), since=&quot;2020-06-13&quot;, until=&quot;2020-06-14&quot;, type=&quot;recent&quot;, include_rts=FALSE, n=18000)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiXG5Eb3dubG9hZGluZyBbLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS1dICAgMSVcbiJ9 -->
-<pre><code>
-Downloading [-----------------------------------------]   1%</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudHdlZXRzX3BlXzEzIDwtIHNlYXJjaF90d2VldHMocSxnZW9jb2RlID0gbG9va3VwX2Nvb3JkcyhcIlBvcnQgRWxpemFiZXRoXCIpLCBzaW5jZT1cIjIwMjAtMDYtMTNcIiwgdW50aWw9XCIyMDIwLTA2LTE0XCIsIHR5cGU9XCJyZWNlbnRcIiwgaW5jbHVkZV9ydHM9RkFMU0UsIG49MTgwMDApXG5gYGAifQ== -->
-<pre class="r"><code>tweets_pe_13 &lt;- search_tweets(q,geocode = lookup_coords(&quot;Port Elizabeth&quot;), since=&quot;2020-06-13&quot;, until=&quot;2020-06-14&quot;, type=&quot;recent&quot;, include_rts=FALSE, n=18000)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiXG5Eb3dubG9hZGluZyBbLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS1dICAgMSVcbiJ9 -->
-<pre><code>
-Downloading [-----------------------------------------]   1%</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI0dldCBGcmllbmRzICYgRm9sbG93ZXJzXG5gYGAifQ== -->
-<pre class="r"><code>#Get Friends &amp; Followers</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI0NvbGxlY3RpbmcgbGFzdCAxODAwMCB0d2VldHMgZm9yIFNvdXRoIEFmcmljYVxuYGBgIn0= -->
+<pre class="r"><code>#Collecting last 18000 tweets for South Africa</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
+<<<<<<< Updated upstream
+<div id="collect-fifth-batch-of-tweets" class="section level3">
+<h3>Collect fifth batch of tweets</h3>
+=======
 </div>
 <div id="finished-collecting-tweets" class="section level2">
 <h2>finished collecting tweets!</h2>
 </div>
-<div id="exporting-tweets-to-.rds" class="section level1">
-<h1>Exporting Tweets to .rds</h1>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI0V4cG9ydCBGaWx0ZXJlZCBEYXRhIGZvciAxMy8wNi8yMDIwXG53cml0ZV9yZHModHdlZXRzX3phXzEzLCBcIkRhdGEvUmF3X0ZpbHRlcmVkX0RhdGEvdHdlZXRzX3phXzEzLnJkc1wiKVxud3JpdGVfcmRzKHR3ZWV0c19ibG9lbV8xMywgXCJEYXRhL1Jhd19GaWx0ZXJlZF9EYXRhL3R3ZWV0c19ibG9lbV8xMy5yZHNcIilcbndyaXRlX3Jkcyh0d2VldHNfY3B0XzEzLCBcIkRhdGEvUmF3X0ZpbHRlcmVkX0RhdGEvdHdlZXRzX2NwdF8xMy5yZHNcIilcbndyaXRlX3Jkcyh0d2VldHNfZHVyYl8xMywgXCJEYXRhL1Jhd19GaWx0ZXJlZF9EYXRhL3R3ZWV0c19kdXJiXzEzLnJkc1wiKVxud3JpdGVfcmRzKHR3ZWV0c19qaGJfMTMsIFwiRGF0YS9SYXdfRmlsdGVyZWRfRGF0YS90d2VldHNfamhiXzEzLnJkc1wiKVxud3JpdGVfcmRzKHR3ZWV0c19raW1fMTMsIFwiRGF0YS9SYXdfRmlsdGVyZWRfRGF0YS90d2VldHNfa2ltXzEzLnJkc1wiKVxud3JpdGVfcmRzKHR3ZWV0c19rbGVya18xMywgXCJEYXRhL1Jhd19GaWx0ZXJlZF9EYXRhL3R3ZWV0c19rbGVya18xMy5yZHNcIilcbndyaXRlX3Jkcyh0d2VldHNfbWJvbWJfMTMsIFwiRGF0YS9SYXdfRmlsdGVyZWRfRGF0YS90d2VldHNfbWJvbWJfMTMucmRzXCIpXG53cml0ZV9yZHModHdlZXRzX3BvbG9fMTMsIFwiRGF0YS9SYXdfRmlsdGVyZWRfRGF0YS90d2VldHNfcG9sb18xM1wiKVxud3JpdGVfcmRzKHR3ZWV0c19wZV8xMywgXCJEYXRhL1Jhd19GaWx0ZXJlZF9EYXRhL3R3ZWV0c19wZV8xM1wiKVxuXG4jRXhwb3J0IEFsbCBUd2VldCBEYXRhIGZvciAxMy8wNi8yMDIwXG5gYGAifQ== -->
-<pre class="r"><code>#Export Filtered Data for 13/06/2020
-write_rds(tweets_za_13, &quot;Data/Raw_Filtered_Data/tweets_za_13.rds&quot;)
-write_rds(tweets_bloem_13, &quot;Data/Raw_Filtered_Data/tweets_bloem_13.rds&quot;)
-write_rds(tweets_cpt_13, &quot;Data/Raw_Filtered_Data/tweets_cpt_13.rds&quot;)
-write_rds(tweets_durb_13, &quot;Data/Raw_Filtered_Data/tweets_durb_13.rds&quot;)
-write_rds(tweets_jhb_13, &quot;Data/Raw_Filtered_Data/tweets_jhb_13.rds&quot;)
-write_rds(tweets_kim_13, &quot;Data/Raw_Filtered_Data/tweets_kim_13.rds&quot;)
-write_rds(tweets_klerk_13, &quot;Data/Raw_Filtered_Data/tweets_klerk_13.rds&quot;)
-write_rds(tweets_mbomb_13, &quot;Data/Raw_Filtered_Data/tweets_mbomb_13.rds&quot;)
-write_rds(tweets_polo_13, &quot;Data/Raw_Filtered_Data/tweets_polo_13&quot;)
-write_rds(tweets_pe_13, &quot;Data/Raw_Filtered_Data/tweets_pe_13&quot;)
-
-#Export All Tweet Data for 13/06/2020</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBFeHBvcnRpbmcgcmF3IHJlc3VsdHNcblxud3JpdGVfcmRzKE5ld3MyNF90d2VldHMsIFwiRGF0YS9SYXdfVGltZWxpbmVfRGF0YS9OZXdzMjRfdHdlZXRzLnJkc1wiKVxud3JpdGVfcmRzKFRpbWVzTElWRV90d2VldHMsIFwiRGF0YS9SYXdfVGltZWxpbmVfRGF0YS9UaW1lc0xJVkVfdHdlZXRzLnJkc1wiKVxud3JpdGVfcmRzKGVOQ0FfdHdlZXRzLCBcIkRhdGEvUmF3X1RpbWVsaW5lX0RhdGEvZU5DQV90d2VldHMucmRzXCIpXG53cml0ZV9yZHMoSU9MX3R3ZWV0cyxcIkRhdGEvUmF3X1RpbWVsaW5lX0RhdGEvSU9MX3R3ZWV0cy5yZHNcIilcbndyaXRlX3JkcyhTQUJDTmV3c190d2VldHMsXCJEYXRhL1Jhd19UaW1lbGluZV9EYXRhL1NBQkNOZXdzX3R3ZWV0cy5yZHNcIilcbndyaXRlX3Jkcyhld251cGRhdGVzX3R3ZWV0cyxcIkRhdGEvUmF3X1RpbWVsaW5lX0RhdGEvZXdudXBkYXRlc190d2VldHNcIilcbmBgYCJ9 -->
-<pre class="r"><code># Exporting raw results
-
-write_rds(News24_tweets, &quot;Data/Raw_Timeline_Data/News24_tweets.rds&quot;)
-write_rds(TimesLIVE_tweets, &quot;Data/Raw_Timeline_Data/TimesLIVE_tweets.rds&quot;)
-write_rds(eNCA_tweets, &quot;Data/Raw_Timeline_Data/eNCA_tweets.rds&quot;)
-write_rds(IOL_tweets,&quot;Data/Raw_Timeline_Data/IOL_tweets.rds&quot;)
-write_rds(SABCNews_tweets,&quot;Data/Raw_Timeline_Data/SABCNews_tweets.rds&quot;)
-write_rds(ewnupdates_tweets,&quot;Data/Raw_Timeline_Data/ewnupdates_tweets&quot;)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-</div>
-<div id="performing-transformations" class="section level1">
-<h1>Performing transformations</h1>
+<<<<<<< Updated upstream
+<div id="exporting-pulled-tweets" class="section level1">
+<h1>Exporting pulled tweets</h1>
+=======
+<div id="perorming-transformations" class="section level1">
+<h1>Perorming transformations</h1>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBTZW50aW1lbnQgQW5hbHlzaXNcblxuXG5gYGAifQ== -->
@@ -2052,26 +1903,88 @@ write_rds(ewnupdates_tweets,&quot;Data/Raw_Timeline_Data/ewnupdates_tweets&quot;
 <h2>Done</h2>
 </div>
 </div>
-<div id="exporting-transformation-results" class="section level1">
-<h1>Exporting transformation results</h1>
+<div id="exporting-results" class="section level1">
+<h1>Exporting results</h1>
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI3dyaXRlX3JkcyhOZXdzMjRfdHdlZXRzLCBcIlJlc3VsdHMvTmV3czI0X3R3ZWV0cy5yZHNcIilcbiN3cml0ZV9yZHMoVGltZXNMSVZFX3R3ZWV0cywgXCJSZXN1bHRzL1RpbWVzTElWRV90d2VldHMucmRzXCIpXG4jd3JpdGVfcmRzKGVOQ0FfdHdlZXRzLCBcIlJlc3VsdHMvZU5DQV90d2VldHMucmRzXCIpXG4jd3JpdGVfcmRzKElPTF90d2VldHMsXCJSZXN1bHRzL0lPTF90d2VldHMucmRzXCIpXG4jd3JpdGVfcmRzKFNBQkNOZXdzX3R3ZWV0cyxcIlJlc3VsdHMvU0FCQ05ld3NfdHdlZXRzLnJkc1wiKVxuI3dyaXRlX3Jkcyhld251cGRhdGVzX3R3ZWV0cyxcIlJlc3VsdHMvZXdudXBkYXRlc190d2VldHNcIilcbmBgYCJ9 -->
-<pre class="r"><code>#write_rds(News24_tweets, &quot;Results/News24_tweets.rds&quot;)
-#write_rds(TimesLIVE_tweets, &quot;Results/TimesLIVE_tweets.rds&quot;)
-#write_rds(eNCA_tweets, &quot;Results/eNCA_tweets.rds&quot;)
-#write_rds(IOL_tweets,&quot;Results/IOL_tweets.rds&quot;)
-#write_rds(SABCNews_tweets,&quot;Results/SABCNews_tweets.rds&quot;)
-#write_rds(ewnupdates_tweets,&quot;Results/ewnupdates_tweets&quot;)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI0NvbGxlY3RpbmcgbGFzdCAxODAwMCB0d2VldHMgd2l0aCB0aGUgQ29yb25hIGxpc3Qgc2VhcmNoIHRlcm1zIGZvciBTb3V0aCBBZnJpY2FcbmBgYCJ9 -->
+<pre class="r"><code>#Collecting last 18000 tweets with the Corona list search terms for South Africa</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+</div>
+</div>
+<div id="finished-collecting-tweets" class="section level2">
+<h2>finished collecting tweets!</h2>
+</div>
+<div id="performing-transformations" class="section level1">
+<h1>Performing transformations</h1>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBTZW50aW1lbnQgQW5hbHlzaXNcblxuXG5gYGAifQ== -->
+<pre class="r"><code># Sentiment Analysis
+</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
+<<<<<<< Updated upstream
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBUb3BpYyBBbmFseXNpc1xuXG5cbmBgYCJ9 -->
+<pre class="r"><code># Topic Analysis
+</code></pre>
+=======
+<<<<<<< Updated upstream
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBUb3BpYyBBbmFseXNpc1xuYGBgIn0= -->
+<pre class="r"><code># Topic Analysis</code></pre>
+>>>>>>> Stashed changes
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBPdGhlciBBbmFseXNpc1xuXG5cbmBgYCJ9 -->
+<pre class="r"><code># Other Analysis
+</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<div id="done" class="section level2">
+<h2>Done</h2>
+</div>
+</div>
+<div id="exporting-results" class="section level1">
+<h1>Exporting results</h1>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxud3JpdGVfcmRzKE5ld3MyNF90d2VldHMsIFwiRGF0YS9OZXdzMjRfdHdlZXRzLnJkc1wiKVxud3JpdGVfcmRzKFRpbWVzTElWRV90d2VldHMsIFwiRGF0YS9UaW1lc0xJVkVfdHdlZXRzLnJkc1wiKVxud3JpdGVfcmRzKGVOQ0FfdHdlZXRzLCBcIkRhdGEvZU5DQV90d2VldHMucmRzXCIpXG53cml0ZV9yZHMoSU9MX3R3ZWV0cyxcIkRhdGEvSU9MX3R3ZWV0cy5yZHNcIilcbndyaXRlX3JkcyhTQUJDTmV3c190d2VldHMsXCJEYXRhL1NBQkNOZXdzX3R3ZWV0cy5yZHNcIilcbndyaXRlX3Jkcyhld251cGRhdGVzX3R3ZWV0cyxcIkRhdGEvZXdudXBkYXRlc190d2VldHNcIilcbmBgYCJ9 -->
+<pre class="r"><code>write_rds(News24_tweets, &quot;Data/News24_tweets.rds&quot;)
+write_rds(TimesLIVE_tweets, &quot;Data/TimesLIVE_tweets.rds&quot;)
+write_rds(eNCA_tweets, &quot;Data/eNCA_tweets.rds&quot;)
+write_rds(IOL_tweets,&quot;Data/IOL_tweets.rds&quot;)
+write_rds(SABCNews_tweets,&quot;Data/SABCNews_tweets.rds&quot;)
+write_rds(ewnupdates_tweets,&quot;Data/ewnupdates_tweets&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<<<<<<< Updated upstream
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+=======
+</div>
+<div id="exporting-results" class="section level2">
+=======
+>>>>>>> Stashed changes
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <p>```</p>
-<div id="exporting-results" class="section level2">
+<div id="exporting-results-1" class="section level2">
+<<<<<<< Updated upstream
+=======
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
 <h2>Exporting results</h2>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
@@ -2081,7 +1994,15 @@ write_rds(ewnupdates_tweets,&quot;Data/Raw_Timeline_Data/ewnupdates_tweets&quot;
 </div>
 </div>
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogIkRhdGEgRXh0cmFjdGlvbiINCm91dHB1dDogaHRtbF9ub3RlYm9vaw0KLS0tDQoNCmBgYHtyfQ0KI2luc3RhbGxfZ2l0aHViKCJta2Vhcm5leS9ydHdlZXQiKQ0KDQojUGFja2FnZXMNCmxpYnJhcnkodXNldGhpcykNCmxpYnJhcnkoZGV2dG9vbHMpDQpsaWJyYXJ5KHJ0d2VldCkNCmxpYnJhcnkocmVhZHIpDQpsaWJyYXJ5KHRvcGljbW9kZWxzKQ0KbGlicmFyeShtYXBzKQ0KYGBgDQoNCg0KYGBge3J9DQoNCiNEZWZpbmUgY3JlZGVudGlhbHMNCmFwcF9uYW1lPC0iIg0KY29uc3VtZXJfa2V5PC0iIg0KY29uc3VtZXJfc2VjcmV0PC0iIg0KYWNjZXNzX3Rva2VuPC0iIg0KYWNjZXNzX3Rva2VuX3NlY3JldDwtIiINCg0KDQpgYGANCg0KIyMgY2hlY2tpbmcgcmF0ZSBsaW1pdHMNCmBgYHtyfQ0KIyBzZWUgcmF0ZSBsaW1pdHMNCiMgVGhlIHJhdGUgbGltaXQgZm9yIHRoZSBzdGFuZGFyZCBzZWFyY2ggQVBJIGlzIDE4LDAwMCB0d2VldHMgcGVyIGZpZnRlZW4gbWludXRlcy4gV2l0aCBhIGJlYXJlciB0b2tlbiwgdGhlIHJhdGUgbGltaXQgaXMgNDUsMDAwIHR3ZWV0cyBwZXIgZmlmdGVlbiBtaW51dGVzLiANCnJhdGVfbGltaXRzPC1yYXRlX2xpbWl0KCkNCmhlYWQocmF0ZV9saW1pdHNbLDE6NF0pDQpgYGANCg0KDQpgYGB7cn0NCiMNCiNjcmVhdGVfdG9rZW4oYXBwPWFwcF9uYW1lLA0KIyAgICAgICAgICAgICBjb25zdW1lcl9rZXk9Y29uc3VtZXJfa2V5LCBjb25zdW1lcl9zZWNyZXQ9Y29uc3VtZXJfc2VjcmV0LA0KIyAgICAgICAgICAgICBhY2Nlc3NfdG9rZW4gPSBhY2Nlc3NfdG9rZW4sIGFjY2Vzc19zZWNyZXQgPSBhY2Nlc3NfdG9rZW5fc2VjcmV0KQ0KDQpgYGANCg0KDQojIyBTZWFyY2hpbmcgZm9yIHR3ZWV0cy4uLg0KIyMjIENvbGxlY3QgZmlyc3QgYmF0Y2ggb2YgdHdlZXRzDQpgYGB7ciBlY2hvPVRSVUUsIG1lc3NhZ2U9RkFMU0UsIHdhcm5pbmc9RkFMU0V9DQojUFVMTCBGSU5BTCBWRVJTSU9OIE9OIE1PTkRBWSBPUiBUVUVTREFZDQpOZXdzMjRfdHdlZXRzIDwtIGdldF90aW1lbGluZXMoYygiTmV3czI0IiksIG4gPSAzMjAwLCBpbmNsdWRlX3J0cz1GQUxTRSkNClRpbWVzTElWRV90d2VldHMgPC0gZ2V0X3RpbWVsaW5lcyhjKCJUaW1lc0xJVkUiKSwgbiA9IDMyMDAsIGluY2x1ZGVfcnRzPUZBTFNFKQ0KZU5DQV90d2VldHMgPC0gZ2V0X3RpbWVsaW5lcyhjKCJlTkNBIiksIG4gPSAzMjAwLCBpbmNsdWRlX3J0cz1GQUxTRSkNCg0KYGBgDQoNCg0KIyMjIENvbGxlY3Qgc2Vjb25kIGJhdGNoIG9mIHR3ZWV0cw0KYGBge3IgZWNobz1UUlVFLCBtZXNzYWdlPUZBTFNFLCB3YXJuaW5nPUZBTFNFfQ0KSU9MX3R3ZWV0cyA8LSBnZXRfdGltZWxpbmVzKGMoIklPTCIpLCBuPTMyMDAsIGluY2x1ZGVfcnRzPUZBTFNFKQ0KU0FCQ05ld3NfdHdlZXRzIDwtIGdldF90aW1lbGluZXMoYygiU0FCQ05ld3MiKSwgbj0zMjAwLCBpbmNsdWRlX3J0cz1GQUxTRSkNCmV3bnVwZGF0ZXNfdHdlZXRzIDwtIGdldF90aW1lbGluZXMoYygiZXdudXBkYXRlcyIpLCBuPTMyMDAsIGluY2x1ZGVfcnRzPUZBTFNFKQ0KYGBgDQoNCiMjIyBDb2xsZWN0IHRoaXJkIGJhdGNoIG9mIHR3ZWV0cw0KYGBge3IgZWNobz1UUlVFLCBtZXNzYWdlPUZBTFNFLCB3YXJuaW5nPUZBTFNFfQ0KI05vdCB1c2VmdWwNCiN0cmVuZF90d2VldHMgPC0gZ2V0X3RyZW5kcygiU291dGggQWZyaWNhIikNCiN0cmVuZF90d2VldHMNCmBgYA0KDQojIyMgQ29sbGVjdCBmb3VydGggYmF0Y2ggb2YgdHdlZXRzDQpgYGB7cn0NCiNEZWZpbmUgdGVybXMgdG8gc2VhcmNoIGJ5DQpxMSA8LSAiQ292aWQgT1IgQ29yb25hIE9SIENvdmlkLTE5IE9SIENvdmlkMTkgT1IgQ29yb25hdmlydXMgT1IgU0FSUy1Db1YtMiBPUiBTQVJTLUNvViINCnEyIDwtICJPUiAjQ292aWQgT1IgI0Nvcm9uYSBPUiAjQ292aWQtMTkgT1IgI0NvdmlkMTkgT1IgI0Nvcm9uYXZpcnVzIE9SICNTQVJTLUNvVi0yIE9SICNTQVJTLUNvViINCnEgPC0gcGFzdGUocTEscTIpDQpgYGANCg0KDQpgYGB7cn0NCiNDb2xsZWN0aW5nIHR3ZWV0cyBmb3IgU291dGggQWZyaWNhDQp0d2VldHNfemFfMTMgPC0gc2VhcmNoX3R3ZWV0cyhxLGdlb2NvZGUgPSBsb29rdXBfY29vcmRzKCJTb3V0aCBBZnJpY2EiKSwgc2luY2U9IjIwMjAtMDYtMTMiLCB1bnRpbD0iMjAyMC0wNi0xNCIsIHR5cGU9InJlY2VudCIsIGluY2x1ZGVfcnRzPUZBTFNFLCBuPTE4MDAwKQ0KDQojQ29sbGVjdGluZyB0d2VldHMgZm9yIGxhcmdlc3QgY2l0eSBpbiBlYWNoIHByb3ZpbmNlDQp0d2VldHNfYmxvZW1fMTMgPC0gc2VhcmNoX3R3ZWV0cyhxLGdlb2NvZGUgPSBsb29rdXBfY29vcmRzKCJCbG9lbWZvbnRlaW4iKSwgc2luY2U9IjIwMjAtMDYtMTMiLCB1bnRpbD0iMjAyMC0wNi0xNCIsIHR5cGU9InJlY2VudCIsIGluY2x1ZGVfcnRzPUZBTFNFLCBuPTE4MDAwKQ0KdHdlZXRzX2NwdF8xMyA8LSBzZWFyY2hfdHdlZXRzKHEsZ2VvY29kZSA9IGxvb2t1cF9jb29yZHMoIkNhcGUgVG93biIpLCBzaW5jZT0iMjAyMC0wNi0xMyIsIHVudGlsPSIyMDIwLTA2LTE0IiwgdHlwZT0icmVjZW50IiwgaW5jbHVkZV9ydHM9RkFMU0UsIG49MTgwMDApDQp0d2VldHNfZHVyYl8xMyA8LSBzZWFyY2hfdHdlZXRzKHEsZ2VvY29kZSA9IGxvb2t1cF9jb29yZHMoIkR1cmJhbiIpLCBzaW5jZT0iMjAyMC0wNi0xMyIsIHVudGlsPSIyMDIwLTA2LTE0IiwgdHlwZT0icmVjZW50IiwgaW5jbHVkZV9ydHM9RkFMU0UsIG49MTgwMDApDQp0d2VldHNfamhiXzEzIDwtIHNlYXJjaF90d2VldHMocSxnZW9jb2RlID0gbG9va3VwX2Nvb3JkcygiSm9oYW5uZXNidXJnIiksIHNpbmNlPSIyMDIwLTA2LTEzIiwgdW50aWw9IjIwMjAtMDYtMTQiLCB0eXBlPSJyZWNlbnQiLCBpbmNsdWRlX3J0cz1GQUxTRSwgbj0xODAwMCkNCnR3ZWV0c19raW1fMTMgPC0gc2VhcmNoX3R3ZWV0cyhxLGdlb2NvZGUgPSBsb29rdXBfY29vcmRzKCJLaW1iZXJsZXkiKSwgc2luY2U9IjIwMjAtMDYtMTMiLCB1bnRpbD0iMjAyMC0wNi0xNCIsIHR5cGU9InJlY2VudCIsIGluY2x1ZGVfcnRzPUZBTFNFLCBuPTE4MDAwKQ0KdHdlZXRzX2tsZXJrXzEzIDwtIHNlYXJjaF90d2VldHMocSxnZW9jb2RlID0gbG9va3VwX2Nvb3JkcygiS2xlcmtzZG9ycCIpLCBzaW5jZT0iMjAyMC0wNi0xMyIsIHVudGlsPSIyMDIwLTA2LTE0IiwgdHlwZT0icmVjZW50IiwgaW5jbHVkZV9ydHM9RkFMU0UsIG49MTgwMDApDQp0d2VldHNfbWJvbWJfMTMgPC0gc2VhcmNoX3R3ZWV0cyhxLGdlb2NvZGUgPSBsb29rdXBfY29vcmRzKCJNYm9tYmVsYSIpLCBzaW5jZT0iMjAyMC0wNi0xMyIsIHVudGlsPSIyMDIwLTA2LTE0IiwgdHlwZT0icmVjZW50IiwgaW5jbHVkZV9ydHM9RkFMU0UsIG49MTgwMDApDQp0d2VldHNfcG9sb18xMyA8LSBzZWFyY2hfdHdlZXRzKHEsZ2VvY29kZSA9IGxvb2t1cF9jb29yZHMoIlBvbG9rd2FuZSIpLCBzaW5jZT0iMjAyMC0wNi0xMyIsIHVudGlsPSIyMDIwLTA2LTE0IiwgdHlwZT0icmVjZW50IiwgaW5jbHVkZV9ydHM9RkFMU0UsIG49MTgwMDApDQp0d2VldHNfcGVfMTMgPC0gc2VhcmNoX3R3ZWV0cyhxLGdlb2NvZGUgPSBsb29rdXBfY29vcmRzKCJQb3J0IEVsaXphYmV0aCIpLCBzaW5jZT0iMjAyMC0wNi0xMyIsIHVudGlsPSIyMDIwLTA2LTE0IiwgdHlwZT0icmVjZW50IiwgaW5jbHVkZV9ydHM9RkFMU0UsIG49MTgwMDApDQpgYGANCg0KYGBge3J9DQojR2V0IEZyaWVuZHMgJiBGb2xsb3dlcnMNCmBgYA0KDQojIyBmaW5pc2hlZCBjb2xsZWN0aW5nIHR3ZWV0cyENCg0KDQojIEV4cG9ydGluZyBUd2VldHMgdG8gLnJkcw0KYGBge3J9DQojRXhwb3J0IEZpbHRlcmVkIERhdGEgZm9yIDEzLzA2LzIwMjANCndyaXRlX3Jkcyh0d2VldHNfemFfMTMsICJEYXRhL1Jhd19GaWx0ZXJlZF9EYXRhL3R3ZWV0c196YV8xMy5yZHMiKQ0Kd3JpdGVfcmRzKHR3ZWV0c19ibG9lbV8xMywgIkRhdGEvUmF3X0ZpbHRlcmVkX0RhdGEvdHdlZXRzX2Jsb2VtXzEzLnJkcyIpDQp3cml0ZV9yZHModHdlZXRzX2NwdF8xMywgIkRhdGEvUmF3X0ZpbHRlcmVkX0RhdGEvdHdlZXRzX2NwdF8xMy5yZHMiKQ0Kd3JpdGVfcmRzKHR3ZWV0c19kdXJiXzEzLCAiRGF0YS9SYXdfRmlsdGVyZWRfRGF0YS90d2VldHNfZHVyYl8xMy5yZHMiKQ0Kd3JpdGVfcmRzKHR3ZWV0c19qaGJfMTMsICJEYXRhL1Jhd19GaWx0ZXJlZF9EYXRhL3R3ZWV0c19qaGJfMTMucmRzIikNCndyaXRlX3Jkcyh0d2VldHNfa2ltXzEzLCAiRGF0YS9SYXdfRmlsdGVyZWRfRGF0YS90d2VldHNfa2ltXzEzLnJkcyIpDQp3cml0ZV9yZHModHdlZXRzX2tsZXJrXzEzLCAiRGF0YS9SYXdfRmlsdGVyZWRfRGF0YS90d2VldHNfa2xlcmtfMTMucmRzIikNCndyaXRlX3Jkcyh0d2VldHNfbWJvbWJfMTMsICJEYXRhL1Jhd19GaWx0ZXJlZF9EYXRhL3R3ZWV0c19tYm9tYl8xMy5yZHMiKQ0Kd3JpdGVfcmRzKHR3ZWV0c19wb2xvXzEzLCAiRGF0YS9SYXdfRmlsdGVyZWRfRGF0YS90d2VldHNfcG9sb18xMyIpDQp3cml0ZV9yZHModHdlZXRzX3BlXzEzLCAiRGF0YS9SYXdfRmlsdGVyZWRfRGF0YS90d2VldHNfcGVfMTMiKQ0KDQojRXhwb3J0IEFsbCBUd2VldCBEYXRhIGZvciAxMy8wNi8yMDIwDQpgYGANCg0KDQoNCg0KDQpgYGB7ciBlY2hvPVRSVUV9DQojIEV4cG9ydGluZyByYXcgcmVzdWx0cw0KDQp3cml0ZV9yZHMoTmV3czI0X3R3ZWV0cywgIkRhdGEvUmF3X1RpbWVsaW5lX0RhdGEvTmV3czI0X3R3ZWV0cy5yZHMiKQ0Kd3JpdGVfcmRzKFRpbWVzTElWRV90d2VldHMsICJEYXRhL1Jhd19UaW1lbGluZV9EYXRhL1RpbWVzTElWRV90d2VldHMucmRzIikNCndyaXRlX3JkcyhlTkNBX3R3ZWV0cywgIkRhdGEvUmF3X1RpbWVsaW5lX0RhdGEvZU5DQV90d2VldHMucmRzIikNCndyaXRlX3JkcyhJT0xfdHdlZXRzLCJEYXRhL1Jhd19UaW1lbGluZV9EYXRhL0lPTF90d2VldHMucmRzIikNCndyaXRlX3JkcyhTQUJDTmV3c190d2VldHMsIkRhdGEvUmF3X1RpbWVsaW5lX0RhdGEvU0FCQ05ld3NfdHdlZXRzLnJkcyIpDQp3cml0ZV9yZHMoZXdudXBkYXRlc190d2VldHMsIkRhdGEvUmF3X1RpbWVsaW5lX0RhdGEvZXdudXBkYXRlc190d2VldHMiKQ0KYGBgDQoNCg0KIyBQZXJmb3JtaW5nIHRyYW5zZm9ybWF0aW9ucw0KYGBge3J9DQojIFNlbnRpbWVudCBBbmFseXNpcw0KDQoNCmBgYA0KDQpgYGB7cn0NCiMgVG9waWMgQW5hbHlzaXMNCg0KDQpgYGANCg0KYGBge3J9DQojIE90aGVyIEFuYWx5c2lzDQoNCg0KYGBgDQoNCiMjIERvbmUNCg0KIyBFeHBvcnRpbmcgdHJhbnNmb3JtYXRpb24gcmVzdWx0cw0KYGBge3IgZWNobz1UUlVFfQ0KI3dyaXRlX3JkcyhOZXdzMjRfdHdlZXRzLCAiUmVzdWx0cy9OZXdzMjRfdHdlZXRzLnJkcyIpDQojd3JpdGVfcmRzKFRpbWVzTElWRV90d2VldHMsICJSZXN1bHRzL1RpbWVzTElWRV90d2VldHMucmRzIikNCiN3cml0ZV9yZHMoZU5DQV90d2VldHMsICJSZXN1bHRzL2VOQ0FfdHdlZXRzLnJkcyIpDQojd3JpdGVfcmRzKElPTF90d2VldHMsIlJlc3VsdHMvSU9MX3R3ZWV0cy5yZHMiKQ0KI3dyaXRlX3JkcyhTQUJDTmV3c190d2VldHMsIlJlc3VsdHMvU0FCQ05ld3NfdHdlZXRzLnJkcyIpDQojd3JpdGVfcmRzKGV3bnVwZGF0ZXNfdHdlZXRzLCJSZXN1bHRzL2V3bnVwZGF0ZXNfdHdlZXRzIikNCmBgYA0KDQpgYGB7cn0NCg0KDQoNCg0KYGBgDQoNCg0KDQpgYGANCg0KIyMgRXhwb3J0aW5nIHJlc3VsdHMNCmBgYHtyfQ0KDQpgYGANCg0K</div>
+<<<<<<< Updated upstream
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIkRhdGEgRXh0cmFjdGlvbiINCm91dHB1dDogaHRtbF9ub3RlYm9vaw0KLS0tDQoNCmBgYHtyfQ0KI2luc3RhbGxfZ2l0aHViKCJta2Vhcm5leS9ydHdlZXQiKQ0KDQojUGFja2FnZXMNCmxpYnJhcnkoZGV2dG9vbHMpDQpsaWJyYXJ5KHJ0d2VldCkNCmxpYnJhcnkocmVhZHIpDQpsaWJyYXJ5KHVzZXRoaXMpDQpsaWJyYXJ5KHRvcGljbW9kZWxzKQ0KYGBgDQoNCmBgYHtyfQ0KDQojRGVmaW5lIGNyZWRlbnRpYWxzDQphcHBfbmFtZTwtIiINCmNvbnN1bWVyX2tleTwtIiINCmNvbnN1bWVyX3NlY3JldDwtIiINCmFjY2Vzc190b2tlbjwtIiINCmFjY2Vzc190b2tlbl9zZWNyZXQ8LSIiDQoNCg0KYGBgDQoNCiMjIGNoZWNraW5nIHJhdGUgbGltaXRzDQpgYGB7cn0NCiMgc2VlIHJhdGUgbGltaXRzDQojIFRoZSByYXRlIGxpbWl0IGZvciB0aGUgc3RhbmRhcmQgc2VhcmNoIEFQSSBpcyAxOCwwMDAgdHdlZXRzIHBlciBmaWZ0ZWVuIG1pbnV0ZXMuIFdpdGggYSBiZWFyZXIgdG9rZW4sIHRoZSByYXRlIGxpbWl0IGlzIDQ1LDAwMCB0d2VldHMgcGVyIGZpZnRlZW4gbWludXRlcy4gDQpyYXRlX2xpbWl0czwtcmF0ZV9saW1pdCgpDQpoZWFkKHJhdGVfbGltaXRzWywxOjRdKQ0KYGBgDQoNCmBgYHtyfQ0KDQpgYGANCg0KDQpgYGB7cn0NCiMNCmNyZWF0ZV90b2tlbihhcHA9YXBwX25hbWUsDQogICAgICAgICAgICAgY29uc3VtZXJfa2V5PWNvbnN1bWVyX2tleSwgY29uc3VtZXJfc2VjcmV0PWNvbnN1bWVyX3NlY3JldCwNCiAgICAgICAgICAgICBhY2Nlc3NfdG9rZW4gPSBhY2Nlc3NfdG9rZW4sIGFjY2Vzc19zZWNyZXQgPSBhY2Nlc3NfdG9rZW5fc2VjcmV0KQ0KDQoNCiNFeHRyYWN0cyAzMDAwIHR3ZWV0cyB3aXRoIGFwcHJvcHJpYXRlIGhhc2h0YWcNCk5FV1MyNF90d2VldHM8LXNlYXJjaF90d2VldHMoIiIsIG49NTAsIGluY2x1ZGVfcnRzID0gRkFMU0UpDQpFTkNBX3R3ZWV0czwtc2VhcmNoX3R3ZWV0cygiIiwgbj01MCwgaW5jbHVkZV9ydHMgPSBGQUxTRSkNCiNUT1BJQ190d2VldHM8LXNlYXJjaF90d2VldHMoIiIsIG49NTAsIGluY2x1ZGVfcnRzID0gRkFMU0UpDQoNCmBgYA0KDQojIyBTZWFyY2hpbmcgZm9yIHR3ZWV0cy4uLg0KIyMjIENvbGxlY3QgZmlyc3QgYmF0Y2ggb2YgdHdlZXRzDQpgYGB7ciBlY2hvPVRSVUUsIG1lc3NhZ2U9RkFMU0UsIHdhcm5pbmc9RkFMU0V9DQoNCk5ld3MyNF90d2VldHMgPC0gZ2V0X3RpbWVsaW5lcyhjKCJOZXdzMjQiKSwgbiA9IDMyMDApDQpUaW1lc0xJVkVfdHdlZXRzIDwtIGdldF90aW1lbGluZXMoYygiVGltZXNMSVZFIiksIG4gPSAzMjAwKQ0KZU5DQV90d2VldHMgPC0gZ2V0X3RpbWVsaW5lcyhjKCJlTkNBIiksIG4gPSAzMjAwKQ0KDQpgYGANCg0KIyMjIENvbGxlY3Qgc2Vjb25kIGJhdGNoIG9mIHR3ZWV0cw0KYGBge3IgZWNobz1UUlVFLCBtZXNzYWdlPUZBTFNFLCB3YXJuaW5nPUZBTFNFfQ0KSU9MX3R3ZWV0cyA8LSBnZXRfdGltZWxpbmVzKGMoIklPTCIpLCBuPTMyMDApDQpTQUJDTmV3c190d2VldHMgPC0gZ2V0X3RpbWVsaW5lcyhjKCJTQUJDTmV3cyIpLCBuPTMyMDApDQpld251cGRhdGVzX3R3ZWV0cyA8LSBnZXRfdGltZWxpbmVzKGMoImV3bnVwZGF0ZXMiKSwgbj0zMjAwKQ0KYGBgDQoNCiMjIyBDb2xsZWN0IHRoaXJkIGJhdGNoIG9mIHR3ZWV0cw0KYGBge3IgZWNobz1UUlVFLCBtZXNzYWdlPUZBTFNFLCB3YXJuaW5nPUZBTFNFfQ0KI05vdCB1c2VmdWwNCiN0cmVuZF90d2VldHMgPC0gZ2V0X3RyZW5kcygiU291dGggQWZyaWNhIikNCiN0cmVuZF90d2VldHMNCmBgYA0KDQojIyMgQ29sbGVjdCBmb3VydGggYmF0Y2ggb2YgdHdlZXRzDQpgYGB7ciBlY2hvPVRSVUUsIG1lc3NhZ2U9RkFMU0UsIHdhcm5pbmc9RkFMU0V9DQojQ29sbGVjdGluZyBsYXN0IDE4MDAwIHR3ZWV0cyBmb3IgU291dGggQWZyaWNhDQpgYGANCg0KIyMjIENvbGxlY3QgZmlmdGggYmF0Y2ggb2YgdHdlZXRzDQpgYGB7ciBlY2hvPVRSVUUsIG1lc3NhZ2U9RkFMU0UsIHdhcm5pbmc9RkFMU0V9DQojQ29sbGVjdGluZyBsYXN0IDE4MDAwIHR3ZWV0cyB3aXRoIHRoZSBDb3JvbmEgbGlzdCBzZWFyY2ggdGVybXMgZm9yIFNvdXRoIEFmcmljYQ0KYGBgDQoNCiMjIGZpbmlzaGVkIGNvbGxlY3RpbmcgdHdlZXRzIQ0KDQoNCiMgUGVyZm9ybWluZyB0cmFuc2Zvcm1hdGlvbnMNCmBgYHtyfQ0KIyBTZW50aW1lbnQgQW5hbHlzaXMNCg0KDQpgYGANCg0KYGBge3J9DQojIFRvcGljIEFuYWx5c2lzDQoNCg0KYGBgDQoNCmBgYHtyfQ0KIyBPdGhlciBBbmFseXNpcw0KDQoNCmBgYA0KDQojIyBEb25lDQoNCiMgRXhwb3J0aW5nIHJlc3VsdHMNCmBgYHtyIGVjaG89VFJVRX0NCndyaXRlX3JkcyhOZXdzMjRfdHdlZXRzLCAiRGF0YS9OZXdzMjRfdHdlZXRzLnJkcyIpDQp3cml0ZV9yZHMoVGltZXNMSVZFX3R3ZWV0cywgIkRhdGEvVGltZXNMSVZFX3R3ZWV0cy5yZHMiKQ0Kd3JpdGVfcmRzKGVOQ0FfdHdlZXRzLCAiRGF0YS9lTkNBX3R3ZWV0cy5yZHMiKQ0Kd3JpdGVfcmRzKElPTF90d2VldHMsIkRhdGEvSU9MX3R3ZWV0cy5yZHMiKQ0Kd3JpdGVfcmRzKFNBQkNOZXdzX3R3ZWV0cywiRGF0YS9TQUJDTmV3c190d2VldHMucmRzIikNCndyaXRlX3Jkcyhld251cGRhdGVzX3R3ZWV0cywiRGF0YS9ld251cGRhdGVzX3R3ZWV0cyIpDQpgYGANCg0KYGBge3J9DQoNCg0KDQoNCmBgYA0KDQoNCg0KYGBgDQoNCiMjIEV4cG9ydGluZyByZXN1bHRzDQpgYGB7cn0NCg0KYGBgDQoNCg==</div>
+=======
+<<<<<<< Updated upstream
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIkRhdGEgRXh0cmFjdGlvbiINCm91dHB1dDogaHRtbF9ub3RlYm9vaw0KLS0tDQoNCmBgYHtyfQ0KI2luc3RhbGxfZ2l0aHViKCJta2Vhcm5leS9ydHdlZXQiKQ0KDQojUGFja2FnZXMNCmxpYnJhcnkoZGV2dG9vbHMpDQpsaWJyYXJ5KHJ0d2VldCkNCmxpYnJhcnkocmVhZHIpDQpsaWJyYXJ5KHVzZXRoaXMpDQpsaWJyYXJ5KHRvcGljbW9kZWxzKQ0KYGBgDQoNCmBgYHtyfQ0KDQojRGVmaW5lIGNyZWRlbnRpYWxzDQphcHBfbmFtZTwtIiINCmNvbnN1bWVyX2tleTwtIiINCmNvbnN1bWVyX3NlY3JldDwtIiINCmFjY2Vzc190b2tlbjwtIiINCmFjY2Vzc190b2tlbl9zZWNyZXQ8LSIiDQoNCg0KYGBgDQoNCiMjIGNoZWNraW5nIHJhdGUgbGltaXRzDQpgYGB7cn0NCiMgc2VlIHJhdGUgbGltaXRzDQpyYXRlX2xpbWl0czwtcmF0ZV9saW1pdCgpDQpoZWFkKHJhdGVfbGltaXRzWywxOjRdKQ0KYGBgDQoNCmBgYHtyfQ0KDQpgYGANCg0KDQpgYGB7cn0NCiMNCmNyZWF0ZV90b2tlbihhcHA9YXBwX25hbWUsDQogICAgICAgICAgICAgY29uc3VtZXJfa2V5PWNvbnN1bWVyX2tleSwgY29uc3VtZXJfc2VjcmV0PWNvbnN1bWVyX3NlY3JldCwNCiAgICAgICAgICAgICBhY2Nlc3NfdG9rZW4gPSBhY2Nlc3NfdG9rZW4sIGFjY2Vzc19zZWNyZXQgPSBhY2Nlc3NfdG9rZW5fc2VjcmV0KQ0KDQoNCiNFeHRyYWN0cyAzMDAwIHR3ZWV0cyB3aXRoIGFwcHJvcHJpYXRlIGhhc2h0YWcNCk5FV1MyNF90d2VldHM8LXNlYXJjaF90d2VldHMoIiIsIG49NTAsIGluY2x1ZGVfcnRzID0gRkFMU0UpDQpFTkNBX3R3ZWV0czwtc2VhcmNoX3R3ZWV0cygiIiwgbj01MCwgaW5jbHVkZV9ydHMgPSBGQUxTRSkNCiNUT1BJQ190d2VldHM8LXNlYXJjaF90d2VldHMoIiIsIG49NTAsIGluY2x1ZGVfcnRzID0gRkFMU0UpDQoNCmBgYA0KDQojIyBTZWFyY2hpbmcgZm9yIHR3ZWV0cy4uLg0KIyMjIENvbGxlY3QgZmlyc3QgYmF0Y2ggb2YgdHdlZXRzDQpgYGB7ciBlY2hvPVRSVUUsIG1lc3NhZ2U9RkFMU0UsIHdhcm5pbmc9RkFMU0V9DQoNCk5ld3MyNF90d2VldHMgPC0gZ2V0X3RpbWVsaW5lcyhjKCJOZXdzMjQiKSwgbiA9IDMyMDApDQpUaW1lc0xJVkVfdHdlZXRzIDwtIGdldF90aW1lbGluZXMoYygiVGltZXNMSVZFIiksIG4gPSAzMjAwKQ0KZU5DQV90d2VldHMgPC0gZ2V0X3RpbWVsaW5lcyhjKCJlTkNBIiksIG4gPSAzMjAwKQ0KDQpgYGANCg0KIyMjIENvbGxlY3Qgc2Vjb25kIGJhdGNoIG9mIHR3ZWV0cw0KYGBge3IgZWNobz1UUlVFLCBtZXNzYWdlPUZBTFNFLCB3YXJuaW5nPUZBTFNFfQ0KSU9MX3R3ZWV0cyA8LSBnZXRfdGltZWxpbmVzKGMoIklPTCIpLCBuPTMyMDApDQpTQUJDTmV3c190d2VldHMgPC0gZ2V0X3RpbWVsaW5lcyhjKCJTQUJDTmV3cyIpLCBuPTMyMDApDQpld251cGRhdGVzX3R3ZWV0cyA8LSBnZXRfdGltZWxpbmVzKGMoImV3bnVwZGF0ZXMiKSwgbj0zMjAwKQ0KYGBgDQoNCiMjIyBDb2xsZWN0IHRoaXJkIGJhdGNoIG9mIHR3ZWV0cw0KYGBge3IgZWNobz1UUlVFLCBtZXNzYWdlPUZBTFNFLCB3YXJuaW5nPUZBTFNFfQ0KdHJlbmRfdHdlZXRzIDwtIGdldF90cmVuZHMoIlNvdXRoIEFmcmljYSIpDQpgYGANCg0KIyMjIENvbGxlY3QgZm91cnRoIGJhdGNoIG9mIHR3ZWV0cw0KYGBge3IgZWNobz1UUlVFLCBtZXNzYWdlPUZBTFNFLCB3YXJuaW5nPUZBTFNFfQ0KDQpgYGANCg0KIyMgZmluaXNoZWQgY29sbGVjdGluZyB0d2VldHMhDQoNCiMgRXhwb3J0aW5nIHB1bGxlZCB0d2VldHMNCmBgYHtyIGVjaG89VFJVRX0NCndyaXRlX3JkcyhOZXdzMjRfdHdlZXRzLCAiRGF0YS9OZXdzMjRfdHdlZXRzLnJkcyIpDQp3cml0ZV9yZHMoVGltZXNMSVZFX3R3ZWV0cywgIkRhdGEvVGltZXNMSVZFX3R3ZWV0cy5yZHMiKQ0Kd3JpdGVfcmRzKGVOQ0FfdHdlZXRzLCAiRGF0YS9lTkNBX3R3ZWV0cy5yZHMiKQ0Kd3JpdGVfcmRzKElPTF90d2VldHMsIkRhdGEvSU9MX3R3ZWV0cy5yZHMiKQ0Kd3JpdGVfcmRzKFNBQkNOZXdzX3R3ZWV0cywiRGF0YS9TQUJDTmV3c190d2VldHMucmRzIikNCndyaXRlX3Jkcyhld251cGRhdGVzX3R3ZWV0cywiRGF0YS9ld251cGRhdGVzX3R3ZWV0cyIpDQpgYGANCg0KIyBQZXJmb3JtaW5nIHRyYW5zZm9ybWF0aW9ucw0KYGBge3J9DQojIFNlbnRpbWVudCBBbmFseXNpcw0KYGBgDQoNCmBgYHtyfQ0KIyBUb3BpYyBBbmFseXNpcw0KYGBgDQoNCmBgYHtyfQ0KIyBPdGhlciBBbmFseXNpcw0KYGBgDQoNCiMjIERvbmUNCmBgYHtyfQ0KDQpgYGANCg0KIyMgRXhwb3J0aW5nIHJlc3VsdHMNCmBgYHtyfQ0KDQpgYGANCg0K</div>
+=======
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIkRhdGEgRXh0cmFjdGlvbiINCm91dHB1dDogaHRtbF9ub3RlYm9vaw0KLS0tDQoNCmBgYHtyfQ0KI2luc3RhbGxfZ2l0aHViKCJta2Vhcm5leS9ydHdlZXQiKQ0KDQojUGFja2FnZXMNCmxpYnJhcnkoZGV2dG9vbHMpDQpsaWJyYXJ5KHJ0d2VldCkNCmxpYnJhcnkocmVhZHIpDQpsaWJyYXJ5KHVzZXRoaXMpDQoNCmBgYA0KDQpgYGB7cn0NCg0KI0RlZmluZSBjcmVkZW50aWFscw0KYXBwX25hbWU8LSIiDQpjb25zdW1lcl9rZXk8LSIiDQpjb25zdW1lcl9zZWNyZXQ8LSIiDQphY2Nlc3NfdG9rZW48LSIiDQphY2Nlc3NfdG9rZW5fc2VjcmV0PC0iIg0KDQoNCmBgYA0KDQojIyBjaGVja2luZyByYXRlIGxpbWl0cw0KYGBge3J9DQojIHNlZSByYXRlIGxpbWl0cw0KcmF0ZV9saW1pdHM8LXJhdGVfbGltaXQoKQ0KaGVhZChyYXRlX2xpbWl0c1ssMTo0XSkNCmBgYA0KDQpgYGB7cn0NCg0KYGBgDQoNCg0KYGBge3J9DQojDQpjcmVhdGVfdG9rZW4oYXBwPWFwcF9uYW1lLA0KICAgICAgICAgICAgIGNvbnN1bWVyX2tleT1jb25zdW1lcl9rZXksIGNvbnN1bWVyX3NlY3JldD1jb25zdW1lcl9zZWNyZXQsDQogICAgICAgICAgICAgYWNjZXNzX3Rva2VuID0gYWNjZXNzX3Rva2VuLCBhY2Nlc3Nfc2VjcmV0ID0gYWNjZXNzX3Rva2VuX3NlY3JldCkNCg0KDQojRXh0cmFjdHMgMzAwMCB0d2VldHMgd2l0aCBhcHByb3ByaWF0ZSBoYXNodGFnDQpORVdTMjRfdHdlZXRzPC1zZWFyY2hfdHdlZXRzKCIiLCBuPTUwLCBpbmNsdWRlX3J0cyA9IEZBTFNFKQ0KRU5DQV90d2VldHM8LXNlYXJjaF90d2VldHMoIiIsIG49NTAsIGluY2x1ZGVfcnRzID0gRkFMU0UpDQojVE9QSUNfdHdlZXRzPC1zZWFyY2hfdHdlZXRzKCIiLCBuPTUwLCBpbmNsdWRlX3J0cyA9IEZBTFNFKQ0KDQpgYGANCg0KIyMgU2VhcmNoaW5nIGZvciB0d2VldHMuLi4NCiMjIyBDb2xsZWN0IGZpcnN0IGJhdGNoIG9mIHR3ZWV0cw0KYGBge3IgZWNobz1UUlVFLCBtZXNzYWdlPUZBTFNFLCB3YXJuaW5nPUZBTFNFfQ0KDQpOZXdzMjRfdHdlZXRzIDwtIGdldF90aW1lbGluZXMoYygiTmV3czI0IiksIG4gPSAzMjAwKQ0KVGltZXNMSVZFX3R3ZWV0cyA8LSBnZXRfdGltZWxpbmVzKGMoIlRpbWVzTElWRSIpLCBuID0gMzIwMCkNCmVOQ0FfdHdlZXRzIDwtIGdldF90aW1lbGluZXMoYygiZU5DQSIpLCBuID0gMzIwMCkNCg0KYGBgDQoNCiMjIyBDb2xsZWN0IHNlY29uZCBiYXRjaCBvZiB0d2VldHMNCmBgYHtyIGVjaG89VFJVRSwgbWVzc2FnZT1GQUxTRSwgd2FybmluZz1GQUxTRX0NCklPTF90d2VldHMgPC0gZ2V0X3RpbWVsaW5lcyhjKCJJT0wiKSwgbj0zMjAwKQ0KU0FCQ05ld3NfdHdlZXRzIDwtIGdldF90aW1lbGluZXMoYygiU0FCQ05ld3MiKSwgbj0zMjAwKQ0KZXdudXBkYXRlc190d2VldHMgPC0gZ2V0X3RpbWVsaW5lcyhjKCJld251cGRhdGVzIiksIG49MzIwMCkNCmBgYA0KDQojIyMgQ29sbGVjdCB0aGlyZCBiYXRjaCBvZiB0d2VldHMNCmBgYHtyIGVjaG89VFJVRSwgbWVzc2FnZT1GQUxTRSwgd2FybmluZz1GQUxTRX0NCnRyZW5kX3R3ZWV0cyA8LSBnZXRfdHJlbmRzKCJTb3V0aCBBZnJpY2EiKQ0KYGBgDQoNCiMjIyBDb2xsZWN0IGZvdXJ0aCBiYXRjaCBvZiB0d2VldHMNCmBgYHtyIGVjaG89VFJVRSwgbWVzc2FnZT1GQUxTRSwgd2FybmluZz1GQUxTRX0NCg0KYGBgDQoNCiMjIGZpbmlzaGVkIGNvbGxlY3RpbmcgdHdlZXRzIQ0KDQoNCiMgUGVyb3JtaW5nIHRyYW5zZm9ybWF0aW9ucw0KYGBge3J9DQojIFNlbnRpbWVudCBBbmFseXNpcw0KDQoNCmBgYA0KDQpgYGB7cn0NCiMgVG9waWMgQW5hbHlzaXMNCg0KDQpgYGANCg0KYGBge3J9DQojIE90aGVyIEFuYWx5c2lzDQoNCg0KYGBgDQoNCiMjIERvbmUNCg0KIyBFeHBvcnRpbmcgcmVzdWx0cw0KYGBge3IgZWNobz1UUlVFfQ0Kd3JpdGVfcmRzKE5ld3MyNF90d2VldHMsICJEYXRhL05ld3MyNF90d2VldHMucmRzIikNCndyaXRlX3JkcyhUaW1lc0xJVkVfdHdlZXRzLCAiRGF0YS9UaW1lc0xJVkVfdHdlZXRzLnJkcyIpDQp3cml0ZV9yZHMoZU5DQV90d2VldHMsICJEYXRhL2VOQ0FfdHdlZXRzLnJkcyIpDQp3cml0ZV9yZHMoSU9MX3R3ZWV0cywiRGF0YS9JT0xfdHdlZXRzLnJkcyIpDQp3cml0ZV9yZHMoU0FCQ05ld3NfdHdlZXRzLCJEYXRhL1NBQkNOZXdzX3R3ZWV0cy5yZHMiKQ0Kd3JpdGVfcmRzKGV3bnVwZGF0ZXNfdHdlZXRzLCJEYXRhL2V3bnVwZGF0ZXNfdHdlZXRzIikNCmBgYA0KDQpgYGB7cn0NCg0KDQoNCg0KYGBgDQoNCg0KDQpgYGANCg0KIyMgRXhwb3J0aW5nIHJlc3VsdHMNCmBgYHtyfQ0KDQpgYGANCg0K</div>
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
 
 
 
