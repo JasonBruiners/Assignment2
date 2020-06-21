@@ -9,9 +9,11 @@ output: html_notebook
 #Packages
 library(usethis)
 library(devtools)
+library(dplyr)
 library(rtweet)
 library(readr)
 library(topicmodels)
+library(tidyverse)
 library(maps)
 ```
 
@@ -124,6 +126,24 @@ SABC_freq <- separate(SABCNews_tweets, created_at, into=c("date","time"), sep=" 
 # sum days and join together, then send to visualisation
 
 ```
+
+```{r}
+#count the total number of tweets for each media house
+News24_freq <- nrow(News24_freq)
+timesLIVE_freq <- nrow(timesLIVE_freq)
+Ewnupdate_freq <- nrow(Ewnupdate_freq)
+IOL_freq <- nrow(IOL_freq)
+eNCA_freq <- nrow(eNCA_freq)
+SABC_freq <- nrow(SABC_freq)
+
+News24_freq
+timesLIVE_freq
+Ewnupdate_freq
+IOL_freq
+eNCA_freq
+SABC_freq
+```
+
 
 ## Done
 
