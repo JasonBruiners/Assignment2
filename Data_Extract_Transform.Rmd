@@ -118,6 +118,9 @@ IOL_freq <- separate(IOL_tweets, created_at, into=c("date","time"), sep=" ") %>%
 eNCA_freq <- separate(ewnupdates_tweets, created_at, into=c("date","time"), sep=" ") %>% select(date, screen_name)
 
 SABC_freq <- separate(SABCNews_tweets, created_at, into=c("date","time"), sep=" ") %>% select(date, screen_name)
+
+# sum days and join together, then send to visualisation
+
 ```
 
 ## Done
