@@ -48,7 +48,7 @@ head(rate_limits[,1:4])
 
 ## Searching for tweets...
 ### Collect first batch of tweets
-```{r echo=TRUE, message=FALSE, warning=FALSE}
+```{r echo=TRUE, message=TRUE, warning=TRUE}
 #PULL FINAL VERSION ON MONDAY OR TUESDAY
 News24_tweets <- get_timelines(c("News24"), n = 3200, include_rts=FALSE)
 TimesLIVE_tweets <- get_timelines(c("TimesLIVE"), n = 3200, include_rts=FALSE)
@@ -58,7 +58,7 @@ eNCA_tweets <- get_timelines(c("eNCA"), n = 3200, include_rts=FALSE)
 
 
 ### Collect second batch of tweets
-```{r echo=TRUE, message=FALSE, warning=FALSE}
+```{r echo=TRUE, message=TRUE, warning=TRUE}
 IOL_tweets <- get_timelines(c("IOL"), n=3200, include_rts=FALSE)
 SABCNews_tweets <- get_timelines(c("SABCNews"), n=3200, include_rts=FALSE)
 ewnupdates_tweets <- get_timelines(c("ewnupdates"), n=3200, include_rts=FALSE)
