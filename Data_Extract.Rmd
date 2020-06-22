@@ -99,6 +99,7 @@ tweets_pe_19 <- search_tweets(q,geocode = lookup_coords("Port Elizabeth"), since
 
 ```{r}
 #Get Friends & Followers
+
 ```
 
 ## finished collecting tweets!
