@@ -111,7 +111,7 @@ tweets_pe <-rbind(tweets_pe_14,tweets_pe_13)
 # Other Analysis
 
 # Frequency of tweets
-News24_freq <- separate(News24_tweets, created_at, into=c("date","time"), sep=" ") %>% format(as.Date(date), "%Y-%m-%d") %>%  group_by(date) %>% summarise(sum = count(date))
+News24_freq <- separate(News24_tweets, created_at, into=c("date","time"), sep=" ") %>% group_by(date) %>% summarise(freq = n())
 
 timesLIVE_freq <- separate(TimesLIVE_tweets, created_at, into=c("date","time"), sep=" ") %>% select(date, screen_name)
 
