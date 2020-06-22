@@ -30,66 +30,135 @@ ewnupdates_tweets <- read_rds("Data/Raw_Timeline_Data/ewnupdates_tweets")
 ```{r}
 tweets_za_13 <- read_rds("Data/Raw_Filtered_Data/tweets_za_13.rds")
 tweets_za_14 <- read_rds("Data/Raw_Filtered_Data/tweets_za_14.rds")
-#tweets_za_15
+tweets_za_15 <- read_rds("Data/Raw_Filtered_Data/tweets_za_15.rds")
+tweets_za_16 <- read_rds("Data/Raw_Filtered_Data/tweets_za_16.rds")
+tweets_za_17 <- read_rds("Data/Raw_Filtered_Data/tweets_za_17.rds")
+tweets_za_18 <- read_rds("Data/Raw_Filtered_Data/tweets_za_18.rds")
+#tweets_za_19 <- read_rds("Data/Raw_Filtered_Data/tweets_za_19.rds")
+#tweets_za_20 <- read_rds("Data/Raw_Filtered_Data/tweets_za_20.rds")
+#tweets_za_21 <- read_rds("Data/Raw_Filtered_Data/tweets_za_21.rds")
 ```
 
 ```{r}
 tweets_bloem_13 <- read_rds("Data/Raw_Filtered_Data/tweets_bloem_13.rds")
 tweets_bloem_14 <- read_rds("Data/Raw_Filtered_Data/tweets_bloem_14.rds")
+tweets_bloem_15 <- read_rds("Data/Raw_Filtered_Data/tweets_bloem_15.rds")
+tweets_bloem_16 <- read_rds("Data/Raw_Filtered_Data/tweets_bloem_16.rds")
+tweets_bloem_17 <- read_rds("Data/Raw_Filtered_Data/tweets_bloem_17.rds")
+tweets_bloem_18 <- read_rds("Data/Raw_Filtered_Data/tweets_bloem_18.rds")
+#tweets_bloem_19 <- read_rds("Data/Raw_Filtered_Data/tweets_bloem_19.rds")
+#tweets_bloem_20 <- read_rds("Data/Raw_Filtered_Data/tweets_bloem_20.rds")
+#tweets_bloem_21 <- read_rds("Data/Raw_Filtered_Data/tweets_bloem_21.rds")
 ```
 
 ```{r}
 tweets_cpt_13 <- read_rds("Data/Raw_Filtered_Data/tweets_cpt_13.rds")
 tweets_cpt_14 <- read_rds("Data/Raw_Filtered_Data/tweets_cpt_14.rds")
+tweets_cpt_15 <- read_rds("Data/Raw_Filtered_Data/tweets_cpt_15.rds")
+tweets_cpt_16 <- read_rds("Data/Raw_Filtered_Data/tweets_cpt_16.rds")
+tweets_cpt_17 <- read_rds("Data/Raw_Filtered_Data/tweets_cpt_17.rds")
+tweets_cpt_18 <- read_rds("Data/Raw_Filtered_Data/tweets_cpt_18.rds")
+#tweets_cpt_19 <- read_rds("Data/Raw_Filtered_Data/tweets_cpt_19.rds")
+#tweets_cpt_20 <- read_rds("Data/Raw_Filtered_Data/tweets_cpt_20.rds")
+#tweets_cpt_21 <- read_rds("Data/Raw_Filtered_Data/tweets_cpt_21.rds")
 ```
 
 ```{r}
 tweets_durb_13 <- read_rds("Data/Raw_Filtered_Data/tweets_durb_13.rds")
 tweets_durb_14 <- read_rds("Data/Raw_Filtered_Data/tweets_durb_14.rds")
+tweets_durb_15 <- read_rds("Data/Raw_Filtered_Data/tweets_durb_15.rds")
+tweets_durb_16 <- read_rds("Data/Raw_Filtered_Data/tweets_durb_16.rds")
+tweets_durb_17 <- read_rds("Data/Raw_Filtered_Data/tweets_durb_17.rds")
+tweets_durb_18 <- read_rds("Data/Raw_Filtered_Data/tweets_durb_18.rds")
+#tweets_durb_19 <- read_rds("Data/Raw_Filtered_Data/tweets_durb_19.rds")
+#tweets_durb_20 <- read_rds("Data/Raw_Filtered_Data/tweets_durb_20.rds")
+#tweets_durb_21 <- read_rds("Data/Raw_Filtered_Data/tweets_durb_21.rds")
 ```
 
 ```{r}
 tweets_jhb_13 <- read_rds("Data/Raw_Filtered_Data/tweets_jhb_13.rds")
 tweets_jhb_14 <- read_rds("Data/Raw_Filtered_Data/tweets_jhb_14.rds")
+tweets_jhb_15 <- read_rds("Data/Raw_Filtered_Data/tweets_jhb_15.rds")
+tweets_jhb_16 <- read_rds("Data/Raw_Filtered_Data/tweets_jhb_16.rds")
+tweets_jhb_17 <- read_rds("Data/Raw_Filtered_Data/tweets_jhb_17.rds")
+tweets_jhb_18 <- read_rds("Data/Raw_Filtered_Data/tweets_jhb_18.rds")
+#tweets_jhb_19 <- read_rds("Data/Raw_Filtered_Data/tweets_jhb_19.rds")
+#tweets_jhb_20 <- read_rds("Data/Raw_Filtered_Data/tweets_jhb_20.rds")
+#tweets_jhb_21 <- read_rds("Data/Raw_Filtered_Data/tweets_jhb_21.rds")
 ```
 
 ```{r}
 tweets_kim_13 <- read_rds("Data/Raw_Filtered_Data/tweets_kim_13.rds")
 tweets_kim_14 <- read_rds("Data/Raw_Filtered_Data/tweets_kim_14.rds")
+tweets_kim_15 <- read_rds("Data/Raw_Filtered_Data/tweets_kim_15.rds")
+tweets_kim_16 <- read_rds("Data/Raw_Filtered_Data/tweets_kim_16.rds")
+tweets_kim_17 <- read_rds("Data/Raw_Filtered_Data/tweets_kim_17.rds")
+tweets_kim_18 <- read_rds("Data/Raw_Filtered_Data/tweets_kim_18.rds")
+#tweets_kim_19 <- read_rds("Data/Raw_Filtered_Data/tweets_kim_19.rds")
+#tweets_kim_20 <- read_rds("Data/Raw_Filtered_Data/tweets_kim_20.rds")
+#tweets_kim_21 <- read_rds("Data/Raw_Filtered_Data/tweets_kim_21.rds")
 ```
 
 ```{r}
 tweets_klerk_13 <- read_rds("Data/Raw_Filtered_Data/tweets_klerk_13.rds")
 tweets_klerk_14 <- read_rds("Data/Raw_Filtered_Data/tweets_klerk_14.rds")
+tweets_klerk_15 <- read_rds("Data/Raw_Filtered_Data/tweets_klerk_15.rds")
+tweets_klerk_16 <- read_rds("Data/Raw_Filtered_Data/tweets_klerk_16.rds")
+tweets_klerk_17 <- read_rds("Data/Raw_Filtered_Data/tweets_klerk_17.rds")
+tweets_klerk_18 <- read_rds("Data/Raw_Filtered_Data/tweets_klerk_18.rds")
+#tweets_klerk_19 <- read_rds("Data/Raw_Filtered_Data/tweets_klerk_19.rds")
+#tweets_klerk_20 <- read_rds("Data/Raw_Filtered_Data/tweets_klerk_20.rds")
+#tweets_klerk_21 <- read_rds("Data/Raw_Filtered_Data/tweets_klerk_21.rds")
 ```
 
 ```{r}
 tweets_mbomb_13 <- read_rds("Data/Raw_Filtered_Data/tweets_mbomb_13.rds")
 tweets_mbomb_14 <- read_rds("Data/Raw_Filtered_Data/tweets_mbomb_14.rds")
+tweets_mbomb_15 <- read_rds("Data/Raw_Filtered_Data/tweets_mbomb_15.rds")
+tweets_mbomb_16 <- read_rds("Data/Raw_Filtered_Data/tweets_mbomb_16.rds")
+tweets_mbomb_17 <- read_rds("Data/Raw_Filtered_Data/tweets_mbomb_17.rds")
+tweets_mbomb_18 <- read_rds("Data/Raw_Filtered_Data/tweets_mbomb_18.rds")
+#tweets_mbomb_19 <- read_rds("Data/Raw_Filtered_Data/tweets_mbomb_19.rds")
+#tweets_mbomb_20 <- read_rds("Data/Raw_Filtered_Data/tweets_mbomb_20.rds")
+#tweets_mbomb_21 <- read_rds("Data/Raw_Filtered_Data/tweets_mbomb_21.rds")
 ```
 
 ```{r}
 tweets_polo_13 <- read_rds("Data/Raw_Filtered_Data/tweets_polo_13.rds")
 tweets_polo_14 <- read_rds("Data/Raw_Filtered_Data/tweets_polo_14.rds")
+tweets_polo_15 <- read_rds("Data/Raw_Filtered_Data/tweets_polo_15.rds")
+tweets_polo_16 <- read_rds("Data/Raw_Filtered_Data/tweets_polo_16.rds")
+tweets_polo_17 <- read_rds("Data/Raw_Filtered_Data/tweets_polo_17.rds")
+tweets_polo_18 <- read_rds("Data/Raw_Filtered_Data/tweets_polo_18.rds")
+#tweets_polo_19 <- read_rds("Data/Raw_Filtered_Data/tweets_polo_19.rds")
+#tweets_polo_20 <- read_rds("Data/Raw_Filtered_Data/tweets_polo_20.rds")
+#tweets_polo_21 <- read_rds("Data/Raw_Filtered_Data/tweets_polo_21.rds")
 ```
 
 ```{r}
 tweets_pe_13 <- read_rds("Data/Raw_Filtered_Data/tweets_pe_13.rds")
 tweets_pe_14 <- read_rds("Data/Raw_Filtered_Data/tweets_pe_14.rds")
+tweets_pe_15 <- read_rds("Data/Raw_Filtered_Data/tweets_pe_15.rds")
+tweets_pe_16 <- read_rds("Data/Raw_Filtered_Data/tweets_pe_16.rds")
+tweets_pe_17 <- read_rds("Data/Raw_Filtered_Data/tweets_pe_17.rds")
+tweets_pe_18 <- read_rds("Data/Raw_Filtered_Data/tweets_pe_18.rds")
+#tweets_pe_19 <- read_rds("Data/Raw_Filtered_Data/tweets_pe_19.rds")
+#tweets_pe_20 <- read_rds("Data/Raw_Filtered_Data/tweets_pe_20.rds")
+#tweets_pe_21 <- read_rds("Data/Raw_Filtered_Data/tweets_pe_21.rds")
 ```
 
 # Bind Dataframes
 ```{r}
-tweets_za <-rbind(tweets_za_14,tweets_za_13)
-tweets_bloem <-rbind(tweets_bloem_14,tweets_bloem_13)
-tweets_cpt <-rbind(tweets_cpt_14,tweets_cpt_13)
-tweets_durb <-rbind(tweets_durb_14,tweets_durb_13)
-tweets_jhb <-rbind(tweets_jhb_14,tweets_jhb_13)
-tweets_kim <-rbind(tweets_kim_14,tweets_kim_13)
-tweets_klerk <-rbind(tweets_klerk_14,tweets_klerk_13)
-tweets_mbomb <-rbind(tweets_mbomb_14,tweets_mbomb_13)
-tweets_polo <-rbind(tweets_polo_14,tweets_polo_13)
-tweets_pe <-rbind(tweets_pe_14,tweets_pe_13)
+tweets_za <-rbind(tweets_za_18,tweets_za_17,tweets_za_16,tweets_za_15,tweets_za_14,tweets_za_13)
+tweets_bloem <-rbind(tweets_bloem_18,tweets_bloem_17,tweets_bloem_16,tweets_bloem_15,tweets_bloem_14,tweets_bloem_13)
+tweets_cpt <-rbind(tweets_cpt_18,tweets_cpt_17,tweets_cpt_16,tweets_cpt_15,tweets_cpt_14,tweets_cpt_13)
+tweets_durb <-rbind(tweets_durb_18,tweets_durb_17,tweets_durb_16,tweets_durb_15,tweets_durb_14,tweets_durb_13)
+tweets_jhb <-rbind(tweets_jhb_18,tweets_jhb_17,tweets_jhb_16,tweets_jhb_15,tweets_jhb_14,tweets_jhb_13)
+tweets_kim <-rbind(tweets_kim_18,tweets_kim_17,tweets_kim_16,tweets_kim_15,tweets_kim_14,tweets_kim_13)
+tweets_klerk <-rbind(tweets_klerk_18,tweets_klerk_17,tweets_klerk_16,tweets_klerk_15,tweets_klerk_14,tweets_klerk_13)
+tweets_mbomb <-rbind(tweets_mbomb_18,tweets_mbomb_17,tweets_mbomb_16,tweets_mbomb_15,tweets_mbomb_14,tweets_mbomb_13)
+tweets_polo <-rbind(tweets_polo_18,tweets_polo_17,tweets_polo_16,tweets_polo_15,tweets_polo_14,tweets_polo_13)
+tweets_pe <-rbind(tweets_pe_18,tweets_pe_17,tweets_pe_16,tweets_pe_15,tweets_pe_14,tweets_pe_13)
 
 ```
 
