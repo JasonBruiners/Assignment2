@@ -110,20 +110,21 @@ tweets_pe <-rbind(tweets_pe_14,tweets_pe_13)
 ```{r}
 # Other Analysis
 
-# Frequency of tweets
-News24_freq <- separate(News24_tweets, created_at, into=c("date","time"), sep=" ") %>% group_by(date) %>% summarise(freq = n())
+# Frequency of tweets by day
+News24_freq <- separate(News24_tweets, created_at, into=c("date","time"), sep=" ") %>% group_by(date) %>% summarise(News24 = n())
 
-timesLIVE_freq <- separate(TimesLIVE_tweets, created_at, into=c("date","time"), sep=" ") %>% select(date, screen_name)
+timesLIVE_freq <- separate(TimesLIVE_tweets, created_at, into=c("date","time"), sep=" ") %>% group_by(date) %>% summarise(timesLIVE = n())
 
-Ewnupdate_freq <- separate(News24_tweets, created_at, into=c("date","time"), sep=" ") %>% select(date, screen_name)
+Ewnupdate_freq <- separate(News24_tweets, created_at, into=c("date","time"), sep=" ") %>% group_by(date) %>% summarise(Ewnupdate = n())
 
-IOL_freq <- separate(IOL_tweets, created_at, into=c("date","time"), sep=" ") %>% select(date, screen_name)
+IOL_freq <- separate(IOL_tweets, created_at, into=c("date","time"), sep=" ") %>% group_by(date) %>% summarise(IOL = n())
 
-eNCA_freq <- separate(ewnupdates_tweets, created_at, into=c("date","time"), sep=" ") %>% select(date, screen_name)
+eNCA_freq <- separate(ewnupdates_tweets, created_at, into=c("date","time"), sep=" ") %>% group_by(date) %>% summarise(eNCA = n()) 
 
-SABC_freq <- separate(SABCNews_tweets, created_at, into=c("date","time"), sep=" ") %>% select(date, screen_name)
+SABC_freq <- separate(SABCNews_tweets, created_at, into=c("date","time"), sep=" ") %>% group_by(date) %>% summarise(SABC = n())
 
 # sum days and join together, then send to visualisation
+#Frequency_tweets <- cbind(News24_freq,timesLIVE_freq,Ewnupdate_freq,IOL_freq,eNCA_freq,SABC_freq)
 
 ```
 
