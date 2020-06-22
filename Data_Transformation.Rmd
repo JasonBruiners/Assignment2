@@ -187,6 +187,10 @@ tweets_pe <-rbind(tweets_pe_18,tweets_pe_17,tweets_pe_16,tweets_pe_15,tweets_pe_
 #find frequent words (top 15) in tweets
 #tweets <- count(word, sort = TRUE) %>%  top_n(15) %>% mutate(word = reoder(wotd, n))
 
+# topic modeling using LDA
+# needs libary(topicmodels)
+# example on rpubs.com
+
 ```
 
 ```{r}
@@ -242,7 +246,7 @@ SABC_likes <- separate(SABCNews_tweets, created_at, into=c("date","time"), sep="
 
 
 
-# comparing total tweets by medias vs the amount that was related to COVID-19
+# comparing total tweets by medias vs the amount that was related to COVID-19 COULD THIS BE SEEN AS TOPIC ANALYSIS???????
 #start
 #end
 
