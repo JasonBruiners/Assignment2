@@ -173,6 +173,19 @@ tweets_pe <-rbind(tweets_pe_18,tweets_pe_17,tweets_pe_16,tweets_pe_15,tweets_pe_
 ```{r}
 # Topic Analysis
 
+#start by cleaning text
+#tweet <- gsub("https\\S*","")
+#         gsub("@\\S*","")
+#         gsub("amp","")
+#         gsub("[\r\n]","")
+#         gsub("[[:punct:]]","")
+
+#removing common words suc as to or and
+#tweets <- tweets %>% select(text) %>% unnest_tokens(word, text)
+#tweets <- tweets %>% anti_join(stop_words)
+
+#find frequent words (top 15) in tweets
+#tweets <- count(word, sort = TRUE) %>%  top_n(15) %>% mutate(word = reoder(wotd, n))
 
 ```
 
