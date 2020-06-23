@@ -267,75 +267,75 @@ clean_tweets.News24
 ```
 
 ```{r}
-tweets.News24 <- News24_tweets %>% select(text)
+tweets.IOL <- IOL_tweets %>% select(text)
 
-tweets.News24_clean <- unique(tweets.News24)
-tweets.News24_clean$stripped_text <- tolower(tweets.News24_clean$text)
+tweets.IOL_clean <- unique(tweets.IOL)
+tweets.IOL_clean$stripped_text <- tolower(tweets.IOL_clean$text)
 
 
-tweets.News24_clean$stripped_text <- gsub("http.+ |http.+$", " ", tweets.News24_clean$stripped_text) # remove links
-tweets.News24_clean$stripped_text <- gsub("@\\S*","", tweets.News24_clean$stripped_text) # remove mentons
-tweets.News24_clean$stripped_text <- gsub("amp","", tweets.News24_clean$stripped_text) 
-tweets.News24_clean$stripped_text <- gsub("[\r\n]","", tweets.News24_clean$stripped_text)
-tweets.News24_clean$stripped_text <- gsub("[[:punct:]]"," ", tweets.News24_clean$stripped_text) #emove punctuation
-tweets.News24_clean$stripped_text = gsub("[ |\t]{2,}", " ", tweets.News24_clean$stripped_text) # remove tabs
-tweets.News24_clean$stripped_text = gsub("^ ", "", tweets.News24_clean$stripped_text) # leading blanks
-tweets.News24_clean$stripped_text = gsub(" $", "", tweets.News24_clean$stripped_text) #laggin blanks
-tweets.News24_clean$stripped_text = gsub(" +", " ", tweets.News24_clean$stripped_text) #general spaces
+tweets.IOL_clean$stripped_text <- gsub("http.+ |http.+$", " ", tweets.IOL_clean$stripped_text) # remove links
+tweets.IOL_clean$stripped_text <- gsub("@\\S*","", tweets.IOL_clean$stripped_text) # remove mentons
+tweets.IOL_clean$stripped_text <- gsub("amp","", tweets.IOL_clean$stripped_text) 
+tweets.IOL_clean$stripped_text <- gsub("[\r\n]","", tweets.IOL_clean$stripped_text)
+tweets.IOL_clean$stripped_text <- gsub("[[:punct:]]"," ", tweets.IOL_clean$stripped_text) #emove punctuation
+tweets.IOL_clean$stripped_text = gsub("[ |\t]{2,}", " ", tweets.IOL_clean$stripped_text) # remove tabs
+tweets.IOL_clean$stripped_text = gsub("^ ", "", tweets.IOL_clean$stripped_text) # leading blanks
+tweets.IOL_clean$stripped_text = gsub(" $", "", tweets.IOL_clean$stripped_text) #laggin blanks
+tweets.IOL_clean$stripped_text = gsub(" +", " ", tweets.IOL_clean$stripped_text) #general spaces
 
-tweets.News24_stem <- tweets.News24_clean %>% select(stripped_text) %>% unnest_tokens(word, stripped_text)
+tweets.IOL_stem <- tweets.IOL_clean %>% select(stripped_text) %>% unnest_tokens(word, stripped_text)
 
-clean_tweets.News24 <- tweets.News24_stem %>% anti_join(stop_words)
+clean_tweets.IOL <- tweets.IOL_stem %>% anti_join(stop_words)
 
-clean_tweets.News24
+clean_tweets.IOL
 ```
 
 ```{r}
-tweets.News24 <- News24_tweets %>% select(text)
+tweets.ewn <- ewnupdates_tweets %>% select(text)
 
-tweets.News24_clean <- unique(tweets.News24)
-tweets.News24_clean$stripped_text <- tolower(tweets.News24_clean$text)
+tweets.ewn_clean <- unique(tweets.ewnu)
+tweets.ewn_clean$stripped_text <- tolower(tweets.ewn_clean$text)
 
 
-tweets.News24_clean$stripped_text <- gsub("http.+ |http.+$", " ", tweets.News24_clean$stripped_text) # remove links
-tweets.News24_clean$stripped_text <- gsub("@\\S*","", tweets.News24_clean$stripped_text) # remove mentons
-tweets.News24_clean$stripped_text <- gsub("amp","", tweets.News24_clean$stripped_text) 
-tweets.News24_clean$stripped_text <- gsub("[\r\n]","", tweets.News24_clean$stripped_text)
-tweets.News24_clean$stripped_text <- gsub("[[:punct:]]"," ", tweets.News24_clean$stripped_text) #emove punctuation
-tweets.News24_clean$stripped_text = gsub("[ |\t]{2,}", " ", tweets.News24_clean$stripped_text) # remove tabs
-tweets.News24_clean$stripped_text = gsub("^ ", "", tweets.News24_clean$stripped_text) # leading blanks
-tweets.News24_clean$stripped_text = gsub(" $", "", tweets.News24_clean$stripped_text) #laggin blanks
-tweets.News24_clean$stripped_text = gsub(" +", " ", tweets.News24_clean$stripped_text) #general spaces
+tweets.ewn_clean$stripped_text <- gsub("http.+ |http.+$", " ", tweets.ewn_clean$stripped_text) # remove links
+tweets.ewn_clean$stripped_text <- gsub("@\\S*","", tweets.ewn_clean$stripped_text) # remove mentons
+tweets.ewn_clean$stripped_text <- gsub("amp","", tweets.ewn_clean$stripped_text) 
+tweets.ewn_clean$stripped_text <- gsub("[\r\n]","", tweets.ewn_clean$stripped_text)
+tweets.ewn_clean$stripped_text <- gsub("[[:punct:]]"," ", tweets.ewn_clean$stripped_text) #emove punctuation
+tweets.ewn_clean$stripped_text = gsub("[ |\t]{2,}", " ", tweets.ewn_clean$stripped_text) # remove tabs
+tweets.ewn_clean$stripped_text = gsub("^ ", "", tweets.ewn_clean$stripped_text) # leading blanks
+tweets.ewn_clean$stripped_text = gsub(" $", "", tweets.ewn_clean$stripped_text) #laggin blanks
+tweets.ewn_clean$stripped_text = gsub(" +", " ", tweets.ewn_clean$stripped_text) #general spaces
 
-tweets.News24_stem <- tweets.News24_clean %>% select(stripped_text) %>% unnest_tokens(word, stripped_text)
+tweets.ewn_stem <- tweets.ewn_clean %>% select(stripped_text) %>% unnest_tokens(word, stripped_text)
 
-clean_tweets.News24 <- tweets.News24_stem %>% anti_join(stop_words)
+clean_tweets.ewn <- tweets.ewn_stem %>% anti_join(stop_words)
 
-clean_tweets.News24
+clean_tweets.ewn
 ```
 
 ```{r}
-tweets.News24 <- News24_tweets %>% select(text)
+tweets.SABCNews <- SABCNews_tweets %>% select(text)
 
-tweets.News24_clean <- unique(tweets.News24)
-tweets.News24_clean$stripped_text <- tolower(tweets.News24_clean$text)
+tweets.SABCNews_clean <- unique(tweets.SABCNews)
+tweets.SABCNews_clean$stripped_text <- tolower(tweets.SABCNews_clean$text)
 
 
-tweets.News24_clean$stripped_text <- gsub("http.+ |http.+$", " ", tweets.News24_clean$stripped_text) # remove links
-tweets.News24_clean$stripped_text <- gsub("@\\S*","", tweets.News24_clean$stripped_text) # remove mentons
-tweets.News24_clean$stripped_text <- gsub("amp","", tweets.News24_clean$stripped_text) 
-tweets.News24_clean$stripped_text <- gsub("[\r\n]","", tweets.News24_clean$stripped_text)
-tweets.News24_clean$stripped_text <- gsub("[[:punct:]]"," ", tweets.News24_clean$stripped_text) #emove punctuation
-tweets.News24_clean$stripped_text = gsub("[ |\t]{2,}", " ", tweets.News24_clean$stripped_text) # remove tabs
-tweets.News24_clean$stripped_text = gsub("^ ", "", tweets.News24_clean$stripped_text) # leading blanks
-tweets.News24_clean$stripped_text = gsub(" $", "", tweets.News24_clean$stripped_text) #laggin blanks
-tweets.News24_clean$stripped_text = gsub(" +", " ", tweets.News24_clean$stripped_text) #general spaces
+tweets.SABCNews_clean$stripped_text <- gsub("http.+ |http.+$", " ", tweets.SABCNews_clean$stripped_text) # remove links
+tweets.SABCNews_clean$stripped_text <- gsub("@\\S*","", tweets.SABCNews_clean$stripped_text) # remove mentons
+tweets.SABCNews_clean$stripped_text <- gsub("amp","", tweets.SABCNews_clean$stripped_text) 
+tweets.SABCNews_clean$stripped_text <- gsub("[\r\n]","", tweets.SABCNews_clean$stripped_text)
+tweets.SABCNews_clean$stripped_text <- gsub("[[:punct:]]"," ", tweets.SABCNews_clean$stripped_text) #emove punctuation
+tweets.SABCNews_clean$stripped_text = gsub("[ |\t]{2,}", " ", tweets.SABCNews_clean$stripped_text) # remove tabs
+tweets.SABCNews_clean$stripped_text = gsub("^ ", "", tweets.SABCNews_clean$stripped_text) # leading blanks
+tweets.SABCNews_clean$stripped_text = gsub(" $", "", tweets.SABCNews_clean$stripped_text) #laggin blanks
+tweets.SABCNews_clean$stripped_text = gsub(" +", " ", tweets.SABCNews_clean$stripped_text) #general spaces
 
-tweets.News24_stem <- tweets.News24_clean %>% select(stripped_text) %>% unnest_tokens(word, stripped_text)
+tweets.SABCNews_stem <- tweets.SABCNews_clean %>% select(stripped_text) %>% unnest_tokens(word, stripped_text)
 
-clean_tweets.News24 <- tweets.News24_stem %>% anti_join(stop_words)
+clean_tweets.SABCNews <- tweets.SABCNews_stem  %>% anti_join(stop_words)
 
-clean_tweets.News24
+clean_tweets.SABCNews
 ```
 
 
