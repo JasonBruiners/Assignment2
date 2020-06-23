@@ -234,31 +234,122 @@ bing_news24
 ```{r}
 # Topic Analysis
 
-#start by cleaning text
-#tweet <- gsub("https\\S*","")
-#         gsub("@\\S*","")
-#         gsub("amp","")
-#         gsub("[\r\n]","")
-#         gsub("[[:punct:]]","")
-
-#removing common words such as to or and
-#tweets <- tweets %>% select(text) %>% unnest_tokens(word, text)
-#tweets <- tweets %>% anti_join(stop_words)
-
-#find frequent words (top 15) in tweets
-#tweets <- count(word, sort = TRUE) %>%  top_n(15) %>% mutate(word = reoder(wotd, n))
-
 # topic modeling using LDA
-# needs libary(topicmodels)
 # example on rpubs.com
 
+corpus <- Corpus(VectorSource(News24_cleaned$text))
+dtm = DocumentTermMatrix(corpus)
 
+lda_5 = LDA(dtm, k = 5, method = 'Gibbs', 
+          control = list(nstart = 5, seed = list(1505,99,36,56,88), best = TRUE, 
+                         thin = 500, burnin = 4000, iter = 2000))
+
+#LDA model with 2 topics selected
+lda_2 = LDA(dtm, k = 2, method = 'Gibbs', 
+          control = list(nstart = 5, seed = list(1505,99,36,56,88), best = TRUE, 
+                         thin = 500, burnin = 4000, iter = 2000))
+
+#LDA model with 10 topics selected
+lda_10 = LDA(dtm, k = 10, method = 'Gibbs', 
+          control = list(nstart = 5, seed = list(1505,99,36,56,88), best = TRUE, 
+                         thin = 500, burnin = 4000, iter = 2000))
 
 # comparing total tweets by medias vs the amount that was related to COVID-19 COULD THIS BE SEEN AS TOPIC ANALYSIS???????
 #start
 #end
+#lda_2
+#lda_5
+#lda_10
+```
+
+```{r}
+#Top 10 terms or words under each topic
+top10terms_5 = as.matrix(terms(lda_5,10))
+top10terms_2 = as.matrix(terms(lda_2,10))
+top10terms_10 = as.matrix(terms(lda_10,10))
+
+top10terms_5
+top10terms_2
+top10terms_10
 
 ```
+
+```{r}
+#Topics found out by our model:
+lda.topics_5 = as.matrix(topics(lda_5))
+lda.topics_2 = as.matrix(topics(lda_2))
+lda.topics_10 = as.matrix(topics(lda_10))
+#write.csv(lda.topics_5,file = paste('LDAGibbs',5,'DocsToTopics.csv'))
+#write.csv(lda.topics_2,file = paste('LDAGibbs',2,'DocsToTopics.csv'))
+#write.csv(lda.topics_10,file = paste('LDAGibbs',10,'DocsToTopics.csv'))
+
+summary(as.factor(lda.topics_5[,1]))
+summary(as.factor(lda.topics_2[,1]))
+summary(as.factor(lda.topics_10[,1]))
+```
+
+
+```{r}
+#document wise probability of each topic.
+topicprob_5 = as.matrix(lda_5@gamma)
+topicprob_2 = as.matrix(lda_2@gamma)
+topicprob_10 = as.matrix(lda_10@gamma)
+
+#write.csv(topicprob_5, file = paste('LDAGibbs', 5, 'DoctToTopicProb.csv'))
+#write.csv(topicprob_2, file = paste('LDAGibbs', 2, 'DoctToTopicProb.csv'))
+#write.csv(topicprob_10, file = paste('LDAGibbs', 10, 'DoctToTopicProb.csv'))
+
+head(topicprob_2,1)
+```
+
+```{r}
+
+```
+
+
+```{r}
+# Other Analysis
+
+# Frequency of tweets by day
+News24_freq <- News24_tweets %>% summarise(News24 = n())
+timesLIVE_freq <- timesLIVE_tweets %>% summarise(timesLIVE = n())
+Ewnupdate_freq <- Ewnupdate_tweets %>% summarise(Ewnupdate = n())
+IOL_freq <- IOL_tweets %>% summarise(IOL = n())
+eNCA_freq <- eNCA_tweets %>% summarise(eNCA = n()) 
+SABC_freq <- SABC_tweets %>% summarise(SABC = n())
+
+# sum days and join together, then send to visualisation
+#Frequency_tweets <- cbind(News24_freq,timesLIVE_freq,Ewnupdate_freq,IOL_freq,eNCA_freq,SABC_freq)
+
+#retweet count 
+News24_retweet <- News24_tweets %>% summarise(News24 = sum(retweet_count))
+timesLIVE_retweet <- timesLIVE_tweets %>% summarise(timesLIVE = sum(retweet_count))
+Ewnupdate_retweet <- Ewnupdate_tweets %>% summarise(Ewnupdate = sum(retweet_count))
+IOL_retweet <- IOL_tweets %>% summarise(IOL = sum(retweet_count))
+eNCA_retweet <- eNCA_tweets %>% summarise(eNCA = sum(retweet_count)) 
+SABC_retweet <- SABC_tweets %>% summarise(SABC = sum(retweet_count))
+
+# sum days and join together, then send to visualisation
+#retweet_tweets <- cbind(News24_retweet,timesLIVE_retweet,Ewnupdate_retweet,IOL_retweet,eNCA_retweet,SABC_retweet)
+
+# like count
+News24_likes <- News24_tweets %>% summarise(News24 = sum(favorite_count))
+timesLIVE_likes <- timesLIVE_tweets %>% summarise(timesLIVE = sum(favorite_count))
+Ewnupdate_likes <- Ewnupdate_tweets %>% summarise(Ewnupdate = sum(favorite_count))
+IOL_likes <- IOL_tweets %>% summarise(IOL = sum(favorite_count))
+eNCA_likes <- eNCA_tweets %>% summarise(eNCA = sum(favorite_count)) 
+SABC_likes <- SABC_tweets %>% summarise(SABC = sum(favorite_count))
+
+# sum days and join together, then send to visualisation
+#Likes_tweets <- cbind(News24_likes,timesLIVE_likes,Ewnupdate_likes,IOL_likes,eNCA_likes,SABC_likes)
+
+
+# Comparing likes and retweets i.e maby retweets per like or compaing stats of non-covid to covid
+#start
+#end
+
+```
+
 
 ```{r}
 # Other Analysis
