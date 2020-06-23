@@ -205,7 +205,7 @@ News24_text<- News24_tweets %>% select(text)
 News24_cleaned <- unique(News24_text)
 News24_cleaned$stripped_text <- tolower(News24_cleaned$text)
 
-News24_cleaned$stripped_text <- gsub("http.+ |http.+$", " ", News24_cleaned$stripped_text) # remove links
+News24_cleaned$stripped_text <- gsub("http[^[:space:]]*", " ", News24_cleaned$stripped_text) # remove links
 News24_cleaned$stripped_text <- gsub("@\\S*","", News24_cleaned$stripped_text) # remove mentons
 News24_cleaned$stripped_text <- gsub("amp","", News24_cleaned$stripped_text) 
 News24_cleaned$stripped_text <- gsub("[\r\n]","", News24_cleaned$stripped_text)
@@ -215,43 +215,20 @@ News24_cleaned$stripped_text = gsub("^ ", "", News24_cleaned$stripped_text) # le
 News24_cleaned$stripped_text = gsub(" $", "", News24_cleaned$stripped_text) #laggin blanks
 News24_cleaned$stripped_text = gsub(" +", " ", News24_cleaned$stripped_text) #general spaces
 
-News24_cleaned <- News24_tweets %>% select(screen_name, text)
-News24_cleaned$stripped_text <- gsub("http\\S+", "", News24_cleaned$stripped_text) 
-News24_cleaned$stripped_text <- gsub("@\\S*","", News24_cleaned$stripped_text) 
-News24_cleaned$stripped_text <- gsub("amp","", News24_cleaned$stripped_text) 
-News24_cleaned$stripped_text <- gsub("[\r\n]","", News24_cleaned$stripped_text)
-
 head(News24_cleaned$text)
 head(News24_cleaned$stripped_text)
 
-unique(News24_tweets$text)
 #AFFIN_tweets <- News24_tweets$text %>% inner_join(get_seniments("affin")) %>% count(word, sentiment, sort = TRUE) %>% ungroup()
-
 
 ```
 
 ```{r}
 # Topic Analysis
 
-#start by cleaning text
-#tweet <- gsub("https\\S*","")
-#         gsub("@\\S*","")
-#         gsub("amp","")
-#         gsub("[\r\n]","")
-#         gsub("[[:punct:]]","")
-
-#removing common words such as to or and
-#tweets <- tweets %>% select(text) %>% unnest_tokens(word, text)
-#tweets <- tweets %>% anti_join(stop_words)
-
-#find frequent words (top 15) in tweets
-#tweets <- count(word, sort = TRUE) %>%  top_n(15) %>% mutate(word = reoder(wotd, n))
-
 # topic modeling using LDA
-# needs libary(topicmodels)
 # example on rpubs.com
 
-corpus <- Corpus(VectorSource(News24_tweets$text))
+corpus <- Corpus(VectorSource(News24_cleaned$text))
 dtm = DocumentTermMatrix(corpus)
 
 lda_5 = LDA(dtm, k = 5, method = 'Gibbs', 
@@ -275,6 +252,7 @@ lda_10 = LDA(dtm, k = 10, method = 'Gibbs',
 #lda_5
 #lda_10
 ```
+
 ```{r}
 #Top 10 terms or words under each topic
 top10terms_5 = as.matrix(terms(lda_5,10))
