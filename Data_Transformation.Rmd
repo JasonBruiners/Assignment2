@@ -201,6 +201,7 @@ library(tidytext)
 library(textdata)
 
 News24_text<- News24_tweets %>% select(text)
+
 News24_cleaned <- unique(News24_text)
 News24_cleaned$stripped_text <- tolower(News24_cleaned$text)
 
@@ -213,13 +214,12 @@ News24_cleaned$stripped_text = gsub("[ |\t]{2,}", " ", News24_cleaned$stripped_t
 News24_cleaned$stripped_text = gsub("^ ", "", News24_cleaned$stripped_text) # leading blanks
 News24_cleaned$stripped_text = gsub(" $", "", News24_cleaned$stripped_text) #laggin blanks
 News24_cleaned$stripped_text = gsub(" +", " ", News24_cleaned$stripped_text) #general spaces
-#=======
+
 News24_cleaned <- News24_tweets %>% select(screen_name, text)
 News24_cleaned$stripped_text <- gsub("http\\S+", "", News24_cleaned$stripped_text) 
 News24_cleaned$stripped_text <- gsub("@\\S*","", News24_cleaned$stripped_text) 
 News24_cleaned$stripped_text <- gsub("amp","", News24_cleaned$stripped_text) 
 News24_cleaned$stripped_text <- gsub("[\r\n]","", News24_cleaned$stripped_text)
-#>>>>>>> Stashed changes
 
 head(News24_cleaned$text)
 head(News24_cleaned$stripped_text)
