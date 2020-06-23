@@ -301,7 +301,7 @@ clean_tweets.IOL
 #ewn cleaning
 tweets.ewn <- ewnupdates_tweets %>% select(text)
 
-tweets.ewn_clean <- unique(tweets.ewnu)
+tweets.ewn_clean <- unique(tweets.ewn)
 tweets.ewn_clean$stripped_text <- tolower(tweets.ewn_clean$text)
 
 
@@ -357,8 +357,22 @@ clean_tweets.SABCNews
 #bing_news24
 
 afinn_news24 <- clean_tweets.News24 %>% inner_join(get_sentiments("afinn")) %>% count(word, value, sort = TRUE) %>% ungroup()
-
 afinn_news24
+
+afinn_TimesLIVE <- clean_tweets.TimesLIVE %>% inner_join(get_sentiments("afinn")) %>% count(word, value, sort = TRUE) %>% ungroup()
+afinn_TimesLIVE
+
+afinn_eNCA <- clean_tweets.eNCA %>% inner_join(get_sentiments("afinn")) %>% count(word, value, sort = TRUE) %>% ungroup()
+afinn_eNCA
+
+afinn_IOL <- clean_tweets.IOL %>% inner_join(get_sentiments("afinn")) %>% count(word, value, sort = TRUE) %>% ungroup()
+afinn_IOL
+
+afinn_ewn <- clean_tweets.ewn %>% inner_join(get_sentiments("afinn")) %>% count(word, value, sort = TRUE) %>% ungroup()
+afinn_ewn
+
+afinn_SABCNews <- clean_tweets.SABCNews %>% inner_join(get_sentiments("afinn")) %>% count(word, value, sort = TRUE) %>% ungroup()
+afinn_SABCNews
 
 ```
 
