@@ -97,11 +97,9 @@ with(geocoded, points(lng, lat, pch = 20, cex = .75, col = rgb(0, .3, .7, .75)))
 ## Sentiment visuals
 ```{r}
 # sentiment score
-ggplot(data=sentimentscores,aes(x=sentiment,y=Score))+
-  geom_bar(aes(fill=sentiment),stat = "identity")+
-  theme(legend.position="none")+
-  xlab("Sentiments")+ylab("Scores")+
-  ggtitle("Total sentiment based on scores")+
+affin_tweets %>% group_by(sentiment) %>% top_n(10) %>% ungroup() %>% mutate(word = reorder(word, n)) %>% ggplot(aes(x=word,y=n, fill = sentiment))+
+  geom_col()+facet_wrap(~sentiment, scales = "free_y")+
+  labs(title = "Sentiments", x = NULL, y = "Contribution")+
   theme_minimal()
 
 ```
