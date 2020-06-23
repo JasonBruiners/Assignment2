@@ -194,7 +194,10 @@ SABC_tweets <- myfunc(DATE1,DATE2)
 
 ```
 
+# Addtional cleaning per dataframe
+
 ```{r}
+#News24 cleaning
 tweets.News24 <- News24_tweets %>% select(text)
 
 tweets.News24_clean <- unique(tweets.News24)
@@ -219,54 +222,58 @@ clean_tweets.News24
 ```
 
 ```{r}
-tweets.News24 <- News24_tweets %>% select(text)
+#TimesLIVE cleaning
+tweets.TimesLIVE <- TimesLIVE_tweets %>% select(text)
 
-tweets.News24_clean <- unique(tweets.News24)
-tweets.News24_clean$stripped_text <- tolower(tweets.News24_clean$text)
+tweets.TimesLIVE_clean <- unique(tweets.TimesLIVE)
+tweets.TimesLIVE_clean$stripped_text <- tolower(tweets.TimesLIVE_clean$text)
 
 
-tweets.News24_clean$stripped_text <- gsub("http.+ |http.+$", " ", tweets.News24_clean$stripped_text) # remove links
-tweets.News24_clean$stripped_text <- gsub("@\\S*","", tweets.News24_clean$stripped_text) # remove mentons
-tweets.News24_clean$stripped_text <- gsub("amp","", tweets.News24_clean$stripped_text) 
-tweets.News24_clean$stripped_text <- gsub("[\r\n]","", tweets.News24_clean$stripped_text)
-tweets.News24_clean$stripped_text <- gsub("[[:punct:]]"," ", tweets.News24_clean$stripped_text) #emove punctuation
-tweets.News24_clean$stripped_text = gsub("[ |\t]{2,}", " ", tweets.News24_clean$stripped_text) # remove tabs
-tweets.News24_clean$stripped_text = gsub("^ ", "", tweets.News24_clean$stripped_text) # leading blanks
-tweets.News24_clean$stripped_text = gsub(" $", "", tweets.News24_clean$stripped_text) #laggin blanks
-tweets.News24_clean$stripped_text = gsub(" +", " ", tweets.News24_clean$stripped_text) #general spaces
+tweets.TimesLIVE_clean$stripped_text <- gsub("http.+ |http.+$", " ", tweets.TimesLIVE_clean$stripped_text) # remove links
+tweets.TimesLIVE_clean$stripped_text <- gsub("@\\S*","", tweets.TimesLIVE_clean$stripped_text) # remove mentons
+tweets.TimesLIVE_clean$stripped_text <- gsub("amp","", tweets.TimesLIVE_clean$stripped_text) 
+tweets.TimesLIVE_clean$stripped_text <- gsub("[\r\n]","", tweets.TimesLIVE_clean$stripped_text)
+tweets.TimesLIVE_clean$stripped_text <- gsub("[[:punct:]]"," ", tweets.TimesLIVE_clean$stripped_text) #emove punctuation
+tweets.TimesLIVE_clean$stripped_text = gsub("[ |\t]{2,}", " ", tweets.TimesLIVE_clean$stripped_text) # remove tabs
+tweets.TimesLIVE_clean$stripped_text = gsub("^ ", "", tweets.TimesLIVE_clean$stripped_text) # leading blanks
+tweets.TimesLIVE_clean$stripped_text = gsub(" $", "", tweets.TimesLIVE_clean$stripped_text) #laggin blanks
+tweets.TimesLIVE_clean$stripped_text = gsub(" +", " ", tweets.TimesLIVE_clean$stripped_text) #general spaces
 
-tweets.News24_stem <- tweets.News24_clean %>% select(stripped_text) %>% unnest_tokens(word, stripped_text)
+tweets.TimesLIVE_stem <- tweets.TimesLIVE_clean %>% select(stripped_text) %>% unnest_tokens(word, stripped_text)
 
-clean_tweets.News24 <- tweets.News24_stem %>% anti_join(stop_words)
+clean_tweets.TimesLIVE <- tweets.TimesLIVE_stem %>% anti_join(stop_words)
 
-clean_tweets.News24
+clean_tweets.TimesLIVE
 ```
 
 ```{r}
-tweets.News24 <- News24_tweets %>% select(text)
+#eNCA cleaning
+tweets.eNCA <- eNCA_tweets %>% select(text)
 
-tweets.News24_clean <- unique(tweets.News24)
-tweets.News24_clean$stripped_text <- tolower(tweets.News24_clean$text)
+tweets.eNCA_clean <- unique(tweets.eNCA)
+tweets.eNCA_clean$stripped_text <- tolower(tweets.eNCA_clean$text)
 
 
-tweets.News24_clean$stripped_text <- gsub("http.+ |http.+$", " ", tweets.News24_clean$stripped_text) # remove links
-tweets.News24_clean$stripped_text <- gsub("@\\S*","", tweets.News24_clean$stripped_text) # remove mentons
-tweets.News24_clean$stripped_text <- gsub("amp","", tweets.News24_clean$stripped_text) 
-tweets.News24_clean$stripped_text <- gsub("[\r\n]","", tweets.News24_clean$stripped_text)
-tweets.News24_clean$stripped_text <- gsub("[[:punct:]]"," ", tweets.News24_clean$stripped_text) #emove punctuation
-tweets.News24_clean$stripped_text = gsub("[ |\t]{2,}", " ", tweets.News24_clean$stripped_text) # remove tabs
-tweets.News24_clean$stripped_text = gsub("^ ", "", tweets.News24_clean$stripped_text) # leading blanks
-tweets.News24_clean$stripped_text = gsub(" $", "", tweets.News24_clean$stripped_text) #laggin blanks
-tweets.News24_clean$stripped_text = gsub(" +", " ", tweets.News24_clean$stripped_text) #general spaces
+tweets.eNCA_clean$stripped_text <- gsub("http.+ |http.+$", " ", tweets.eNCA_clean$stripped_text) # remove links
+tweets.eNCA_clean$stripped_text <- gsub("@\\S*","", tweets.eNCA_clean$stripped_text) # remove mentons
+tweets.eNCA_clean$stripped_text <- gsub("amp","", tweets.eNCA_clean$stripped_text) 
+tweets.eNCA_clean$stripped_text <- gsub("[\r\n]","", tweets.eNCA_clean$stripped_text)
+tweets.eNCA_clean$stripped_text <- gsub("[[:punct:]]"," ", tweets.eNCA_clean$stripped_text) #emove punctuation
+tweets.eNCA_clean$stripped_text = gsub("[ |\t]{2,}", " ", tweets.eNCA_clean$stripped_text) # remove tabs
+tweets.eNCA_clean$stripped_text = gsub("^ ", "", tweets.eNCA_clean$stripped_text) # leading blanks
+tweets.eNCA_clean$stripped_text = gsub(" $", "", tweets.eNCA_clean$stripped_text) #laggin blanks
+tweets.eNCA_clean$stripped_text = gsub(" +", " ", tweets.eNCA_clean$stripped_text) #general spaces
 
-tweets.News24_stem <- tweets.News24_clean %>% select(stripped_text) %>% unnest_tokens(word, stripped_text)
+tweets.eNCA_stem <- tweets.eNCA_clean %>% select(stripped_text) %>% unnest_tokens(word, stripped_text)
 
-clean_tweets.News24 <- tweets.News24_stem %>% anti_join(stop_words)
+clean_tweets.eNCA <- tweets.eNCA_stem %>% anti_join(stop_words)
 
-clean_tweets.News24
+clean_tweets.eNCA
 ```
 
+
 ```{r}
+#IOL cleaning
 tweets.IOL <- IOL_tweets %>% select(text)
 
 tweets.IOL_clean <- unique(tweets.IOL)
@@ -291,6 +298,7 @@ clean_tweets.IOL
 ```
 
 ```{r}
+#ewn cleaning
 tweets.ewn <- ewnupdates_tweets %>% select(text)
 
 tweets.ewn_clean <- unique(tweets.ewnu)
@@ -315,6 +323,7 @@ clean_tweets.ewn
 ```
 
 ```{r}
+#SABCNews cleaning
 tweets.SABCNews <- SABCNews_tweets %>% select(text)
 
 tweets.SABCNews_clean <- unique(tweets.SABCNews)
@@ -359,7 +368,7 @@ afinn_news24
 # topic modeling using LDA
 # example on rpubs.com
 
-corpus <- Corpus(VectorSource(News24_cleaned$text))
+corpus <- Corpus(VectorSource(clean_tweets.News24))
 dtm = DocumentTermMatrix(corpus)
 
 lda_5 = LDA(dtm, k = 5, method = 'Gibbs', 
