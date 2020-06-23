@@ -199,29 +199,35 @@ SABC_tweets <- myfunc(DATE1,DATE2)
 library(tidytext)
 library(textdata)
 
-News24_text<- News24_tweets %>% select(text)
+tweets.News24 <- News24_tweets %>% select(screen_name, text)
 
-News24_cleaned <- unique(News24_text)
-News24_cleaned$stripped_text <- tolower(News24_cleaned$text)
-
-
-News24_cleaned$stripped_text <- gsub("http.+ |http.+$", " ", News24_cleaned$stripped_text) # remove links
-News24_cleaned$stripped_text <- gsub("@\\S*","", News24_cleaned$stripped_text) # remove mentons
-News24_cleaned$stripped_text <- gsub("amp","", News24_cleaned$stripped_text) 
-News24_cleaned$stripped_text <- gsub("[\r\n]","", News24_cleaned$stripped_text)
-News24_cleaned$stripped_text <- gsub("[[:punct:]]"," ", News24_cleaned$stripped_text) #emove punctuation
-News24_cleaned$stripped_text = gsub("[ |\t]{2,}", " ", News24_cleaned$stripped_text) # remove tabs
-News24_cleaned$stripped_text = gsub("^ ", "", News24_cleaned$stripped_text) # leading blanks
-News24_cleaned$stripped_text = gsub(" $", "", News24_cleaned$stripped_text) #laggin blanks
-News24_cleaned$stripped_text = gsub(" +", " ", News24_cleaned$stripped_text) #general spaces
-
-head(News24_cleaned$text)
-head(News24_cleaned$stripped_text)
+tweets.News24_clean <- unique(tweets.News24)
+tweets.News24_clean$stripped_text <- tolower(tweets.News24_clean$text)
 
 
-#AFFIN_tweets <- News24_tweets$text %>% inner_join(get_seniments("affin")) %>% count(word, sentiment, sort = TRUE) %>% ungroup()
+tweets.News24_clean$stripped_text <- gsub("http.+ |http.+$", " ", tweets.News24_clean$stripped_text) # remove links
+tweets.News24_clean$stripped_text <- gsub("@\\S*","", tweets.News24_clean$stripped_text) # remove mentons
+tweets.News24_clean$stripped_text <- gsub("amp","", tweets.News24_clean$stripped_text) 
+tweets.News24_clean$stripped_text <- gsub("[\r\n]","", tweets.News24_clean$stripped_text)
+tweets.News24_clean$stripped_text <- gsub("[[:punct:]]"," ", tweets.News24_clean$stripped_text) #emove punctuation
+tweets.News24_clean$stripped_text = gsub("[ |\t]{2,}", " ", tweets.News24_clean$stripped_text) # remove tabs
+tweets.News24_clean$stripped_text = gsub("^ ", "", tweets.News24_clean$stripped_text) # leading blanks
+tweets.News24_clean$stripped_text = gsub(" $", "", tweets.News24_clean$stripped_text) #laggin blanks
+tweets.News24_clean$stripped_text = gsub(" +", " ", tweets.News24_clean$stripped_text) #general spaces
 
+tweets.News24_stem <- tweets.News24_clean %>% select(stripped_text) %>% unnest_tokens(word, stripped_text)
 
+clean_tweets.News24 <- tweets.News24_stem %>% anti_join(stop_words)
+
+clean_tweets.News24
+
+bing_news24 <- clean_tweets.News24 %>% inner_join(get_sentiments("bing")) %>% count(word, sentiment, sort = TRUE) %>% ungroup()
+
+bing_news24
+
+bing_news24 <- clean_tweets.News24 %>% inner_join(get_sentiments("afinn")) %>% count(word, value, sort = TRUE) %>% ungroup()
+
+bing_news24
 
 ```
 
