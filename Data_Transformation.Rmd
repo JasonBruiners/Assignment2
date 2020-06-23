@@ -166,6 +166,26 @@ tweets_pe <-rbind(tweets_pe_18,tweets_pe_17,tweets_pe_16,tweets_pe_15,tweets_pe_
 # Performing transformations
 ```{r}
 # Sentiment Analysis
+# this example uses library(syuzhet)
+
+# Converting tweets to ASCII to trackle strange characters
+#tweets <- iconv(tweets, from="UTF-8", to="ASCII", sub="")
+# removing retweets, in case needed 
+#tweets <-gsub("(RT|via)((?:\\b\\w*@\\w+)+)","",tweets)
+# removing mentions, in case needed
+#tweets <-gsub("@\\w+","",tweets)
+#ew_sentiment<-get_nrc_sentiment((tweets))
+#sentimentscores<-data.frame(colSums(ew_sentiment[,]))
+#names(sentimentscores) <- "Score"
+#sentimentscores <- cbind("sentiment"=rownames(sentimentscores),sentimentscores)
+#rownames(sentimentscores) <- NULL
+
+
+# this example uses library(tidytext) and library(textdata)
+## AFFIN sentiment analysis
+
+#AFFIN_tweets <- cleaned_tweets %>% 
+
 
 
 ```

@@ -94,3 +94,20 @@ with(geocoded, points(lng, lat, pch = 20, cex = .75, col = rgb(0, .3, .7, .75)))
 
 ```
 
+## Sentiment visuals
+```{r}
+# sentiment score
+ggplot(data=sentimentscores,aes(x=sentiment,y=Score))+
+  geom_bar(aes(fill=sentiment),stat = "identity")+
+  theme(legend.position="none")+
+  xlab("Sentiments")+ylab("Scores")+
+  ggtitle("Total sentiment based on scores")+
+  theme_minimal()
+
+```
+
+## Topic visuals
+```{r}
+
+```
+
