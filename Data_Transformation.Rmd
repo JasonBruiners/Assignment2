@@ -204,7 +204,7 @@ tweets.News24_clean <- unique(tweets.News24)
 tweets.News24_clean$stripped_text <- tolower(tweets.News24_clean$text)
 
 
-tweets.News24_clean$stripped_text <- gsub("http.+ |http.+$", " ", tweets.News24_clean$stripped_text) # remove links
+tweets.News24_clean$stripped_text <- gsub("http[^[:space:]]*", " ", tweets.News24_clean$stripped_text) # remove links
 tweets.News24_clean$stripped_text <- gsub("@\\S*","", tweets.News24_clean$stripped_text) # remove mentons
 tweets.News24_clean$stripped_text <- gsub("amp","", tweets.News24_clean$stripped_text) 
 tweets.News24_clean$stripped_text <- gsub("[\r\n]","", tweets.News24_clean$stripped_text)
@@ -220,6 +220,30 @@ clean_tweets.News24 <- tweets.News24_stem %>% anti_join(stop_words)
 
 clean_tweets.News24
 ```
+
+```{r}
+News24_text<- News24_tweets %>% select(text)
+
+News24_cleaned <- unique(News24_text)
+News24_cleaned$stripped_text <- tolower(News24_cleaned$text)
+
+
+News24_cleaned$stripped_text <- gsub("http.+ |http.+$", " ", News24_cleaned$stripped_text) # remove links
+News24_cleaned$stripped_text <- gsub("@\\S*","", News24_cleaned$stripped_text) # remove mentons
+News24_cleaned$stripped_text <- gsub("amp","", News24_cleaned$stripped_text) 
+News24_cleaned$stripped_text <- gsub("[\r\n]","", News24_cleaned$stripped_text)
+News24_cleaned$stripped_text <- gsub("[[:punct:]]"," ", News24_cleaned$stripped_text) #emove punctuation
+News24_cleaned$stripped_text = gsub("[ |\t]{2,}", " ", News24_cleaned$stripped_text) # remove tabs
+News24_cleaned$stripped_text = gsub("^ ", "", News24_cleaned$stripped_text) # leading blanks
+News24_cleaned$stripped_text = gsub(" $", "", News24_cleaned$stripped_text) #laggin blanks
+News24_cleaned$stripped_text = gsub(" +", " ", News24_cleaned$stripped_text) #general spaces
+
+head(News24_cleaned$text)
+News24_tester <- News24_cleaned$stripped_text
+News24_tester
+```
+
+
 
 ```{r}
 #TimesLIVE cleaning
@@ -377,12 +401,21 @@ afinn_SABCNews
 ```
 
 
+```{r}
+testywesty <- tweets.News24_clean %>% select(stripped_text)
+testywesty
+```
+
+
 # Topic Analysis
 ```{r}
 # topic modeling using LDA
 # example on rpubs.com
 
-corpusNews24 <- Corpus(VectorSource(clean_tweets.News24))
+corpusNews24 <- Corpus(VectorSource(testywesty))
+corpusNews24 <- tm_map(corpusNews24, removeWords, stopwords("english"))  
+corpusNews24 <- tm_map(corpusNews24, removeNumbers)
+corpusNews24 <- tm_map(corpusNews24, stemDocument)
 dtmNews24 = DocumentTermMatrix(corpusNews24)
 
 corpusTimesLIVE <- Corpus(VectorSource(clean_tweets.TimesLIVE))
@@ -406,9 +439,9 @@ dtmSABCNews = DocumentTermMatrix(corpusSABCNews)
 #News24 LDA topic analysis
 
 #LDA model with 2 topics selected
-News24_lda_5 = LDA(dtmNews24, k = 5, method = 'Gibbs', 
-          control = list(nstart = 5, seed = list(1505,99,36,56,88), best = TRUE, 
-                         thin = 500, burnin = 4000, iter = 2000))
+#News24_lda_5 = LDA(dtmNews24, k = 5, method = 'Gibbs', 
+#          control = list(nstart = 5, seed = list(1505,99,36,56,88), best = TRUE, 
+#                         thin = 500, burnin = 4000, iter = 2000))
 
 #LDA model with 2 topics selected
 News24_lda_2 = LDA(dtmNews24, k = 2, method = 'Gibbs', 
