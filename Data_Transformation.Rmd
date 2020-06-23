@@ -169,12 +169,12 @@ tweets_pe <-rbind(tweets_pe_18,tweets_pe_17,tweets_pe_16,tweets_pe_15,tweets_pe_
 ## cleaning data (text)
 ```{r}
 #Separate date column
-News24_tweets <- separate(News24_tweets, created_at, into=c("date","time"), sep=" ") %>% group_by(date) %>% mutate(date = as.Date(date)) %>% select(date, time, text, source, favorite_count, retweet_count)
-timesLIVE_tweets <- separate(TimesLIVE_tweets, created_at, into=c("date","time"), sep=" ") %>% group_by(date) %>% mutate(date = as.Date(date)) %>% select(date, time, text, source, favorite_count, retweet_count)
-Ewnupdate_tweets <- separate(ewnupdates_tweets, created_at, into=c("date","time"), sep=" ") %>% group_by(date) %>% mutate(date = as.Date(date)) %>% select(date, time, text, source, favorite_count, retweet_count)
-IOL_tweets <- separate(IOL_tweets, created_at, into=c("date","time"), sep=" ") %>% group_by(date) %>% mutate(date = as.Date(date)) %>% select(date, time, text, source, favorite_count, retweet_count)
-eNCA_tweets <- separate(eNCA_tweets, created_at, into=c("date","time"), sep=" ") %>% group_by(date) %>% mutate(date = as.Date(date)) %>% select(date, time, text, source, favorite_count, retweet_count)
-SABC_tweets <- separate(SABCNews_tweets, created_at, into=c("date","time"), sep=" ") %>% group_by(date) %>% mutate(date = as.Date(date)) %>% select(date, time, text, source, favorite_count, retweet_count)
+News24_tweets <- separate(News24_tweets, created_at, into=c("date","time"), sep=" ") %>% mutate(date = as.Date(date)) %>% select(date, time, text, source, favorite_count, retweet_count)
+timesLIVE_tweets <- separate(TimesLIVE_tweets, created_at, into=c("date","time"), sep=" ") %>% mutate(date = as.Date(date)) %>% select(date, time, text, source, favorite_count, retweet_count)
+Ewnupdate_tweets <- separate(ewnupdates_tweets, created_at, into=c("date","time"), sep=" ") %>% mutate(date = as.Date(date)) %>% select(date, time, text, source, favorite_count, retweet_count)
+IOL_tweets <- separate(IOL_tweets, created_at, into=c("date","time"), sep=" ") %>% mutate(date = as.Date(date)) %>% select(date, time, text, source, favorite_count, retweet_count)
+eNCA_tweets <- separate(eNCA_tweets, created_at, into=c("date","time"), sep=" ") %>% mutate(date = as.Date(date)) %>% select(date, time, text, source, favorite_count, retweet_count)
+SABC_tweets <- separate(SABCNews_tweets, created_at, into=c("date","time"), sep=" ") %>% mutate(date = as.Date(date)) %>% select(date, time, text, source, favorite_count, retweet_count)
 
 
 #Subset data into 3 week range 1 June - 21 June
@@ -376,26 +376,47 @@ afinn_SABCNews
 
 ```
 
-```{r}
-# Topic Analysis
 
+# Topic Analysis
+```{r}
 # topic modeling using LDA
 # example on rpubs.com
 
-corpus <- Corpus(VectorSource(clean_tweets.News24))
-dtm = DocumentTermMatrix(corpus)
+corpusNews24 <- Corpus(VectorSource(clean_tweets.News24))
+dtmNews24 = DocumentTermMatrix(corpusNews24)
 
-lda_5 = LDA(dtm, k = 5, method = 'Gibbs', 
+corpusTimesLIVE <- Corpus(VectorSource(clean_tweets.TimesLIVE))
+dtmTimesLIVE = DocumentTermMatrix(corpusTimesLIVE)
+
+corpuseNCA <- Corpus(VectorSource(clean_tweets.eNCA))
+dtmeNCA = DocumentTermMatrix(corpuseNCA)
+
+corpusIOL <- Corpus(VectorSource(clean_tweets.IOL))
+dtmIOL = DocumentTermMatrix(corpusIOL)
+
+corpusewn <- Corpus(VectorSource(clean_tweets.ewn))
+dtmewn = DocumentTermMatrix(corpusewn)
+
+corpusSABCNews <- Corpus(VectorSource(clean_tweets.SABCNews))
+dtmSABCNews = DocumentTermMatrix(corpusSABCNews)
+```
+
+
+```{r}
+#News24 LDA topic analysis
+
+#LDA model with 2 topics selected
+News24_lda_5 = LDA(dtmNews24, k = 5, method = 'Gibbs', 
           control = list(nstart = 5, seed = list(1505,99,36,56,88), best = TRUE, 
                          thin = 500, burnin = 4000, iter = 2000))
 
 #LDA model with 2 topics selected
-lda_2 = LDA(dtm, k = 2, method = 'Gibbs', 
+News24_lda_2 = LDA(dtmNews24, k = 2, method = 'Gibbs', 
           control = list(nstart = 5, seed = list(1505,99,36,56,88), best = TRUE, 
                          thin = 500, burnin = 4000, iter = 2000))
 
 #LDA model with 10 topics selected
-lda_10 = LDA(dtm, k = 10, method = 'Gibbs', 
+News24_lda_10 = LDA(dtmNews24, k = 10, method = 'Gibbs', 
           control = list(nstart = 5, seed = list(1505,99,36,56,88), best = TRUE, 
                          thin = 500, burnin = 4000, iter = 2000))
 
@@ -407,11 +428,98 @@ lda_10 = LDA(dtm, k = 10, method = 'Gibbs',
 #lda_10
 ```
 
+
+```{r}
+#LDA model with 2 topics selected
+TimesLIVE_lda_5 = LDA(dtmTimesLIVE, k = 5, method = 'Gibbs', 
+          control = list(nstart = 5, seed = list(1505,99,36,56,88), best = TRUE, 
+                         thin = 500, burnin = 4000, iter = 2000))
+
+#LDA model with 2 topics selected
+TimesLIVE_lda_2 = LDA(dtmTimesLIVE, k = 2, method = 'Gibbs', 
+          control = list(nstart = 5, seed = list(1505,99,36,56,88), best = TRUE, 
+                         thin = 500, burnin = 4000, iter = 2000))
+
+#LDA model with 10 topics selected
+TimesLIVE_lda_10 = LDA(dtmTimesLIVE, k = 10, method = 'Gibbs', 
+          control = list(nstart = 5, seed = list(1505,99,36,56,88), best = TRUE, 
+                         thin = 500, burnin = 4000, iter = 2000))
+```
+
+```{r}
+#LDA model with 2 topics selected
+eNCA_lda_5 = LDA(dtmeNCA, k = 5, method = 'Gibbs', 
+          control = list(nstart = 5, seed = list(1505,99,36,56,88), best = TRUE, 
+                         thin = 500, burnin = 4000, iter = 2000))
+
+#LDA model with 2 topics selected
+eNCA_lda_2 = LDA(dtmeNCA, k = 2, method = 'Gibbs', 
+          control = list(nstart = 5, seed = list(1505,99,36,56,88), best = TRUE, 
+                         thin = 500, burnin = 4000, iter = 2000))
+
+#LDA model with 10 topics selected
+eNCA_lda_10 = LDA(dtmeNCA, k = 10, method = 'Gibbs', 
+          control = list(nstart = 5, seed = list(1505,99,36,56,88), best = TRUE, 
+                         thin = 500, burnin = 4000, iter = 2000))
+```
+
+```{r}
+#LDA model with 2 topics selected
+IOL_lda_5 = LDA(dtmIOL, k = 5, method = 'Gibbs', 
+          control = list(nstart = 5, seed = list(1505,99,36,56,88), best = TRUE, 
+                         thin = 500, burnin = 4000, iter = 2000))
+
+#LDA model with 2 topics selected
+IOL_lda_2 = LDA(dtmIOL, k = 2, method = 'Gibbs', 
+          control = list(nstart = 5, seed = list(1505,99,36,56,88), best = TRUE, 
+                         thin = 500, burnin = 4000, iter = 2000))
+
+#LDA model with 10 topics selected
+IOL_lda_10 = LDA(dtmIOL, k = 10, method = 'Gibbs', 
+          control = list(nstart = 5, seed = list(1505,99,36,56,88), best = TRUE, 
+                         thin = 500, burnin = 4000, iter = 2000))
+```
+
+```{r}
+#LDA model with 2 topics selected
+ewn_lda_5 = LDA(dtmewn, k = 5, method = 'Gibbs', 
+          control = list(nstart = 5, seed = list(1505,99,36,56,88), best = TRUE, 
+                         thin = 500, burnin = 4000, iter = 2000))
+
+#LDA model with 2 topics selected
+ewn_lda_2 = LDA(dtmewn, k = 2, method = 'Gibbs', 
+          control = list(nstart = 5, seed = list(1505,99,36,56,88), best = TRUE, 
+                         thin = 500, burnin = 4000, iter = 2000))
+
+#LDA model with 10 topics selected
+ewn_lda_10 = LDA(dtmewn, k = 10, method = 'Gibbs', 
+          control = list(nstart = 5, seed = list(1505,99,36,56,88), best = TRUE, 
+                         thin = 500, burnin = 4000, iter = 2000))
+```
+
+```{r}
+#LDA model with 2 topics selected
+SABCNews_lda_5 = LDA(dtmSABCNews, k = 5, method = 'Gibbs', 
+          control = list(nstart = 5, seed = list(1505,99,36,56,88), best = TRUE, 
+                         thin = 500, burnin = 4000, iter = 2000))
+
+#LDA model with 2 topics selected
+SABCNews_lda_2 = LDA(dtmSABCNews, k = 2, method = 'Gibbs', 
+          control = list(nstart = 5, seed = list(1505,99,36,56,88), best = TRUE, 
+                         thin = 500, burnin = 4000, iter = 2000))
+
+#LDA model with 10 topics selected
+SABCNews_lda_10 = LDA(dtmSABCNews, k = 10, method = 'Gibbs', 
+          control = list(nstart = 5, seed = list(1505,99,36,56,88), best = TRUE, 
+                         thin = 500, burnin = 4000, iter = 2000))
+```
+
+
 ```{r}
 #Top 10 terms or words under each topic
-top10terms_5 = as.matrix(terms(lda_5,10))
-top10terms_2 = as.matrix(terms(lda_2,10))
-top10terms_10 = as.matrix(terms(lda_10,10))
+top10terms_5 = as.matrix(terms(News24_lda_5,10))
+top10terms_2 = as.matrix(terms(News24_lda_2,10))
+top10terms_10 = as.matrix(terms(News24_lda_10,10))
 
 top10terms_5
 top10terms_2
@@ -421,9 +529,9 @@ top10terms_10
 
 ```{r}
 #Topics found out by our model:
-lda.topics_5 = as.matrix(topics(lda_5))
-lda.topics_2 = as.matrix(topics(lda_2))
-lda.topics_10 = as.matrix(topics(lda_10))
+lda.topics_5 = as.matrix(topics(News24_lda_5))
+lda.topics_2 = as.matrix(topics(News24_lda_2))
+lda.topics_10 = as.matrix(topics(News24_lda_10))
 #write.csv(lda.topics_5,file = paste('LDAGibbs',5,'DocsToTopics.csv'))
 #write.csv(lda.topics_2,file = paste('LDAGibbs',2,'DocsToTopics.csv'))
 #write.csv(lda.topics_10,file = paste('LDAGibbs',10,'DocsToTopics.csv'))
@@ -436,9 +544,9 @@ summary(as.factor(lda.topics_10[,1]))
 
 ```{r}
 #document wise probability of each topic.
-topicprob_5 = as.matrix(lda_5@gamma)
-topicprob_2 = as.matrix(lda_2@gamma)
-topicprob_10 = as.matrix(lda_10@gamma)
+topicprob_5 = as.matrix(News24_lda_5@gamma)
+topicprob_2 = as.matrix(News24_lda_2@gamma)
+topicprob_10 = as.matrix(News24_lda_10@gamma)
 
 #write.csv(topicprob_5, file = paste('LDAGibbs', 5, 'DoctToTopicProb.csv'))
 #write.csv(topicprob_2, file = paste('LDAGibbs', 2, 'DoctToTopicProb.csv'))
@@ -456,6 +564,7 @@ head(topicprob_2,1)
 # Other Analysis
 
 # Frequency of tweets by day
+ #%>% group_by(date)
 News24_freq <- News24_tweets %>% summarise(News24 = n())
 timesLIVE_freq <- timesLIVE_tweets %>% summarise(timesLIVE = n())
 Ewnupdate_freq <- Ewnupdate_tweets %>% summarise(Ewnupdate = n())
