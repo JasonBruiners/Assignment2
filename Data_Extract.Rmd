@@ -64,6 +64,15 @@ SABCNews_tweets <- get_timelines(c("SABCNews"), n=3200, include_rts=FALSE)
 ewnupdates_tweets <- get_timelines(c("ewnupdates"), n=3200, include_rts=FALSE)
 ```
 
+### Collecting additional tweets
+```{r}
+SAgovnews_tweets <- get_timelines(c("SAgovnews"), n=3200, include_rts=FALSE)
+SowetanLIVE_tweets <- get_timelines(c("SowetanLIVE"), n=3200, include_rts=FALSE)
+City_Press_tweets <- get_timelines(c("City_Press"), n=3200, include_rts=FALSE)
+mailandguardian_tweets <- get_timelines(c("mailandguardian"), n=3200, include_rts=FALSE)
+```
+
+
 ### Collect third batch of tweets
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 #Not useful
@@ -98,8 +107,29 @@ tweets_pe_19 <- search_tweets(q,geocode = lookup_coords("Port Elizabeth"), since
 ```
 
 ```{r}
-#Get Friends & Followers
+#Retrieve profiles
+News24_profile <- lookup_users("News24")
+TimesLIVE_profile <- lookup_users("TimesLIVE")
+eNCA_profile <- lookup_users("eNCA")
+IOL_profile <- lookup_users("IOL")
+SABCNews_profile <- lookup_users("SABCNews")
+ewnupdates_profile <- lookup_users("ewnupdates")
 
+#Get Followers count
+News24_followers <- News24_profile$followers_count
+TimesLIVE_followers <- TimesLIVE_profile$followers_count
+eNCA_followers <- eNCA_profile$followers_count
+IOL_followers <- IOL_profile$followers_count
+SABCNews_followers <- SABCNews_profile$followers_count
+ewnupdates_followrtd <- ewnupdates_profile$followers_count
+
+#Get Friends count
+News24_followers <- News24_profile$friends_count
+TimesLIVE_followers <- TimesLIVE_profile$friends_count
+eNCA_followers <- eNCA_profile$friends_count
+IOL_followers <- IOL_profile$friends_count
+SABCNews_followers <- SABCNews_profile$friends_count
+ewnupdates_followers <- ewnupdates_profile$friends_count
 ```
 
 ## finished collecting tweets!
@@ -123,15 +153,22 @@ write_rds(tweets_pe_19, "Data/Raw_Filtered_Data/tweets_pe_19.rds")
 ```
 
 
-
-
-
 ```{r echo=TRUE}
-# Exporting raw results
+# Exporting Timeline Data
 write_rds(News24_tweets, "Data/Raw_Timeline_Data/News24_tweets.rds")
 write_rds(TimesLIVE_tweets, "Data/Raw_Timeline_Data/TimesLIVE_tweets.rds")
 write_rds(eNCA_tweets, "Data/Raw_Timeline_Data/eNCA_tweets.rds")
 write_rds(IOL_tweets,"Data/Raw_Timeline_Data/IOL_tweets.rds")
 write_rds(SABCNews_tweets,"Data/Raw_Timeline_Data/SABCNews_tweets.rds")
-write_rds(ewnupdates_tweets,"Data/Raw_Timeline_Data/ewnupdates_tweets")
+write_rds(ewnupdates_tweets,"Data/Raw_Timeline_Data/ewnupdates_tweets.rds")
+write_rds(SAgovnews_tweets,"Data/Raw_Timeline_Data/SAgovnews.rds")
+write_rds(SowetanLIVE_tweets,"Data/Raw_Timeline_Data/SowetanLIVE.rds")
+write_rds(City_Press_tweets,"Data/Raw_Timeline_Data/City_Press.rds")
+write_rds(mailandguardian_tweets,"Data/Raw_Timeline_Data/mailandguardian.rds")
 ```
+
+```{r}
+#Exporting followers and following counts
+
+```
+

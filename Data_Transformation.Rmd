@@ -180,7 +180,7 @@ tweets_pe <-rbind(tweets_pe_18,tweets_pe_17,tweets_pe_16,tweets_pe_15,tweets_pe_
 #         gsub("[\r\n]","")
 #         gsub("[[:punct:]]","")
 
-#removing common words suc as to or and
+#removing common words such as to or and
 #tweets <- tweets %>% select(text) %>% unnest_tokens(word, text)
 #tweets <- tweets %>% anti_join(stop_words)
 
