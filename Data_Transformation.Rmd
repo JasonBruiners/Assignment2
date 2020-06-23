@@ -24,7 +24,7 @@ TimesLIVE_tweets <- read_rds("Data/Raw_Timeline_Data/TimesLIVE_tweets.rds")
 eNCA_tweets <- read_rds("Data/Raw_Timeline_Data/eNCA_tweets.rds")
 IOL_tweets <- read_rds("Data/Raw_Timeline_Data/IOL_tweets.rds")
 SABCNews_tweets <- read_rds("Data/Raw_Timeline_Data/SABCNews_tweets.rds")
-ewnupdates_tweets <- read_rds("Data/Raw_Timeline_Data/ewnupdates_tweets")
+ewnupdates_tweets <- read_rds("Data/Raw_Timeline_Data/ewnupdates_tweets.rds")
 ```
 
 ```{r}
@@ -162,6 +162,11 @@ tweets_pe <-rbind(tweets_pe_18,tweets_pe_17,tweets_pe_16,tweets_pe_15,tweets_pe_
 
 ```
 
+## cleaning data (text)
+```{r}
+
+```
+
 
 # Performing transformations
 ```{r}
@@ -257,15 +262,15 @@ SABC_retweet <- separate(SABCNews_tweets, created_at, into=c("date","time"), sep
 # like count
 News24_likes <- separate(News24_tweets, created_at, into=c("date","time"), sep=" ") %>% group_by(date) %>% summarise(News24 = sum(favorite_count))
 
-timesLIVE_likes <- separate(TimesLIVE_tweets, created_at, into=c("date","time"), sep=" ") %>% group_by(date) %>% summarise(timesLIVE = sum(favourite_count))
+timesLIVE_likes <- separate(TimesLIVE_tweets, created_at, into=c("date","time"), sep=" ") %>% group_by(date) %>% summarise(timesLIVE = sum(favorite_count))
 
-Ewnupdate_likes <- separate(News24_tweets, created_at, into=c("date","time"), sep=" ") %>% group_by(date) %>% summarise(Ewnupdate = sum(favourite_count))
+Ewnupdate_likes <- separate(News24_tweets, created_at, into=c("date","time"), sep=" ") %>% group_by(date) %>% summarise(Ewnupdate = sum(favorite_count))
 
-IOL_likes <- separate(IOL_tweets, created_at, into=c("date","time"), sep=" ") %>% group_by(date) %>% summarise(IOL = sum(favourite_count))
+IOL_likes <- separate(IOL_tweets, created_at, into=c("date","time"), sep=" ") %>% group_by(date) %>% summarise(IOL = sum(favorite_count))
 
-eNCA_likes <- separate(ewnupdates_tweets, created_at, into=c("date","time"), sep=" ") %>% group_by(date) %>% summarise(eNCA = sum(favourite_count)) 
+eNCA_likes <- separate(ewnupdates_tweets, created_at, into=c("date","time"), sep=" ") %>% group_by(date) %>% summarise(eNCA = sum(favorite_count)) 
 
-SABC_likes <- separate(SABCNews_tweets, created_at, into=c("date","time"), sep=" ") %>% group_by(date) %>% summarise(SABC = sum(favourite_count))
+SABC_likes <- separate(SABCNews_tweets, created_at, into=c("date","time"), sep=" ") %>% group_by(date) %>% summarise(SABC = sum(favorite_count))
 
 # sum days and join together, then send to visualisation
 #Likes_tweets <- cbind(News24_likes,timesLIVE_likes,Ewnupdate_likes,IOL_likes,eNCA_likes,SABC_likes)
