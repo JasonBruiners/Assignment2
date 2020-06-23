@@ -191,6 +191,12 @@ tweets_pe <-rbind(tweets_pe_18,tweets_pe_17,tweets_pe_16,tweets_pe_15,tweets_pe_
 # needs libary(topicmodels)
 # example on rpubs.com
 
+
+
+# comparing total tweets by medias vs the amount that was related to COVID-19 COULD THIS BE SEEN AS TOPIC ANALYSIS???????
+#start
+#end
+
 ```
 
 ```{r}
@@ -244,11 +250,6 @@ SABC_likes <- separate(SABCNews_tweets, created_at, into=c("date","time"), sep="
 # sum days and join together, then send to visualisation
 #Likes_tweets <- cbind(News24_likes,timesLIVE_likes,Ewnupdate_likes,IOL_likes,eNCA_likes,SABC_likes)
 
-
-
-# comparing total tweets by medias vs the amount that was related to COVID-19 COULD THIS BE SEEN AS TOPIC ANALYSIS???????
-#start
-#end
 
 # Comparing likes and retweets i.e maby retweets per like or compaing stats of non-covid to covid
 #start
