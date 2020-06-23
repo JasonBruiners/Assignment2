@@ -162,13 +162,20 @@ tweets_pe <-rbind(tweets_pe_18,tweets_pe_17,tweets_pe_16,tweets_pe_15,tweets_pe_
 
 ```
 
+# Performing transformations
+
 ## cleaning data (text)
 ```{r}
-
+#Separate date column
+News24_tweets <- separate(News24_tweets, created_at, into=c("date","time"), sep=" ") %>% group_by(date) %>% mutate(date = as.Date(date))
+timesLIVE_tweets <- separate(TimesLIVE_tweets, created_at, into=c("date","time"), sep=" ") %>% group_by(date) %>% mutate(date = as.Date(date))
+Ewnupdate_tweets <- separate(ewnupdates_tweets, created_at, into=c("date","time"), sep=" ") %>% group_by(date) %>% mutate(date = as.Date(date))
+IOL_tweets <- separate(IOL_tweets, created_at, into=c("date","time"), sep=" ") %>% group_by(date) %>% mutate(date = as.Date(date))
+eNCA_tweets <- separate(eNCA_tweets, created_at, into=c("date","time"), sep=" ") %>% group_by(date) %>% mutate(date = as.Date(date))
+SABC_tweets <- separate(SABCNews_tweets, created_at, into=c("date","time"), sep=" ") %>% group_by(date) %>% mutate(date = as.Date(date))
 ```
 
 
-# Performing transformations
 ```{r}
 # Sentiment Analysis
 # this example uses library(syuzhet)
@@ -228,49 +235,49 @@ tweets_pe <-rbind(tweets_pe_18,tweets_pe_17,tweets_pe_16,tweets_pe_15,tweets_pe_
 # Other Analysis
 
 # Frequency of tweets by day
-News24_freq <- separate(News24_tweets, created_at, into=c("date","time"), sep=" ") %>% group_by(date) %>% summarise(News24 = n())
+News24_freq <- News24_tweets %>% summarise(News24 = n())
 
-timesLIVE_freq <- separate(TimesLIVE_tweets, created_at, into=c("date","time"), sep=" ") %>% group_by(date) %>% summarise(timesLIVE = n())
+timesLIVE_freq <- timesLIVE_tweets %>% summarise(timesLIVE = n())
 
-Ewnupdate_freq <- separate(News24_tweets, created_at, into=c("date","time"), sep=" ") %>% group_by(date) %>% summarise(Ewnupdate = n())
+Ewnupdate_freq <- Ewnupdate_tweets %>% summarise(Ewnupdate = n())
 
-IOL_freq <- separate(IOL_tweets, created_at, into=c("date","time"), sep=" ") %>% group_by(date) %>% summarise(IOL = n())
+IOL_freq <- IOL_tweets %>% summarise(IOL = n())
 
-eNCA_freq <- separate(ewnupdates_tweets, created_at, into=c("date","time"), sep=" ") %>% group_by(date) %>% summarise(eNCA = n()) 
+eNCA_freq <- eNCA_tweets %>% summarise(eNCA = n()) 
 
-SABC_freq <- separate(SABCNews_tweets, created_at, into=c("date","time"), sep=" ") %>% group_by(date) %>% summarise(SABC = n())
+SABC_freq <- SABC_tweets %>% summarise(SABC = n())
 
 # sum days and join together, then send to visualisation
 #Frequency_tweets <- cbind(News24_freq,timesLIVE_freq,Ewnupdate_freq,IOL_freq,eNCA_freq,SABC_freq)
 
 #retweet count 
-News24_retweet <- separate(News24_tweets, created_at, into=c("date","time"), sep=" ") %>% group_by(date) %>% summarise(News24 = sum(retweet_count))
+News24_retweet <- News24_tweets %>% summarise(News24 = sum(retweet_count))
 
-timesLIVE_retweet <- separate(TimesLIVE_tweets, created_at, into=c("date","time"), sep=" ") %>% group_by(date) %>% summarise(timesLIVE = sum(retweet_count))
+timesLIVE_retweet <- timesLIVE_tweets %>% summarise(timesLIVE = sum(retweet_count))
 
-Ewnupdate_retweet <- separate(News24_tweets, created_at, into=c("date","time"), sep=" ") %>% group_by(date) %>% summarise(Ewnupdate = sum(retweet_count))
+Ewnupdate_retweet <- Ewnupdate_tweets %>% summarise(Ewnupdate = sum(retweet_count))
 
-IOL_retweet <- separate(IOL_tweets, created_at, into=c("date","time"), sep=" ") %>% group_by(date) %>% summarise(IOL = sum(retweet_count))
+IOL_retweet <- IOL_tweets %>% summarise(IOL = sum(retweet_count))
 
-eNCA_retweet <- separate(ewnupdates_tweets, created_at, into=c("date","time"), sep=" ") %>% group_by(date) %>% summarise(eNCA = sum(retweet_count)) 
+eNCA_retweet <- eNCA_tweets %>% summarise(eNCA = sum(retweet_count)) 
 
-SABC_retweet <- separate(SABCNews_tweets, created_at, into=c("date","time"), sep=" ") %>% group_by(date) %>% summarise(SABC = sum(retweet_count))
+SABC_retweet <- SABC_tweets %>% summarise(SABC = sum(retweet_count))
 
 # sum days and join together, then send to visualisation
 #retweet_tweets <- cbind(News24_retweet,timesLIVE_retweet,Ewnupdate_retweet,IOL_retweet,eNCA_retweet,SABC_retweet)
 
 # like count
-News24_likes <- separate(News24_tweets, created_at, into=c("date","time"), sep=" ") %>% group_by(date) %>% summarise(News24 = sum(favorite_count))
+News24_likes <- News24_tweets %>% summarise(News24 = sum(favorite_count))
 
-timesLIVE_likes <- separate(TimesLIVE_tweets, created_at, into=c("date","time"), sep=" ") %>% group_by(date) %>% summarise(timesLIVE = sum(favorite_count))
+timesLIVE_likes <- timesLIVE_tweets %>% summarise(timesLIVE = sum(favorite_count))
 
-Ewnupdate_likes <- separate(News24_tweets, created_at, into=c("date","time"), sep=" ") %>% group_by(date) %>% summarise(Ewnupdate = sum(favorite_count))
+Ewnupdate_likes <- Ewnupdate_tweets %>% summarise(Ewnupdate = sum(favorite_count))
 
-IOL_likes <- separate(IOL_tweets, created_at, into=c("date","time"), sep=" ") %>% group_by(date) %>% summarise(IOL = sum(favorite_count))
+IOL_likes <- IOL_tweets %>% summarise(IOL = sum(favorite_count))
 
-eNCA_likes <- separate(ewnupdates_tweets, created_at, into=c("date","time"), sep=" ") %>% group_by(date) %>% summarise(eNCA = sum(favorite_count)) 
+eNCA_likes <- eNCA_tweets %>% summarise(eNCA = sum(favorite_count)) 
 
-SABC_likes <- separate(SABCNews_tweets, created_at, into=c("date","time"), sep=" ") %>% group_by(date) %>% summarise(SABC = sum(favorite_count))
+SABC_likes <- SABC_tweets %>% summarise(SABC = sum(favorite_count))
 
 # sum days and join together, then send to visualisation
 #Likes_tweets <- cbind(News24_likes,timesLIVE_likes,Ewnupdate_likes,IOL_likes,eNCA_likes,SABC_likes)
