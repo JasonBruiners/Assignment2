@@ -167,12 +167,29 @@ tweets_pe <-rbind(tweets_pe_18,tweets_pe_17,tweets_pe_16,tweets_pe_15,tweets_pe_
 ## cleaning data (text)
 ```{r}
 #Separate date column
-News24_tweets <- separate(News24_tweets, created_at, into=c("date","time"), sep=" ") %>% group_by(date) %>% mutate(date = as.Date(date))
-timesLIVE_tweets <- separate(TimesLIVE_tweets, created_at, into=c("date","time"), sep=" ") %>% group_by(date) %>% mutate(date = as.Date(date))
-Ewnupdate_tweets <- separate(ewnupdates_tweets, created_at, into=c("date","time"), sep=" ") %>% group_by(date) %>% mutate(date = as.Date(date))
-IOL_tweets <- separate(IOL_tweets, created_at, into=c("date","time"), sep=" ") %>% group_by(date) %>% mutate(date = as.Date(date))
-eNCA_tweets <- separate(eNCA_tweets, created_at, into=c("date","time"), sep=" ") %>% group_by(date) %>% mutate(date = as.Date(date))
-SABC_tweets <- separate(SABCNews_tweets, created_at, into=c("date","time"), sep=" ") %>% group_by(date) %>% mutate(date = as.Date(date))
+News24_tweets <- separate(News24_tweets, created_at, into=c("date","time"), sep=" ") %>% group_by(date) %>% mutate(date = as.Date(date)) %>% select(date, time, text, source, favorite_count, retweet_count)
+timesLIVE_tweets <- separate(TimesLIVE_tweets, created_at, into=c("date","time"), sep=" ") %>% group_by(date) %>% mutate(date = as.Date(date)) %>% select(date, time, text, source, favorite_count, retweet_count)
+Ewnupdate_tweets <- separate(ewnupdates_tweets, created_at, into=c("date","time"), sep=" ") %>% group_by(date) %>% mutate(date = as.Date(date)) %>% select(date, time, text, source, favorite_count, retweet_count)
+IOL_tweets <- separate(IOL_tweets, created_at, into=c("date","time"), sep=" ") %>% group_by(date) %>% mutate(date = as.Date(date)) %>% select(date, time, text, source, favorite_count, retweet_count)
+eNCA_tweets <- separate(eNCA_tweets, created_at, into=c("date","time"), sep=" ") %>% group_by(date) %>% mutate(date = as.Date(date)) %>% select(date, time, text, source, favorite_count, retweet_count)
+SABC_tweets <- separate(SABCNews_tweets, created_at, into=c("date","time"), sep=" ") %>% group_by(date) %>% mutate(date = as.Date(date)) %>% select(date, time, text, source, favorite_count, retweet_count)
+
+
+#Subset data into 3 week range 1 June - 21 June
+
+myfunc <- function(x,y){News24_tweets[News24_tweets$date >= x & News24_tweets$date <= y,]}
+
+DATE1 <- as.Date("2020-06-01")
+DATE2 <- as.Date("2020-06-21")
+
+News24_tweets <- myfunc(DATE1,DATE2)
+timesLIVE_tweets <- myfunc(DATE1,DATE2)
+Ewnupdate_tweets <- myfunc(DATE1,DATE2)
+IOL_tweets <- myfunc(DATE1,DATE2)
+eNCA_tweets <- myfunc(DATE1,DATE2)
+SABC_tweets <- myfunc(DATE1,DATE2)
+
+
 ```
 
 
