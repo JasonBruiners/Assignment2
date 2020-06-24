@@ -15,72 +15,27 @@ library(dplyr)
 
 ```
 
-## Load extracted data 
+# Load extracted data 
 ```{r}
-News24_tweets <- read_rds("Data/News24_tweets.rds")
-TimesLIVE_tweets <- read_rds("Data/TimesLIVE_tweets.rds")
-eNCA_tweets <- read_rds("Data/eNCA_tweets.rds")
-IOL_tweets <- read_rds("Data/IOL_tweets.rds")
-SABCNews_tweets <- read_rds("Data/SABCNews_tweets.rds")
-ewnupdates_tweets <- read_rds("Data/ewnupdates_tweets")
+#News24_tweets <- read_rds("Data/News24_tweets.rds")
+#TimesLIVE_tweets <- read_rds("Data/TimesLIVE_tweets.rds")
+#eNCA_tweets <- read_rds("Data/eNCA_tweets.rds")
+#IOL_tweets <- read_rds("Data/IOL_tweets.rds")
+#SABCNews_tweets <- read_rds("Data/SABCNews_tweets.rds")
+#ewnupdates_tweets <- read_rds("Data/ewnupdates_tweets")
 
 #Load Topic Modelling Data
 News24_top_terms <- read_rds("Data/Final_Data/News24_top_terms.rds")
+timesLIVE_top_terms <- read_rds("Data/Final_Data/News24_top_terms.rds")
+#Ewnupdate_top_terms <- read_rds("Data/Final_Data/News24_top_terms.rds")
+IOL_top_terms <- read_rds("Data/Final_Data/News24_top_terms.rds")
+eNCA_top_terms <- read_rds("Data/Final_Data/News24_top_terms.rds")
+SABC_top_terms <- read_rds("Data/Final_Data/News24_top_terms.rds")
 ```
 
 
-```{r}
-
-# Preview dataframes
-head(News24_tweets$text)
-head(TimesLIVE_tweets$text)
-head(eNCA_tweets$text)
-head(IOL_tweets$text)
-head(SABCNews_tweets$text)
-head(ewnupdates_tweets$text)
-
-# See variables 
-#names(News24_tweets)
-#names(TimesLIVE_tweets)
-#names(eNCA_tweets)
-#names(IOL_tweets)
-#names(SABCNews_tweets)
-#names(ewnupdates_tweets)
-#
-
-
-```
-
-## Analysis
-```{r}
-# Analyse and evaluate data
-
-# restrict geo location to united states and english tweets
-nk_tweets <- search_tweets("korea",
-  "lang:en", geocode = lookup_coords("usa"), 
-  n = 1000, type="recent", include_rts=FALSE
-  )
-
-# getting 5 latest tweets from sanders
-sanders_tweets <- get_timelines(c("sensanders"), n = 5)
-head(sanders_tweets$text)
-
-
-# identify the Tweets Sanders has recently “liked"
-sanders_favorites<-get_favorites("sensanders", n=5)
-sanders_favorites$text
-
-# We can also get a list of the people who Sanders follows like this:
-sanders_follows<-get_followers("sensanders")
-
-
-# trending topics in new york
-get_trends("New York")
-
-```
-
-## Generating visuals
-### Global Theme
+# Generating visuals
+## Global Theme
 ```{r}
 t <- theme(
   axis.text.x=element_text(colour = "black",face = "bold"),
@@ -98,6 +53,7 @@ t <- theme(
 )
 
 ```
+
 
 ```{r}
 
@@ -119,6 +75,7 @@ with(geocoded, points(lng, lat, pch = 20, cex = .75, col = rgb(0, .3, .7, .75)))
 
 ```
 
+
 ## Sentiment visuals
 ```{r}
 # sentiment score
@@ -129,8 +86,8 @@ affin_tweets %>% group_by(sentiment) %>% top_n(10) %>% ungroup() %>% mutate(word
 
 ```
 
-## Topic visuals
 
+## Topic visuals
 ```{r}
 #News24 STM Plot
 News24_top_terms %>%
@@ -145,3 +102,76 @@ News24_top_terms %>%
 ) + t %+replace% theme(strip.text = element_text(face = "bold"))
 ```
 
+```{r}
+#TimesLIVE STM Plot
+timesLIVE_top_terms %>%
+  mutate(term = reorder(term, beta)) %>%
+  ggplot(aes(term, beta, fill = factor(topic))) +
+  geom_col(show.legend = FALSE) + 
+  scale_y_continuous(breaks = c(0.00, 0.02, 0.04, 0.060, 0.080),labels = c("0", ".02", ".04", ".06", ".08")) +
+  expand_limits(y=c(0,0.08)) + 
+  facet_wrap(~ topic, scales = "free") + 
+  coord_flip() +
+  labs(title = "Structural Topic Modeling for TimesLIVE ", caption = "\nSource: Data collected from Twitter's REST API via rtweet"
+) + t %+replace% theme(strip.text = element_text(face = "bold"))
+```
+
+
+```{r}
+#ewn STM Plot
+ewn_top_terms %>%
+  mutate(term = reorder(term, beta)) %>%
+  ggplot(aes(term, beta, fill = factor(topic))) +
+  geom_col(show.legend = FALSE) + 
+  scale_y_continuous(breaks = c(0.00, 0.02, 0.04, 0.060, 0.080),labels = c("0", ".02", ".04", ".06", ".08")) +
+  expand_limits(y=c(0,0.08)) + 
+  facet_wrap(~ topic, scales = "free") + 
+  coord_flip() +
+  labs(title = "Structural Topic Modeling for EWN ", caption = "\nSource: Data collected from Twitter's REST API via rtweet"
+) + t %+replace% theme(strip.text = element_text(face = "bold"))
+```
+
+
+```{r}
+#IOL STM Plot
+IOL_top_terms %>%
+  mutate(term = reorder(term, beta)) %>%
+  ggplot(aes(term, beta, fill = factor(topic))) +
+  geom_col(show.legend = FALSE) + 
+  scale_y_continuous(breaks = c(0.00, 0.02, 0.04, 0.060, 0.080),labels = c("0", ".02", ".04", ".06", ".08")) +
+  expand_limits(y=c(0,0.08)) + 
+  facet_wrap(~ topic, scales = "free") + 
+  coord_flip() +
+  labs(title = "Structural Topic Modeling for IOL ", caption = "\nSource: Data collected from Twitter's REST API via rtweet"
+) + t %+replace% theme(strip.text = element_text(face = "bold"))
+```
+
+
+```{r}
+#eNCA STM Plot
+eNCA_top_terms %>%
+  mutate(term = reorder(term, beta)) %>%
+  ggplot(aes(term, beta, fill = factor(topic))) +
+  geom_col(show.legend = FALSE) + 
+  scale_y_continuous(breaks = c(0.00, 0.02, 0.04, 0.060, 0.080),labels = c("0", ".02", ".04", ".06", ".08")) +
+  expand_limits(y=c(0,0.08)) + 
+  facet_wrap(~ topic, scales = "free") + 
+  coord_flip() +
+  labs(title = "Structural Topic Modeling for eNCA ", caption = "\nSource: Data collected from Twitter's REST API via rtweet"
+) + t %+replace% theme(strip.text = element_text(face = "bold"))
+```
+
+
+```{r}
+#SABC STM Plot
+SABC_top_terms %>%
+  mutate(term = reorder(term, beta)) %>%
+  ggplot(aes(term, beta, fill = factor(topic))) +
+  geom_col(show.legend = FALSE) + 
+  scale_y_continuous(breaks = c(0.00, 0.02, 0.04, 0.060, 0.080),labels = c("0", ".02", ".04", ".06", ".08")) +
+  expand_limits(y=c(0,0.08)) + 
+  facet_wrap(~ topic, scales = "free") + 
+  coord_flip() +
+  labs(title = "Structural Topic Modeling for SABC ", caption = "\nSource: Data collected from Twitter's REST API via rtweet"
+) + t %+replace% theme(strip.text = element_text(face = "bold"))
+```

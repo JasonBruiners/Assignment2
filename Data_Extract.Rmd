@@ -92,18 +92,18 @@ q <- paste(q1,q2)
 ```{r}
 #UPDATE DAILY
 #Collecting tweets for South Africa
-tweets_za_19 <- search_tweets(q,geocode = lookup_coords("South Africa"), since="2020-06-19", until="2020-06-20", type="recent", include_rts=FALSE, n=18000)
+tweets_za_22 <- search_tweets(q,geocode = lookup_coords("South Africa"), since="2020-06-22", until="2020-06-23", type="recent", include_rts=FALSE, n=18000)
 
 #Collecting tweets for largest city in each province
-tweets_bloem_19 <- search_tweets(q,geocode = lookup_coords("Bloemfontein"), since="2020-06-19", until="2020-06-20", type="recent", include_rts=FALSE, n=18000)
-tweets_cpt_19 <- search_tweets(q,geocode = lookup_coords("Cape Town"), since="2020-06-19", until="2020-06-20", type="recent", include_rts=FALSE, n=18000)
-tweets_durb_19 <- search_tweets(q,geocode = lookup_coords("Durban"), since="2020-06-19", until="2020-06-20", type="recent", include_rts=FALSE, n=18000)
-tweets_jhb_19 <- search_tweets(q,geocode = lookup_coords("Johannesburg"), since="2020-06-19", until="2020-06-20", type="recent", include_rts=FALSE, n=18000)
-tweets_kim_19 <- search_tweets(q,geocode = lookup_coords("Kimberley"), since="2020-06-19", until="2020-06-20", type="recent", include_rts=FALSE, n=18000)
-tweets_klerk_19 <- search_tweets(q,geocode = lookup_coords("Klerksdorp"), since="2020-06-19", until="2020-06-20", type="recent", include_rts=FALSE, n=18000)
-tweets_mbomb_19 <- search_tweets(q,geocode = lookup_coords("Mbombela"), since="2020-06-19", until="2020-06-20", type="recent", include_rts=FALSE, n=18000)
-tweets_polo_19 <- search_tweets(q,geocode = lookup_coords("Polokwane"), since="2020-06-19", until="2020-06-20", type="recent", include_rts=FALSE, n=18000)
-tweets_pe_19 <- search_tweets(q,geocode = lookup_coords("Port Elizabeth"), since="2020-06-19", until="2020-06-20", type="recent", include_rts=FALSE, n=18000)
+tweets_bloem_22 <- search_tweets(q,geocode = lookup_coords("Bloemfontein"), since="2020-06-22", until="2020-06-23", type="recent", include_rts=FALSE, n=18000)
+tweets_cpt_22 <- search_tweets(q,geocode = lookup_coords("Cape Town"), since="2020-06-22", until="2020-06-23", type="recent", include_rts=FALSE, n=18000)
+tweets_durb_22 <- search_tweets(q,geocode = lookup_coords("Durban"), since="2020-06-22", until="2020-06-23", type="recent", include_rts=FALSE, n=18000)
+tweets_jhb_22 <- search_tweets(q,geocode = lookup_coords("Johannesburg"), since="2020-06-22", until="2020-06-23", type="recent", include_rts=FALSE, n=18000)
+tweets_kim_22 <- search_tweets(q,geocode = lookup_coords("Kimberley"), since="2020-06-22", until="2020-06-23", type="recent", include_rts=FALSE, n=18000)
+tweets_klerk_22 <- search_tweets(q,geocode = lookup_coords("Klerksdorp"), since="2020-06-22", until="2020-06-23", type="recent", include_rts=FALSE, n=18000)
+tweets_mbomb_22 <- search_tweets(q,geocode = lookup_coords("Mbombela"), since="2020-06-22", until="2020-06-23", type="recent", include_rts=FALSE, n=18000)
+tweets_polo_22 <- search_tweets(q,geocode = lookup_coords("Polokwane"), since="2020-06-22", until="2020-06-23", type="recent", include_rts=FALSE, n=18000)
+tweets_pe_22 <- search_tweets(q,geocode = lookup_coords("Port Elizabeth"), since="2020-06-22", until="2020-06-23", type="recent", include_rts=FALSE, n=18000)
 ```
 
 ```{r}
@@ -138,17 +138,17 @@ ewnupdates_followers <- ewnupdates_profile$friends_count
 # Exporting Tweets to .rds
 ```{r}
 #UPDATE DAILY
-#Export Filtered Data for 19/06/2020
-write_rds(tweets_za_19, "Data/Raw_Filtered_Data/tweets_za_19.rds")
-write_rds(tweets_bloem_19, "Data/Raw_Filtered_Data/tweets_bloem_19.rds")
-write_rds(tweets_cpt_19, "Data/Raw_Filtered_Data/tweets_cpt_19.rds")
-write_rds(tweets_durb_19, "Data/Raw_Filtered_Data/tweets_durb_19.rds")
-write_rds(tweets_jhb_19, "Data/Raw_Filtered_Data/tweets_jhb_19.rds")
-write_rds(tweets_kim_19, "Data/Raw_Filtered_Data/tweets_kim_19.rds")
-write_rds(tweets_klerk_19, "Data/Raw_Filtered_Data/tweets_klerk_19.rds")
-write_rds(tweets_mbomb_19, "Data/Raw_Filtered_Data/tweets_mbomb_19.rds")
-write_rds(tweets_polo_19, "Data/Raw_Filtered_Data/tweets_polo_19.rds")
-write_rds(tweets_pe_19, "Data/Raw_Filtered_Data/tweets_pe_19.rds")
+#Export Filtered Data for 21/06/2020
+write_rds(tweets_za_22, "Data/Raw_Filtered_Data/tweets_za_22.rds")
+write_rds(tweets_bloem_22, "Data/Raw_Filtered_Data/tweets_bloem_22.rds")
+write_rds(tweets_cpt_22, "Data/Raw_Filtered_Data/tweets_cpt_22.rds")
+write_rds(tweets_durb_22, "Data/Raw_Filtered_Data/tweets_durb_22.rds")
+write_rds(tweets_jhb_22, "Data/Raw_Filtered_Data/tweets_jhb_22.rds")
+write_rds(tweets_kim_22, "Data/Raw_Filtered_Data/tweets_kim_22.rds")
+write_rds(tweets_klerk_22, "Data/Raw_Filtered_Data/tweets_klerk_22.rds")
+write_rds(tweets_mbomb_22, "Data/Raw_Filtered_Data/tweets_mbomb_22.rds")
+write_rds(tweets_polo_22, "Data/Raw_Filtered_Data/tweets_polo_22.rds")
+write_rds(tweets_pe_22, "Data/Raw_Filtered_Data/tweets_pe_22.rds")
 
 ```
 
