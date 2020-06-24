@@ -17,6 +17,7 @@ library(tidyverse)
 library(maps)
 library(tidytext)
 library(textdata)
+library(tm)
 ```
 
 ## Load extracted data 
@@ -194,8 +195,7 @@ SABC_tweets <- myfunc(DATE1,DATE2)
 
 ```
 
-# Addtional cleaning per dataframe
-
+# AddItional cleaning per dataframe
 ```{r}
 #News24 cleaning
 tweets.News24 <- News24_tweets %>% select(text)
@@ -214,35 +214,14 @@ tweets.News24_clean$stripped_text = gsub("^ ", "", tweets.News24_clean$stripped_
 tweets.News24_clean$stripped_text = gsub(" $", "", tweets.News24_clean$stripped_text) #laggin blanks
 tweets.News24_clean$stripped_text = gsub(" +", " ", tweets.News24_clean$stripped_text) #general spaces
 
-tweets.News24_stem <- tweets.News24_clean %>% select(stripped_text) %>% unnest_tokens(word, stripped_text)
+tweets.News24_clean <- tweets.News24_clean %>% select(stripped_text) 
+
+tweets.News24_stem <- tweets.News24_clean %>% unnest_tokens(word, stripped_text)
 
 clean_tweets.News24 <- tweets.News24_stem %>% anti_join(stop_words)
 
 clean_tweets.News24
 ```
-
-```{r}
-News24_text<- News24_tweets %>% select(text)
-
-News24_cleaned <- unique(News24_text)
-News24_cleaned$stripped_text <- tolower(News24_cleaned$text)
-
-
-News24_cleaned$stripped_text <- gsub("http.+ |http.+$", " ", News24_cleaned$stripped_text) # remove links
-News24_cleaned$stripped_text <- gsub("@\\S*","", News24_cleaned$stripped_text) # remove mentons
-News24_cleaned$stripped_text <- gsub("amp","", News24_cleaned$stripped_text) 
-News24_cleaned$stripped_text <- gsub("[\r\n]","", News24_cleaned$stripped_text)
-News24_cleaned$stripped_text <- gsub("[[:punct:]]"," ", News24_cleaned$stripped_text) #emove punctuation
-News24_cleaned$stripped_text = gsub("[ |\t]{2,}", " ", News24_cleaned$stripped_text) # remove tabs
-News24_cleaned$stripped_text = gsub("^ ", "", News24_cleaned$stripped_text) # leading blanks
-News24_cleaned$stripped_text = gsub(" $", "", News24_cleaned$stripped_text) #laggin blanks
-News24_cleaned$stripped_text = gsub(" +", " ", News24_cleaned$stripped_text) #general spaces
-
-head(News24_cleaned$text)
-News24_tester <- News24_cleaned$stripped_text
-News24_tester
-```
-
 
 
 ```{r}
@@ -401,21 +380,16 @@ afinn_SABCNews
 ```
 
 
-```{r}
-testywesty <- tweets.News24_clean %>% select(stripped_text)
-testywesty
-```
-
-
 # Topic Analysis
 ```{r}
 # topic modeling using LDA
 # example on rpubs.com
 
-corpusNews24 <- Corpus(VectorSource(testywesty))
+corpusNews24 <- Corpus(VectorSource(tweets.News24_clean))
 corpusNews24 <- tm_map(corpusNews24, removeWords, stopwords("english"))  
 corpusNews24 <- tm_map(corpusNews24, removeNumbers)
 corpusNews24 <- tm_map(corpusNews24, stemDocument)
+#Remove search terms -->
 dtmNews24 = DocumentTermMatrix(corpusNews24)
 
 corpusTimesLIVE <- Corpus(VectorSource(clean_tweets.TimesLIVE))
@@ -439,12 +413,12 @@ dtmSABCNews = DocumentTermMatrix(corpusSABCNews)
 #News24 LDA topic analysis
 
 #LDA model with 2 topics selected
-#News24_lda_5 = LDA(dtmNews24, k = 5, method = 'Gibbs', 
-#          control = list(nstart = 5, seed = list(1505,99,36,56,88), best = TRUE, 
-#                         thin = 500, burnin = 4000, iter = 2000))
-
-#LDA model with 2 topics selected
 News24_lda_2 = LDA(dtmNews24, k = 2, method = 'Gibbs', 
+          control = list(nstart = 5, seed = list(1505,99,36,56,88), best = TRUE, 
+                         thin = 500, burnin = 4000, iter = 2000))
+
+#LDA model with 5 topics selected
+News24_lda_5 = LDA(dtmNews24, k = 5, method = 'Gibbs', 
           control = list(nstart = 5, seed = list(1505,99,36,56,88), best = TRUE, 
                          thin = 500, burnin = 4000, iter = 2000))
 
@@ -452,6 +426,13 @@ News24_lda_2 = LDA(dtmNews24, k = 2, method = 'Gibbs',
 News24_lda_10 = LDA(dtmNews24, k = 10, method = 'Gibbs', 
           control = list(nstart = 5, seed = list(1505,99,36,56,88), best = TRUE, 
                          thin = 500, burnin = 4000, iter = 2000))
+
+#News24_lda_20 = LDA(dtmNews24, k = 20, method = 'Gibbs', 
+#          control = list(nstart = 5, seed = list(1505,99,36,56,88), best = TRUE, 
+#                         thin = 500, burnin = 4000, iter = 2000))
+
+
+#News24_lda_50 = LDA(dtmNews24, k = 50, method = 'Gibbs', control = list(seed = 1234))
 
 # comparing total tweets by medias vs the amount that was related to COVID-19 COULD THIS BE SEEN AS TOPIC ANALYSIS???????
 #start
@@ -549,36 +530,40 @@ SABCNews_lda_10 = LDA(dtmSABCNews, k = 10, method = 'Gibbs',
 
 
 ```{r}
-#Top 10 terms or words under each topic
-top10terms_5 = as.matrix(terms(News24_lda_5,10))
-top10terms_2 = as.matrix(terms(News24_lda_2,10))
-top10terms_10 = as.matrix(terms(News24_lda_10,10))
+#Top 5 terms or words under each topic
+top10terms_2 = as.matrix(terms(News24_lda_2,5))
+top10terms_5 = as.matrix(terms(News24_lda_5,5))
+top10terms_10 = as.matrix(terms(News24_lda_10,5))
+#top10terms_20 = as.matrix(terms(News24_lda_20,5))
+#top10terms_50 = as.matrix(terms(News24_lda_50,5))
 
-top10terms_5
 top10terms_2
+top10terms_5
 top10terms_10
+#top10terms_20
+#top10terms_50
 
 ```
 
 ```{r}
 #Topics found out by our model:
-lda.topics_5 = as.matrix(topics(News24_lda_5))
 lda.topics_2 = as.matrix(topics(News24_lda_2))
+lda.topics_5 = as.matrix(topics(News24_lda_5))
 lda.topics_10 = as.matrix(topics(News24_lda_10))
 #write.csv(lda.topics_5,file = paste('LDAGibbs',5,'DocsToTopics.csv'))
 #write.csv(lda.topics_2,file = paste('LDAGibbs',2,'DocsToTopics.csv'))
 #write.csv(lda.topics_10,file = paste('LDAGibbs',10,'DocsToTopics.csv'))
 
-summary(as.factor(lda.topics_5[,1]))
 summary(as.factor(lda.topics_2[,1]))
+summary(as.factor(lda.topics_5[,1]))
 summary(as.factor(lda.topics_10[,1]))
 ```
 
 
 ```{r}
 #document wise probability of each topic.
-topicprob_5 = as.matrix(News24_lda_5@gamma)
 topicprob_2 = as.matrix(News24_lda_2@gamma)
+topicprob_5 = as.matrix(News24_lda_5@gamma)
 topicprob_10 = as.matrix(News24_lda_10@gamma)
 
 #write.csv(topicprob_5, file = paste('LDAGibbs', 5, 'DoctToTopicProb.csv'))
@@ -586,10 +571,51 @@ topicprob_10 = as.matrix(News24_lda_10@gamma)
 #write.csv(topicprob_10, file = paste('LDAGibbs', 10, 'DoctToTopicProb.csv'))
 
 head(topicprob_2,1)
+head(topicprob_5,1)
+head(topicprob_10,1)
+```
+#STM Topic Modelling
+
+```{r}
+library(stm)
 ```
 
 ```{r}
+processed <- textProcessor(tweets.News24_clean$stripped_text, metadata = News24_tweets)
+```
 
+```{r}
+out <- prepDocuments(processed$documents, processed$vocab, processed$meta)
+
+```
+
+```{r}
+docs <- out$documents
+vocab <- out$vocab
+meta <-out$meta
+```
+
+
+```{r}
+First_STM <- stm(documents = out$documents, vocab = out$vocab,
+              K = 10, max.em.its = 75, data = out$meta,
+              init.type = "Spectral", verbose = FALSE)
+
+Second_STM <- stm(documents = out$documents, vocab = out$vocab,
+              K = 15, max.em.its = 75, data = out$meta,
+              init.type = "Spectral", verbose = FALSE)
+
+Third_STM <- stm(documents = out$documents, vocab = out$vocab,
+              K = 20, max.em.its = 75, data = out$meta,
+              init.type = "Spectral", verbose = FALSE)
+```
+
+
+```{r}
+plot(First_STM)
+plot(Second_STM)
+plot(Third_STM)
+```
 ```
 
 
