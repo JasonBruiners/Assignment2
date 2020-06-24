@@ -227,7 +227,7 @@ tweets.News24_clean$stripped_text <- gsub("[\r\n]","", tweets.News24_clean$strip
 tweets.News24_clean$stripped_text <- gsub("[[:punct:]]"," ", tweets.News24_clean$stripped_text) #remove punctuation
 tweets.News24_clean$stripped_text = gsub("[ |\t]{2,}", " ", tweets.News24_clean$stripped_text) # remove tabs
 tweets.News24_clean$stripped_text = gsub("^ ", "", tweets.News24_clean$stripped_text) # leading blanks
-tweets.News24_clean$stripped_text = gsub(" $", "", tweets.News24_clean$stripped_text) #laggin blanks
+tweets.News24_clean$stripped_text = gsub(" $", "", tweets.News24_clean$stripped_text) #lagging blanks
 tweets.News24_clean$stripped_text = gsub(" +", " ", tweets.News24_clean$stripped_text) #general spaces
 
 tweets.News24_clean <- tweets.News24_clean %>% select(stripped_text) 
@@ -248,13 +248,13 @@ tweets.TimesLIVE_clean$stripped_text <- tolower(tweets.TimesLIVE_clean$text)
 
 
 tweets.TimesLIVE_clean$stripped_text <- gsub("http.+ |http.+$", " ", tweets.TimesLIVE_clean$stripped_text) # remove links
-tweets.TimesLIVE_clean$stripped_text <- gsub("@\\S*","", tweets.TimesLIVE_clean$stripped_text) # remove mentons
+tweets.TimesLIVE_clean$stripped_text <- gsub("@\\S*","", tweets.TimesLIVE_clean$stripped_text) # remove mentions
 tweets.TimesLIVE_clean$stripped_text <- gsub("amp","", tweets.TimesLIVE_clean$stripped_text) 
 tweets.TimesLIVE_clean$stripped_text <- gsub("[\r\n]","", tweets.TimesLIVE_clean$stripped_text)
-tweets.TimesLIVE_clean$stripped_text <- gsub("[[:punct:]]"," ", tweets.TimesLIVE_clean$stripped_text) #emove punctuation
+tweets.TimesLIVE_clean$stripped_text <- gsub("[[:punct:]]"," ", tweets.TimesLIVE_clean$stripped_text) #remove punctuation
 tweets.TimesLIVE_clean$stripped_text = gsub("[ |\t]{2,}", " ", tweets.TimesLIVE_clean$stripped_text) # remove tabs
 tweets.TimesLIVE_clean$stripped_text = gsub("^ ", "", tweets.TimesLIVE_clean$stripped_text) # leading blanks
-tweets.TimesLIVE_clean$stripped_text = gsub(" $", "", tweets.TimesLIVE_clean$stripped_text) #laggin blanks
+tweets.TimesLIVE_clean$stripped_text = gsub(" $", "", tweets.TimesLIVE_clean$stripped_text) #lagging blanks
 tweets.TimesLIVE_clean$stripped_text = gsub(" +", " ", tweets.TimesLIVE_clean$stripped_text) #general spaces
 
 
@@ -275,13 +275,13 @@ tweets.eNCA_clean$stripped_text <- tolower(tweets.eNCA_clean$text)
 
 
 tweets.eNCA_clean$stripped_text <- gsub("http.+ |http.+$", " ", tweets.eNCA_clean$stripped_text) # remove links
-tweets.eNCA_clean$stripped_text <- gsub("@\\S*","", tweets.eNCA_clean$stripped_text) # remove mentons
+tweets.eNCA_clean$stripped_text <- gsub("@\\S*","", tweets.eNCA_clean$stripped_text) # remove mentions
 tweets.eNCA_clean$stripped_text <- gsub("amp","", tweets.eNCA_clean$stripped_text) 
 tweets.eNCA_clean$stripped_text <- gsub("[\r\n]","", tweets.eNCA_clean$stripped_text)
-tweets.eNCA_clean$stripped_text <- gsub("[[:punct:]]"," ", tweets.eNCA_clean$stripped_text) #emove punctuation
+tweets.eNCA_clean$stripped_text <- gsub("[[:punct:]]"," ", tweets.eNCA_clean$stripped_text) #remove punctuation
 tweets.eNCA_clean$stripped_text = gsub("[ |\t]{2,}", " ", tweets.eNCA_clean$stripped_text) # remove tabs
 tweets.eNCA_clean$stripped_text = gsub("^ ", "", tweets.eNCA_clean$stripped_text) # leading blanks
-tweets.eNCA_clean$stripped_text = gsub(" $", "", tweets.eNCA_clean$stripped_text) #laggin blanks
+tweets.eNCA_clean$stripped_text = gsub(" $", "", tweets.eNCA_clean$stripped_text) #lagging blanks
 tweets.eNCA_clean$stripped_text = gsub(" +", " ", tweets.eNCA_clean$stripped_text) #general spaces
 
 tweets.eNCA_clean <- tweets.eNCA_clean %>% select(stripped_text)
@@ -302,13 +302,13 @@ tweets.IOL_clean$stripped_text <- tolower(tweets.IOL_clean$text)
 
 
 tweets.IOL_clean$stripped_text <- gsub("http.+ |http.+$", " ", tweets.IOL_clean$stripped_text) # remove links
-tweets.IOL_clean$stripped_text <- gsub("@\\S*","", tweets.IOL_clean$stripped_text) # remove mentons
+tweets.IOL_clean$stripped_text <- gsub("@\\S*","", tweets.IOL_clean$stripped_text) # remove mentions
 tweets.IOL_clean$stripped_text <- gsub("amp","", tweets.IOL_clean$stripped_text) 
 tweets.IOL_clean$stripped_text <- gsub("[\r\n]","", tweets.IOL_clean$stripped_text)
-tweets.IOL_clean$stripped_text <- gsub("[[:punct:]]"," ", tweets.IOL_clean$stripped_text) #emove punctuation
+tweets.IOL_clean$stripped_text <- gsub("[[:punct:]]"," ", tweets.IOL_clean$stripped_text) #remove punctuation
 tweets.IOL_clean$stripped_text = gsub("[ |\t]{2,}", " ", tweets.IOL_clean$stripped_text) # remove tabs
 tweets.IOL_clean$stripped_text = gsub("^ ", "", tweets.IOL_clean$stripped_text) # leading blanks
-tweets.IOL_clean$stripped_text = gsub(" $", "", tweets.IOL_clean$stripped_text) #laggin blanks
+tweets.IOL_clean$stripped_text = gsub(" $", "", tweets.IOL_clean$stripped_text) #lagging blanks
 tweets.IOL_clean$stripped_text = gsub(" +", " ", tweets.IOL_clean$stripped_text) #general spaces
 
 tweets.IOL_clean <- tweets.IOL_clean %>% select(stripped_text)
@@ -328,13 +328,13 @@ tweets.ewn_clean$stripped_text <- tolower(tweets.ewn_clean$text)
 
 
 tweets.ewn_clean$stripped_text <- gsub("http.+ |http.+$", " ", tweets.ewn_clean$stripped_text) # remove links
-tweets.ewn_clean$stripped_text <- gsub("@\\S*","", tweets.ewn_clean$stripped_text) # remove mentons
+tweets.ewn_clean$stripped_text <- gsub("@\\S*","", tweets.ewn_clean$stripped_text) # remove mentions
 tweets.ewn_clean$stripped_text <- gsub("amp","", tweets.ewn_clean$stripped_text) 
 tweets.ewn_clean$stripped_text <- gsub("[\r\n]","", tweets.ewn_clean$stripped_text)
-tweets.ewn_clean$stripped_text <- gsub("[[:punct:]]"," ", tweets.ewn_clean$stripped_text) #emove punctuation
+tweets.ewn_clean$stripped_text <- gsub("[[:punct:]]"," ", tweets.ewn_clean$stripped_text) #remove punctuation
 tweets.ewn_clean$stripped_text = gsub("[ |\t]{2,}", " ", tweets.ewn_clean$stripped_text) # remove tabs
 tweets.ewn_clean$stripped_text = gsub("^ ", "", tweets.ewn_clean$stripped_text) # leading blanks
-tweets.ewn_clean$stripped_text = gsub(" $", "", tweets.ewn_clean$stripped_text) #laggin blanks
+tweets.ewn_clean$stripped_text = gsub(" $", "", tweets.ewn_clean$stripped_text) #lagging blanks
 tweets.ewn_clean$stripped_text = gsub(" +", " ", tweets.ewn_clean$stripped_text) #general spaces
 
 tweets.ewn_clean$stripped_text <- iconv(tweets.ewn_clean$stripped_text,"UTF-8", "ASCII", sub="")#to remove emojis 
@@ -356,13 +356,13 @@ tweets.SABCNews_clean$stripped_text <- tolower(tweets.SABCNews_clean$text)
 
 
 tweets.SABCNews_clean$stripped_text <- gsub("http.+ |http.+$", " ", tweets.SABCNews_clean$stripped_text) # remove links
-tweets.SABCNews_clean$stripped_text <- gsub("@\\S*","", tweets.SABCNews_clean$stripped_text) # remove mentons
+tweets.SABCNews_clean$stripped_text <- gsub("@\\S*","", tweets.SABCNews_clean$stripped_text) # remove mentions
 tweets.SABCNews_clean$stripped_text <- gsub("amp","", tweets.SABCNews_clean$stripped_text) 
 tweets.SABCNews_clean$stripped_text <- gsub("[\r\n]","", tweets.SABCNews_clean$stripped_text)
-tweets.SABCNews_clean$stripped_text <- gsub("[[:punct:]]"," ", tweets.SABCNews_clean$stripped_text) #emove punctuation
+tweets.SABCNews_clean$stripped_text <- gsub("[[:punct:]]"," ", tweets.SABCNews_clean$stripped_text) #remove punctuation
 tweets.SABCNews_clean$stripped_text = gsub("[ |\t]{2,}", " ", tweets.SABCNews_clean$stripped_text) # remove tabs
 tweets.SABCNews_clean$stripped_text = gsub("^ ", "", tweets.SABCNews_clean$stripped_text) # leading blanks
-tweets.SABCNews_clean$stripped_text = gsub(" $", "", tweets.SABCNews_clean$stripped_text) #laggin blanks
+tweets.SABCNews_clean$stripped_text = gsub(" $", "", tweets.SABCNews_clean$stripped_text) #lagging blanks
 tweets.SABCNews_clean$stripped_text = gsub(" +", " ", tweets.SABCNews_clean$stripped_text) #general spaces
 
 tweets.SABCNews_clean <- tweets.SABCNews_clean %>% select(stripped_text)
@@ -371,6 +371,14 @@ tweets.SABCNews_stem <- tweets.SABCNews_clean %>% unnest_tokens(word, stripped_t
 clean_tweets.SABCNews <- tweets.SABCNews_stem  %>% anti_join(stop_words)
 
 #clean_tweets.SABCNews
+```
+
+```{r}
+#Global Data
+global_cleaned <- rbind(tweets.SABCNews_clean,tweets.ewn_clean,tweets.IOL_clean,tweets.eNCA_clean,tweets.TimesLIVE_clean,tweets.News24_clean)
+
+global_tweets = rbind(SABCNews_tweets,eNCA_tweets,IOL_tweets,ewnupdates_tweets,TimesLIVE_tweets,News24_tweets)
+
 ```
 
 
@@ -402,8 +410,9 @@ afinn_SABCNews
 
 ```
 
-
-# LDA Topic Analysis
+# Topic Analysis
+## Individual Topic Analysis
+### LDA Topic Analysis
 ```{r}
 # topic modeling using LDA
 # example on rpubs.com
@@ -598,8 +607,7 @@ head(topicprob_5,1)
 head(topicprob_10,1)
 ```
 
-# STM Topic Modelling
-
+### STM Topic Modelling
 ```{r}
 processed_News24 <- textProcessor(tweets.News24_clean$stripped_text, metadata = News24_tweets)
 processed_TimesLIVE <- textProcessor(tweets.TimesLIVE_clean$stripped_text, metadata = TimesLIVE_tweets)
@@ -607,6 +615,8 @@ processed_ewn <- textProcessor(tweets.ewn_clean$stripped_text, metadata = ewnupd
 processed_IOL <- textProcessor(tweets.IOL_clean$stripped_text, metadata = IOL_tweets)
 processed_eNCA <- textProcessor(tweets.eNCA_clean$stripped_text, metadata = eNCA_tweets)
 processed_SABC <- textProcessor(tweets.SABCNews_clean$stripped_text, metadata = SABCNews_tweets)
+processed_global <- textProcessor(tweets.SABCNews_clean$stripped_text, metadata = global_tweets)
+
 ```
 
 ```{r}
@@ -616,7 +626,7 @@ out_ewn <- prepDocuments(processed_ewn$documents, processed_ewn$vocab, processed
 out_IOL <- prepDocuments(processed_IOL$documents, processed_IOL$vocab, processed_IOL$meta)
 out_eNCA <- prepDocuments(processed_eNCA$documents, processed_eNCA$vocab, processed_eNCA$meta)
 out_SABC <- prepDocuments(processed_SABC$documents, processed_SABC$vocab, processed_SABC$meta)
-
+out_global <- prepDocuments(processed_global$documents, processed_global$vocab, processed_global$meta)
 ```
 
 ```{r}
@@ -650,7 +660,10 @@ SABC_docs <- out_SABC$documents
 SABC_vocab <- out_SABC$vocab
 SABC_meta <-out_SABC$meta
 
-
+#Global
+global_docs <- out_global$documents
+global_vocab <- out_global$vocab
+global_meta <-out_global$meta
 ```
 
 #Delete after final K has been found
@@ -685,8 +698,10 @@ findingk <- searchK(out$documents, out$vocab, K = c(10:30),
 #####################################################################################################################
 
 
-## Structural Topic Modelling
+
 ```{r}
+#Running STM per news agency
+
 News24_STM <- stm(documents = News24_docs, vocab = News24_vocab,
               K = 10, max.em.its = 75, data = News24_meta,
               init.type = "Spectral", verbose = FALSE)
@@ -710,6 +725,11 @@ eNCA_STM <- stm(documents = eNCA_docs, vocab = eNCA_vocab,
 SABC_STM <- stm(documents = SABC_docs, vocab = SABC_vocab,
               K = 10, max.em.its = 75, data = SABC_meta,
               init.type = "Spectral", verbose = FALSE)
+
+global_STM <- stm(documents = global_docs, vocab = global_vocab,
+              K = 10, max.em.its = 75, data = global_meta,
+              init.type = "Spectral", verbose = FALSE)
+
 ```
 
 
@@ -720,7 +740,7 @@ Ewnupdate_topics <- tidy(Ewnupdate_STM, matrix = "beta")
 IOL_topics <- tidy(IOL_STM, matrix = "beta")
 eNCA_topics <- tidy(eNCA_STM, matrix = "beta")
 SABC_topics <- tidy(SABC_STM, matrix = "beta")
-
+global_topics <- tidy(global_STM, matrix = "beta")
 
 News24_top_terms <- 
   News24_topics %>%
@@ -764,7 +784,19 @@ SABC_top_terms <-
   ungroup() %>%
   arrange(topic, -beta)
 
+global_top_terms <- 
+  global_topics %>%
+  group_by(topic) %>%
+  top_n(5, beta) %>%
+  ungroup() %>%
+  arrange(topic, -beta)
+
 ```
+
+
+## Global Topic Modelling
+
+
 
 ```{r}
 write_rds(News24_top_terms, "Data/Final_Data/News24_top_terms.rds")
@@ -773,6 +805,7 @@ write_rds(Ewnupdate_top_terms, "Data/Final_Data/Ewnupdate_top_terms.rds")
 write_rds(IOL_top_terms, "Data/Final_Data/IOL_top_terms.rds")
 write_rds(eNCA_top_terms, "Data/Final_Data/eNCA_top_terms.rds")
 write_rds(SABC_top_terms, "Data/Final_Data/SABC_top_terms.rds")
+write_rds(global_top_terms, "Data/Final_Data/global_top_terms.rds")
 ```
 
 ```{r}
