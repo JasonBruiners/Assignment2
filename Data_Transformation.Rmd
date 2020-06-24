@@ -180,17 +180,22 @@ SABC_tweets <- separate(SABCNews_tweets, created_at, into=c("date","time"), sep=
 
 #Subset data into 3 week range 1 June - 21 June
 
-myfunc <- function(x,y){News24_tweets[News24_tweets$date >= x & News24_tweets$date <= y,]}
+myfuncNews24 <- function(x,y){News24_tweets[News24_tweets$date >= x & News24_tweets$date <= y,]}
+myfunctimesLIVE <- function(x,y){timesLIVE_tweets[timesLIVE_tweets$date >= x & timesLIVE_tweets$date <= y,]}
+myfuncEwnupdate <- function(x,y){Ewnupdate_tweets[Ewnupdate_tweets$date >= x & Ewnupdate_tweets$date <= y,]}
+myfuncIOL <- function(x,y){IOL_tweets[IOL_tweets$date >= x & IOL_tweets$date <= y,]}
+myfunceNCA <- function(x,y){eNCA_tweets[eNCA_tweets$date >= x & eNCA_tweets$date <= y,]}
+myfuncSABC <- function(x,y){SABC_tweets[SABC_tweets$date >= x & SABC_tweets$date <= y,]}
 
 DATE1 <- as.Date("2020-06-01")
 DATE2 <- as.Date("2020-06-21")
 
-News24_tweets <- myfunc(DATE1,DATE2)
-timesLIVE_tweets <- myfunc(DATE1,DATE2)
-Ewnupdate_tweets <- myfunc(DATE1,DATE2)
-IOL_tweets <- myfunc(DATE1,DATE2)
-eNCA_tweets <- myfunc(DATE1,DATE2)
-SABC_tweets <- myfunc(DATE1,DATE2)
+News24_tweets <- myfuncNews24(DATE1,DATE2)
+timesLIVE_tweets <- myfunctimesLIVE(DATE1,DATE2)
+Ewnupdate_tweets <- myfuncEwnupdate(DATE1,DATE2)
+IOL_tweets <- myfuncIOL(DATE1,DATE2)
+eNCA_tweets <- myfunceNCA(DATE1,DATE2)
+SABC_tweets <- myfuncSABC(DATE1,DATE2)
 
 
 ```
@@ -574,6 +579,7 @@ head(topicprob_2,1)
 head(topicprob_5,1)
 head(topicprob_10,1)
 ```
+
 #STM Topic Modelling
 
 ```{r}
@@ -619,16 +625,64 @@ plot(Third_STM)
 
 
 ```{r}
+#library(tidytext)
+#library(dplyr)
+#library(ggplot2)
+
+AP_topics <- tidy(First_STM, matrix = "beta")
+
+ap_top_terms <- 
+  AP_topics %>%
+  group_by(topic) %>%
+  top_n(5, beta) %>%
+  ungroup() %>%
+  arrange(topic, -beta)
+
+
+ap_top_terms %>%
+  mutate(term = reorder(term, beta)) %>%
+  ggplot(aes(term, beta, fill = factor(topic))) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~ topic, scales = "free") +
+  coord_flip()
+```
+
+```{r}
+#First_STM
+
+AP_topics <- tidy(First_STM, matrix = "beta")
+
+top_terms <- AP_topics %>%
+  group_by(topic) %>%
+  top_n(5, beta) %>%
+  ungroup() %>%
+  arrange(topic, -beta)
+
+#top_terms
+
+#library(ggplot2)
+
+top_terms %>%
+  mutate(term = reorder_within(term, beta, topic)) %>%
+  ggplot(aes(term, beta, fill = factor(topic))) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~ topic, scales = "free") +
+  coord_flip() +
+  scale_x_reordered()
+
+```
+
+```{r}
 # Other Analysis
 
 # Frequency of tweets by day
  #%>% group_by(date)
-News24_freq <- News24_tweets %>% summarise(News24 = n())
-timesLIVE_freq <- timesLIVE_tweets %>% summarise(timesLIVE = n())
-Ewnupdate_freq <- Ewnupdate_tweets %>% summarise(Ewnupdate = n())
-IOL_freq <- IOL_tweets %>% summarise(IOL = n())
-eNCA_freq <- eNCA_tweets %>% summarise(eNCA = n()) 
-SABC_freq <- SABC_tweets %>% summarise(SABC = n())
+News24_freq <- News24_tweets %>% group_by(date) %>% summarise(News24 = n())
+timesLIVE_freq <- timesLIVE_tweets %>% group_by(date) %>% summarise(timesLIVE = n())
+Ewnupdate_freq <- Ewnupdate_tweets %>% group_by(date) %>% summarise(Ewnupdate = n())
+IOL_freq <- IOL_tweets %>% group_by(date) %>% summarise(IOL = n())
+eNCA_freq <- eNCA_tweets %>% group_by(date) %>% summarise(eNCA = n()) 
+SABC_freq <- SABC_tweets %>% group_by(date) %>% summarise(SABC = n())
 
 # sum days and join together, then send to visualisation
 #Frequency_tweets <- cbind(News24_freq,timesLIVE_freq,Ewnupdate_freq,IOL_freq,eNCA_freq,SABC_freq)
