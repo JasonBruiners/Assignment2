@@ -385,7 +385,7 @@ afinn_SABCNews
 ```
 
 
-# Topic Analysis
+# LDA Topic Analysis
 ```{r}
 # topic modeling using LDA
 # example on rpubs.com
@@ -580,7 +580,7 @@ head(topicprob_5,1)
 head(topicprob_10,1)
 ```
 
-#STM Topic Modelling
+# STM Topic Modelling
 
 ```{r}
 library(stm)
@@ -601,7 +601,8 @@ vocab <- out$vocab
 meta <-out$meta
 ```
 
-
+#Delete after final K has been found
+#####################################################################################################################
 ```{r}
 First_STM <- stm(documents = out$documents, vocab = out$vocab,
               K = 10, max.em.its = 75, data = out$meta,
@@ -623,54 +624,33 @@ plot(Second_STM)
 plot(Third_STM)
 ```
 
+#####################################################################################################################
+
+
 
 ```{r}
-#library(tidytext)
-#library(dplyr)
-#library(ggplot2)
+News24_STM <- stm(documents = out$documents, vocab = out$vocab,
+              K = 10, max.em.its = 75, data = out$meta,
+              init.type = "Spectral", verbose = FALSE)
+```
 
-AP_topics <- tidy(First_STM, matrix = "beta")
 
-ap_top_terms <- 
-  AP_topics %>%
+```{r}
+News24_topics <- tidy(News24_STM, matrix = "beta")
+
+News24_top_terms <- 
+  News24_topics %>%
   group_by(topic) %>%
   top_n(5, beta) %>%
   ungroup() %>%
   arrange(topic, -beta)
 
-
-ap_top_terms %>%
-  mutate(term = reorder(term, beta)) %>%
-  ggplot(aes(term, beta, fill = factor(topic))) +
-  geom_col(show.legend = FALSE) +
-  facet_wrap(~ topic, scales = "free") +
-  coord_flip()
 ```
 
 ```{r}
-#First_STM
-
-AP_topics <- tidy(First_STM, matrix = "beta")
-
-top_terms <- AP_topics %>%
-  group_by(topic) %>%
-  top_n(5, beta) %>%
-  ungroup() %>%
-  arrange(topic, -beta)
-
-#top_terms
-
-#library(ggplot2)
-
-top_terms %>%
-  mutate(term = reorder_within(term, beta, topic)) %>%
-  ggplot(aes(term, beta, fill = factor(topic))) +
-  geom_col(show.legend = FALSE) +
-  facet_wrap(~ topic, scales = "free") +
-  coord_flip() +
-  scale_x_reordered()
-
+write_rds(News24_top_terms, "Data/Final_Data/News24_top_terms.rds")
 ```
+
 
 ```{r}
 # Other Analysis
