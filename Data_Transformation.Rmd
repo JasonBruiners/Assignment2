@@ -221,10 +221,10 @@ tweets.News24_clean$stripped_text <- tolower(tweets.News24_clean$text)
 
 
 tweets.News24_clean$stripped_text <- gsub("http[^[:space:]]*", " ", tweets.News24_clean$stripped_text) # remove links
-tweets.News24_clean$stripped_text <- gsub("@\\S*","", tweets.News24_clean$stripped_text) # remove mentons
+tweets.News24_clean$stripped_text <- gsub("@\\S*","", tweets.News24_clean$stripped_text) # remove mentions
 tweets.News24_clean$stripped_text <- gsub("amp","", tweets.News24_clean$stripped_text) 
 tweets.News24_clean$stripped_text <- gsub("[\r\n]","", tweets.News24_clean$stripped_text)
-tweets.News24_clean$stripped_text <- gsub("[[:punct:]]"," ", tweets.News24_clean$stripped_text) #emove punctuation
+tweets.News24_clean$stripped_text <- gsub("[[:punct:]]"," ", tweets.News24_clean$stripped_text) #remove punctuation
 tweets.News24_clean$stripped_text = gsub("[ |\t]{2,}", " ", tweets.News24_clean$stripped_text) # remove tabs
 tweets.News24_clean$stripped_text = gsub("^ ", "", tweets.News24_clean$stripped_text) # leading blanks
 tweets.News24_clean$stripped_text = gsub(" $", "", tweets.News24_clean$stripped_text) #laggin blanks
@@ -336,6 +336,8 @@ tweets.ewn_clean$stripped_text = gsub("[ |\t]{2,}", " ", tweets.ewn_clean$stripp
 tweets.ewn_clean$stripped_text = gsub("^ ", "", tweets.ewn_clean$stripped_text) # leading blanks
 tweets.ewn_clean$stripped_text = gsub(" $", "", tweets.ewn_clean$stripped_text) #laggin blanks
 tweets.ewn_clean$stripped_text = gsub(" +", " ", tweets.ewn_clean$stripped_text) #general spaces
+
+tweets.ewn_clean$stripped_text <- iconv(tweets.ewn_clean$stripped_text,"UTF-8", "ASCII", sub="")#to remove emojis 
 
 tweets.ewn_clean <- tweets.ewn_clean %>% select(stripped_text)
 tweets.ewn_stem <- tweets.ewn_clean  %>% unnest_tokens(word, stripped_text)
@@ -601,7 +603,7 @@ head(topicprob_10,1)
 ```{r}
 processed_News24 <- textProcessor(tweets.News24_clean$stripped_text, metadata = News24_tweets)
 processed_TimesLIVE <- textProcessor(tweets.TimesLIVE_clean$stripped_text, metadata = TimesLIVE_tweets)
-#processed_ewn <- textProcessor(tweets.ewn_clean$stripped_text, metadata = ewnupdates_tweets)
+processed_ewn <- textProcessor(tweets.ewn_clean$stripped_text, metadata = ewnupdates_tweets)
 processed_IOL <- textProcessor(tweets.IOL_clean$stripped_text, metadata = IOL_tweets)
 processed_eNCA <- textProcessor(tweets.eNCA_clean$stripped_text, metadata = eNCA_tweets)
 processed_SABC <- textProcessor(tweets.SABCNews_clean$stripped_text, metadata = SABCNews_tweets)
@@ -610,7 +612,7 @@ processed_SABC <- textProcessor(tweets.SABCNews_clean$stripped_text, metadata = 
 ```{r}
 out_News24 <- prepDocuments(processed_News24$documents, processed_News24$vocab, processed_News24$meta)
 out_TimesLIVE <- prepDocuments(processed_TimesLIVE$documents, processed_TimesLIVE$vocab, processed_TimesLIVE$meta)
-#out_ewn <- prepDocuments(processed_ewn$documents, processed_ewn$vocab, processed_ewn$meta)
+out_ewn <- prepDocuments(processed_ewn$documents, processed_ewn$vocab, processed_ewn$meta)
 out_IOL <- prepDocuments(processed_IOL$documents, processed_IOL$vocab, processed_IOL$meta)
 out_eNCA <- prepDocuments(processed_eNCA$documents, processed_eNCA$vocab, processed_eNCA$meta)
 out_SABC <- prepDocuments(processed_SABC$documents, processed_SABC$vocab, processed_SABC$meta)
@@ -629,9 +631,9 @@ TimesLIVE_vocab <- out_TimesLIVE$vocab
 TimesLIVE_meta <-out_TimesLIVE$meta
 
 #EWN
-#ewn_docs <- out_ewn$documents
-#ewn_vocab <- out_ewn$vocab
-#ewn_meta <-out_ewn$meta
+ewn_docs <- out_ewn$documents
+ewn_vocab <- out_ewn$vocab
+ewn_meta <-out_ewn$meta
 
 #IOL
 IOL_docs <- out_IOL$documents
@@ -693,9 +695,9 @@ timesLIVE_STM <- stm(documents = TimesLIVE_docs, vocab = TimesLIVE_vocab,
               K = 10, max.em.its = 75, data = TimesLIVE_meta,
               init.type = "Spectral", verbose = FALSE)
 
-#Ewnupdate_STM <- stm(documents = ewn_docs, vocab = ewn_vocab,
-#              K = 10, max.em.its = 75, data = ewn_meta,
-#              init.type = "Spectral", verbose = FALSE)
+Ewnupdate_STM <- stm(documents = ewn_docs, vocab = ewn_vocab,
+              K = 10, max.em.its = 75, data = ewn_meta,
+              init.type = "Spectral", verbose = FALSE)
 
 IOL_STM <- stm(documents = IOL_docs, vocab = IOL_vocab,
               K = 10, max.em.its = 75, data = IOL_meta,
@@ -714,7 +716,7 @@ SABC_STM <- stm(documents = SABC_docs, vocab = SABC_vocab,
 ```{r}
 News24_topics <- tidy(News24_STM, matrix = "beta")
 timesLIVE_topics <- tidy(timesLIVE_STM, matrix = "beta")
-#Ewnupdate_topics <- tidy(Ewnupdate_STM, matrix = "beta")
+Ewnupdate_topics <- tidy(Ewnupdate_STM, matrix = "beta")
 IOL_topics <- tidy(IOL_STM, matrix = "beta")
 eNCA_topics <- tidy(eNCA_STM, matrix = "beta")
 SABC_topics <- tidy(SABC_STM, matrix = "beta")
@@ -734,12 +736,12 @@ timesLIVE_top_terms <-
   ungroup() %>%
   arrange(topic, -beta)
 
-#Ewnupdate_top_terms <- 
-#  Ewnupdate_topics %>%
-#  group_by(topic) %>%
-#  top_n(5, beta) %>%
-#  ungroup() %>%
-#  arrange(topic, -beta)
+Ewnupdate_top_terms <- 
+  Ewnupdate_topics %>%
+  group_by(topic) %>%
+  top_n(5, beta) %>%
+  ungroup() %>%
+  arrange(topic, -beta)
 
 IOL_top_terms <- 
   IOL_topics %>%
@@ -767,7 +769,7 @@ SABC_top_terms <-
 ```{r}
 write_rds(News24_top_terms, "Data/Final_Data/News24_top_terms.rds")
 write_rds(timesLIVE_top_terms, "Data/Final_Data/timesLIVE_top_terms.rds")
-#write_rds(Ewnupdate_top_terms, "Data/Final_Data/Ewnupdate_top_terms.rds")
+write_rds(Ewnupdate_top_terms, "Data/Final_Data/Ewnupdate_top_terms.rds")
 write_rds(IOL_top_terms, "Data/Final_Data/IOL_top_terms.rds")
 write_rds(eNCA_top_terms, "Data/Final_Data/eNCA_top_terms.rds")
 write_rds(SABC_top_terms, "Data/Final_Data/SABC_top_terms.rds")

@@ -26,11 +26,11 @@ library(dplyr)
 
 #Load Topic Modelling Data
 News24_top_terms <- read_rds("Data/Final_Data/News24_top_terms.rds")
-timesLIVE_top_terms <- read_rds("Data/Final_Data/News24_top_terms.rds")
-#Ewnupdate_top_terms <- read_rds("Data/Final_Data/News24_top_terms.rds")
-IOL_top_terms <- read_rds("Data/Final_Data/News24_top_terms.rds")
-eNCA_top_terms <- read_rds("Data/Final_Data/News24_top_terms.rds")
-SABC_top_terms <- read_rds("Data/Final_Data/News24_top_terms.rds")
+TimesLIVE_top_terms <- read_rds("Data/Final_Data/timesLIVE_top_terms.rds")
+ewnupdate_top_terms <- read_rds("Data/Final_Data/Ewnupdate_top_terms.rds")
+IOL_top_terms <- read_rds("Data/Final_Data/IOL_top_terms.rds")
+eNCA_top_terms <- read_rds("Data/Final_Data/eNCA_top_terms.rds")
+SABC_top_terms <- read_rds("Data/Final_Data/SABC_top_terms.rds")
 ```
 
 
@@ -104,7 +104,7 @@ News24_top_terms %>%
 
 ```{r}
 #TimesLIVE STM Plot
-timesLIVE_top_terms %>%
+TimesLIVE_top_terms %>%
   mutate(term = reorder(term, beta)) %>%
   ggplot(aes(term, beta, fill = factor(topic))) +
   geom_col(show.legend = FALSE) + 
@@ -119,7 +119,7 @@ timesLIVE_top_terms %>%
 
 ```{r}
 #ewn STM Plot
-ewn_top_terms %>%
+ewnupdate_top_terms %>%
   mutate(term = reorder(term, beta)) %>%
   ggplot(aes(term, beta, fill = factor(topic))) +
   geom_col(show.legend = FALSE) + 
