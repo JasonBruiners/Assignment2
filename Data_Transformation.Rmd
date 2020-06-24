@@ -624,6 +624,12 @@ plot(Second_STM)
 plot(Third_STM)
 ```
 
+```{r}
+findingk <- searchK(out$documents, out$vocab, K = c(10:30),
+ prevalence =~ date, data = meta, verbose=FALSE)
+```
+
+
 #####################################################################################################################
 
 
@@ -650,6 +656,7 @@ News24_top_terms <-
 ```{r}
 write_rds(News24_top_terms, "Data/Final_Data/News24_top_terms.rds")
 ```
+
 ```{r}
 # theme
 Other_theme <- theme(
