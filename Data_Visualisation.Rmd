@@ -32,7 +32,7 @@ ewn_top_terms_LDA <- read_rds("Data/Final_Data/Ewnupdate_top_terms_LDA.rds")
 IOL_top_terms_LDA <- read_rds("Data/Final_Data/IOL_top_terms_LDA.rds")
 eNCA_top_terms_LDA <- read_rds("Data/Final_Data/eNCA_top_terms_LDA.rds")
 SABC_top_terms_LDA <- read_rds("Data/Final_Data/SABC_top_terms_LDA.rds")
-#global_top_terms_LDA <- read_rds("Data/Final_Data/global_top_terms_LDA.rds")
+global_top_terms_LDA <- read_rds("Data/Final_Data/global_top_terms_LDA.rds")
 
 #STM
 News24_top_terms <- read_rds("Data/Final_Data/News24_top_terms.rds")
@@ -100,18 +100,23 @@ affin_tweets %>% group_by(sentiment) %>% top_n(10) %>% ungroup() %>% mutate(word
 
 ## Topic Modelling visuals
 ###  Latent Dirichlet Allocation 
+
 ```{r}
 News24_top_terms_LDA %>%
   mutate(term = reorder(term, beta)) %>%
   ggplot(aes(term, beta, fill = factor(topic))) +
   geom_col(show.legend = FALSE) +
+  scale_y_continuous(breaks = c(0.00, 0.005, 0.010, 0.015, 0.02),labels = c("0", ".05", ".01", ".015", ".02")) +
+  expand_limits(y=c(0,0.02)) +
   facet_wrap(~ topic, scales = "free") +
   coord_flip() +
   labs(title = "LDA Topic Modeling for News24 ", caption = "\nSource: Data collected from Twitter's REST API via rtweet"
 ) + t %+replace% theme(
   strip.text = element_text(face = "bold"),
-  axis.text.y=element_text(colour = "black",face = "bold", size = 6),
+  axis.text.y=element_text(colour = "black",face = "bold", size = 7),
+  axis.text.x=element_text(colour = "black",face = "bold", size = 7),
 )
+
 ```
 
 ```{r}
@@ -119,20 +124,34 @@ TimesLIVE_top_terms_LDA %>%
   mutate(term = reorder(term, beta)) %>%
   ggplot(aes(term, beta, fill = factor(topic))) +
   geom_col(show.legend = FALSE) +
+  scale_y_continuous(breaks = c(0.00, 0.005, 0.010, 0.015, 0.02),labels = c("0", ".05", ".01", ".015", ".02")) +
+  expand_limits(y=c(0,0.02)) +
   facet_wrap(~ topic, scales = "free") +
   coord_flip() +
-  labs(title = "LDA Topic Modeling for TimesLIVE ", caption = "\nSource: Data collected from Twitter's REST API via rtweet"
-) + t %+replace% theme(strip.text = element_text(face = "bold"))
+  labs(title = "LDA Topic Modeling for TimesLive ", caption = "\nSource: Data collected from Twitter's REST API via rtweet"
+) + t %+replace% theme(
+  strip.text = element_text(face = "bold"),
+  axis.text.y=element_text(colour = "black",face = "bold", size = 7),
+  axis.text.x=element_text(colour = "black",face = "bold", size = 7),
+)
 ```
+
+
 ```{r}
 ewn_top_terms_LDA %>%
   mutate(term = reorder(term, beta)) %>%
   ggplot(aes(term, beta, fill = factor(topic))) +
   geom_col(show.legend = FALSE) +
+  scale_y_continuous(breaks = c(0.00, 0.005, 0.010, 0.015, 0.02),labels = c("0", ".05", ".01", ".015", ".02")) +
+  expand_limits(y=c(0,0.05)) +
   facet_wrap(~ topic, scales = "free") +
   coord_flip() +
   labs(title = "LDA Topic Modeling for EWN ", caption = "\nSource: Data collected from Twitter's REST API via rtweet"
-) + t %+replace% theme(strip.text = element_text(face = "bold"))
+) + t %+replace% theme(
+  strip.text = element_text(face = "bold"),
+  axis.text.y=element_text(colour = "black",face = "bold", size = 7),
+  axis.text.x=element_text(colour = "black",face = "bold", size = 7),
+)
 ```
 
 
@@ -141,10 +160,16 @@ IOL_top_terms_LDA %>%
   mutate(term = reorder(term, beta)) %>%
   ggplot(aes(term, beta, fill = factor(topic))) +
   geom_col(show.legend = FALSE) +
+  scale_y_continuous(breaks = c(0.00, 0.005, 0.010, 0.015, 0.02),labels = c("0", ".05", ".01", ".015", ".02")) +
+  expand_limits(y=c(0,0.02)) +
   facet_wrap(~ topic, scales = "free") +
   coord_flip() +
   labs(title = "LDA Topic Modeling for IOL ", caption = "\nSource: Data collected from Twitter's REST API via rtweet"
-) + t %+replace% theme(strip.text = element_text(face = "bold"))
+) + t %+replace% theme(
+  strip.text = element_text(face = "bold"),
+  axis.text.y=element_text(colour = "black",face = "bold", size = 7),
+  axis.text.x=element_text(colour = "black",face = "bold", size = 7),
+)
 ```
 
 ```{r}
@@ -152,10 +177,16 @@ eNCA_top_terms_LDA %>%
   mutate(term = reorder(term, beta)) %>%
   ggplot(aes(term, beta, fill = factor(topic))) +
   geom_col(show.legend = FALSE) +
+  scale_y_continuous(breaks = c(0.00, 0.005, 0.010, 0.015, 0.02),labels = c("0", ".05", ".01", ".015", ".02")) +
+  expand_limits(y=c(0,0.02)) +
   facet_wrap(~ topic, scales = "free") +
   coord_flip() +
   labs(title = "LDA Topic Modeling for eNCA ", caption = "\nSource: Data collected from Twitter's REST API via rtweet"
-) + t %+replace% theme(strip.text = element_text(face = "bold"))
+) + t %+replace% theme(
+  strip.text = element_text(face = "bold"),
+  axis.text.y=element_text(colour = "black",face = "bold", size = 7),
+  axis.text.x=element_text(colour = "black",face = "bold", size = 7),
+)
 ```
 
 ```{r}
@@ -163,26 +194,38 @@ SABC_top_terms_LDA %>%
   mutate(term = reorder(term, beta)) %>%
   ggplot(aes(term, beta, fill = factor(topic))) +
   geom_col(show.legend = FALSE) +
+  scale_y_continuous(breaks = c(0.00, 0.005, 0.010, 0.015, 0.02),labels = c("0", ".05", ".01", ".015", ".02")) +
+  expand_limits(y=c(0,0.02)) +
   facet_wrap(~ topic, scales = "free") +
   coord_flip() +
   labs(title = "LDA Topic Modeling for SABCNews ", caption = "\nSource: Data collected from Twitter's REST API via rtweet"
-) + t %+replace% theme(strip.text = element_text(face = "bold"))
+) + t %+replace% theme(
+  strip.text = element_text(face = "bold"),
+  axis.text.y=element_text(colour = "black",face = "bold", size = 7),
+  axis.text.x=element_text(colour = "black",face = "bold", size = 7),
+)
 ```
 
-### Structural Topic Modelling
 ```{r}
-#Global STM Plot
-global_top_terms %>%
+global_top_terms_LDA %>%
   mutate(term = reorder(term, beta)) %>%
   ggplot(aes(term, beta, fill = factor(topic))) +
-  geom_col(show.legend = FALSE) + 
-  scale_y_continuous(breaks = c(0.00, 0.02, 0.04, 0.060, 0.080),labels = c("0", ".02", ".04", ".06", ".08")) +
-  expand_limits(y=c(0,0.08)) + 
-  facet_wrap(~ topic, scales = "free") + 
+  geom_col(show.legend = FALSE) +
+  scale_y_continuous(breaks = c(0.00, 0.005, 0.010, 0.015, 0.02),labels = c("0", ".05", ".01", ".015", ".02")) +
+  expand_limits(y=c(0,0.02)) +
+  facet_wrap(~ topic, scales = "free") +
   coord_flip() +
-  labs(title = "Structural Topic Modeling for News24 ", caption = "\nSource: Data collected from Twitter's REST API via rtweet"
-) + t %+replace% theme(strip.text = element_text(face = "bold"))
+  labs(title = "LDA Topic Modeling for News24 ", caption = "\nSource: Data collected from Twitter's REST API via rtweet"
+) + t %+replace% theme(
+  strip.text = element_text(face = "bold"),
+  axis.text.y=element_text(colour = "black",face = "bold", size = 7),
+  axis.text.x=element_text(colour = "black",face = "bold", size = 7),
+)
+
 ```
+
+
+### Structural Topic Modelling
 
 ```{r}
 #News24 STM Plot
@@ -195,7 +238,11 @@ News24_top_terms %>%
   facet_wrap(~ topic, scales = "free") + 
   coord_flip() +
   labs(title = "Structural Topic Modeling for News24 ", caption = "\nSource: Data collected from Twitter's REST API via rtweet"
-) + t %+replace% theme(strip.text = element_text(face = "bold"))
+) + t %+replace% theme(
+  strip.text = element_text(face = "bold"),
+  axis.text.y=element_text(colour = "black",face = "bold", size = 7),
+  axis.text.x=element_text(colour = "black",face = "bold", size = 7),
+  )
 ```
 
 ```{r}
@@ -209,7 +256,11 @@ TimesLIVE_top_terms %>%
   facet_wrap(~ topic, scales = "free") + 
   coord_flip() +
   labs(title = "Structural Topic Modeling for TimesLIVE ", caption = "\nSource: Data collected from Twitter's REST API via rtweet"
-) + t %+replace% theme(strip.text = element_text(face = "bold"))
+) + t %+replace% theme(
+  strip.text = element_text(face = "bold"),
+  axis.text.y=element_text(colour = "black",face = "bold", size = 7),
+  axis.text.x=element_text(colour = "black",face = "bold", size = 7),
+  )
 ```
 
 
@@ -224,7 +275,11 @@ ewnupdate_top_terms %>%
   facet_wrap(~ topic, scales = "free") + 
   coord_flip() +
   labs(title = "Structural Topic Modeling for EWN ", caption = "\nSource: Data collected from Twitter's REST API via rtweet"
-) + t %+replace% theme(strip.text = element_text(face = "bold"))
+) + t %+replace% theme(
+  strip.text = element_text(face = "bold"),
+  axis.text.y=element_text(colour = "black",face = "bold", size = 7),
+  axis.text.x=element_text(colour = "black",face = "bold", size = 7),
+  )
 ```
 
 
@@ -239,7 +294,11 @@ IOL_top_terms %>%
   facet_wrap(~ topic, scales = "free") + 
   coord_flip() +
   labs(title = "Structural Topic Modeling for IOL ", caption = "\nSource: Data collected from Twitter's REST API via rtweet"
-) + t %+replace% theme(strip.text = element_text(face = "bold"))
+) + t %+replace% theme(
+  strip.text = element_text(face = "bold"),
+  axis.text.y=element_text(colour = "black",face = "bold", size = 7),
+  axis.text.x=element_text(colour = "black",face = "bold", size = 7),
+  )
 ```
 
 
@@ -254,7 +313,11 @@ eNCA_top_terms %>%
   facet_wrap(~ topic, scales = "free") + 
   coord_flip() +
   labs(title = "Structural Topic Modeling for eNCA ", caption = "\nSource: Data collected from Twitter's REST API via rtweet"
-) + t %+replace% theme(strip.text = element_text(face = "bold"))
+) + t %+replace% theme(
+  strip.text = element_text(face = "bold"),
+  axis.text.y=element_text(colour = "black",face = "bold", size = 7),
+  axis.text.x=element_text(colour = "black",face = "bold", size = 7),
+  )
 ```
 
 
@@ -269,9 +332,30 @@ SABC_top_terms %>%
   facet_wrap(~ topic, scales = "free") + 
   coord_flip() +
   labs(title = "Structural Topic Modeling for SABC ", caption = "\nSource: Data collected from Twitter's REST API via rtweet"
-) + t %+replace% theme(strip.text = element_text(face = "bold"))
+) + t %+replace% theme(
+  strip.text = element_text(face = "bold"),
+  axis.text.y=element_text(colour = "black",face = "bold", size = 7),
+  axis.text.x=element_text(colour = "black",face = "bold", size = 7),
+  )
 ```
 
+```{r}
+#Global STM Plot
+global_top_terms %>%
+  mutate(term = reorder(term, beta)) %>%
+  ggplot(aes(term, beta, fill = factor(topic))) +
+  geom_col(show.legend = FALSE) + 
+  scale_y_continuous(breaks = c(0.00, 0.02, 0.04, 0.060, 0.080),labels = c("0", ".02", ".04", ".06", ".08")) +
+  expand_limits(y=c(0,0.08)) + 
+  facet_wrap(~ topic, scales = "free") + 
+  coord_flip() +
+  labs(title = "Structural Topic Modeling for News24 ", caption = "\nSource: Data collected from Twitter's REST API via rtweet"
+) + t %+replace% theme(
+  strip.text = element_text(face = "bold"),
+  axis.text.y=element_text(colour = "black",face = "bold", size = 7),
+  axis.text.x=element_text(colour = "black",face = "bold", size = 7),
+  )
+```
 
 # Additional Analysis
 ```{r}

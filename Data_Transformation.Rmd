@@ -448,7 +448,11 @@ afinn_TimesLIVE
 
 TimesLIVE_score <- afinn_TimesLIVE %>% group_by(value) %>% summarise(count = sum(n))
 
+<<<<<<< Updated upstream
 TimesLIVE_plot <- afinn_TimesLIVE %>% top_n(10) %>% head(10) %>% mutate(word = reorder(word,n)) %>% ggplot(aes(x= word, y = n)) + geom_col() + coord_flip() + sentiment_theme %+replace% theme(panel.grid.major=element_blank()) + labs(x = NULL, y = NULL, title = "TimesLIVE Frequently Used Words", subtitle = "Top 10", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
+=======
+TimesLIVE_plot <- afinn_TimesLIVE %>% top_n(10) %>% mutate(word = reorder(word,n)) %>% head(10)  %>% ggplot(aes(x= word, y = n)) + geom_col() + coord_flip() + sentiment_theme + labs(x = NULL, y = NULL, title = "TimesLIVE Frequently Used Words", subtitle = "Top 10", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
+>>>>>>> Stashed changes
 TimesLIVE_plot 
 
 ggplot(TimesLIVE_score, aes(x=value,y=count)) + geom_bar(stat = "identity") + sentiment_theme + scale_x_continuous(breaks = c(-5,-4,-3,-2,-1,0,1,2,3,4,5)) + labs(x = NULL, y = NULL, title = "TimesLIVE Sentiment Score", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
@@ -539,6 +543,12 @@ corpusSABCNews <- tm_map(corpusSABCNews, removeNumbers)
 corpusSABCNews <- tm_map(corpusSABCNews, stemDocument)
 dtmSABCNews = DocumentTermMatrix(corpusSABCNews)
 
+corpusGlobal <- Corpus(VectorSource(global_cleaned))
+corpusGlobal <- tm_map(corpusGlobal, removeWords, stopwords("english"))  
+corpusGlobal <- tm_map(corpusGlobal, removeNumbers)
+corpusGlobal <- tm_map(corpusGlobal, stemDocument)
+dtmGlobal = DocumentTermMatrix(corpusGlobal)
+
 ```
 
 
@@ -560,31 +570,11 @@ ewn_lda = LDA(dtmewn, k = 16, method = 'Gibbs', control = list(nstart = 5, seed 
 
 #LDA model with 16 topics selected
 SABCNews_lda = LDA(dtmSABCNews, k = 16, method = 'Gibbs', control = list(nstart = 5, seed = list(1505,99,36,56,88), best = TRUE,thin = 500, burnin = 4000, iter = 2000))
+
+#LDA model with 16 topics selected
+Global_lda = LDA(dtmGlobal, k = 16, method = 'Gibbs', control = list(nstart = 5, seed = list(1505,99,36,56,88), best = TRUE,thin = 500, burnin = 4000, iter = 2000))
 ```
 
-###################################################################################################################
-DELETE CHUNCK BELOW
-```{r}
-
-#Top 5 terms or words under each topic
-News24_top_terms_LDA = as.matrix(terms(News24_lda,5))
-TimesLIVE_top_terms_LDA = as.matrix(terms(TimesLIVE_lda,5))
-eNCA_top_terms_LDA = as.matrix(terms(eNCA_lda,5))
-IOL_top_terms_LDA = as.matrix(terms(IOL_lda,5))
-ewn_top_terms_LDA = as.matrix(terms(ewn_lda,5))
-SABCNews_top_terms_LDA = as.matrix(terms(SABCNews_lda,5))
-
-
-News24_top_terms_LDA %>% pivot_longer(News24_top_terms_LDA,names_to ="Topics", values_to = "term")
-TimesLIVE_top_terms_LDA
-eNCA_top_terms_LDA
-IOL_top_terms_LDA
-ewn_top_terms_LDA
-SABCNews_top_terms_LDA
-
-```
-
-####################################################################################################################
 
 ```{r}
 News24_topics_LDA <- tidy(News24_lda, matrix = "beta")
@@ -593,6 +583,7 @@ eNCA_topics_LDA <- tidy(eNCA_lda, matrix = "beta")
 IOL_topics_LDA <- tidy(IOL_lda, matrix = "beta")
 ewn_topics_LDA <- tidy(ewn_lda, matrix = "beta")
 SABCNews_topics_LDA <- tidy(SABCNews_lda, matrix = "beta")
+Global_topics_LDA <- tidy(Global_lda, matrix = "beta")
 
 News24_top_terms_LDA <- 
   News24_topics_LDA %>%
@@ -601,12 +592,19 @@ News24_top_terms_LDA <-
   ungroup() %>%
   arrange(topic, -beta)
 
+d <- by(News24_top_terms_LDA, News24_top_terms_LDA["topic"], head, n=5)
+News24_top_terms_LDA <- rbind(d[[1]],d[[2]],d[[3]],d[[4]],d[[5]],d[[6]],d[[7]],d[[8]],d[[9]],d[[10]],d[[11]],d[[12]],d[[13]],d[[14]],d[[15]],d[[16]])
+  
+
 TimesLIVE_top_terms_LDA <- 
   TimesLIVE_topics_LDA %>%
   group_by(topic) %>%
   top_n(5, beta) %>%
   ungroup() %>%
   arrange(topic, -beta)
+
+d <- by(TimesLIVE_top_terms_LDA, TimesLIVE_top_terms_LDA["topic"], head, n=5)
+TimesLIVE_top_terms_LDA <- rbind(d[[1]],d[[2]],d[[3]],d[[4]],d[[5]],d[[6]],d[[7]],d[[8]],d[[9]],d[[10]],d[[11]],d[[12]],d[[13]],d[[14]],d[[15]],d[[16]])
 
 eNCA_top_terms_LDA <- 
   eNCA_topics_LDA %>%
@@ -615,12 +613,18 @@ eNCA_top_terms_LDA <-
   ungroup() %>%
   arrange(topic, -beta)
 
+d <- by(eNCA_top_terms_LDA, eNCA_top_terms_LDA["topic"], head, n=5)
+eNCA_top_terms_LDA <- rbind(d[[1]],d[[2]],d[[3]],d[[4]],d[[5]],d[[6]],d[[7]],d[[8]],d[[9]],d[[10]],d[[11]],d[[12]],d[[13]],d[[14]],d[[15]],d[[16]])
+
 IOL_top_terms_LDA <- 
   IOL_topics_LDA %>%
   group_by(topic) %>%
   top_n(5, beta) %>%
   ungroup() %>%
   arrange(topic, -beta)
+
+d <- by(IOL_top_terms_LDA, IOL_top_terms_LDA["topic"], head, n=5)
+IOL_top_terms_LDA <- rbind(d[[1]],d[[2]],d[[3]],d[[4]],d[[5]],d[[6]],d[[7]],d[[8]],d[[9]],d[[10]],d[[11]],d[[12]],d[[13]],d[[14]],d[[15]],d[[16]])
 
 ewn_top_terms_LDA <- 
   ewn_topics_LDA %>%
@@ -629,6 +633,9 @@ ewn_top_terms_LDA <-
   ungroup() %>%
   arrange(topic, -beta)
 
+d <- by(ewn_top_terms_LDA, ewn_top_terms_LDA["topic"], head, n=5)
+ewn_top_terms_LDA <- rbind(d[[1]],d[[2]],d[[3]],d[[4]],d[[5]],d[[6]],d[[7]],d[[8]],d[[9]],d[[10]],d[[11]],d[[12]],d[[13]],d[[14]],d[[15]],d[[16]])
+
 SABCNews_top_terms_LDA <- 
   SABCNews_topics_LDA %>%
   group_by(topic) %>%
@@ -636,10 +643,24 @@ SABCNews_top_terms_LDA <-
   ungroup() %>%
   arrange(topic, -beta)
 
+d <- by(SABCNews_top_terms_LDA, SABCNews_top_terms_LDA["topic"], head, n=5)
+SABCNews_top_terms_LDA <- rbind(d[[1]],d[[2]],d[[3]],d[[4]],d[[5]],d[[6]],d[[7]],d[[8]],d[[9]],d[[10]],d[[11]],d[[12]],d[[13]],d[[14]],d[[15]],d[[16]])
+
+Global_top_terms_LDA <- 
+  Global_topics_LDA %>%
+  group_by(topic) %>%
+  top_n(5, beta) %>%
+  ungroup() %>%
+  arrange(topic, -beta)
+
+d <- by(Global_top_terms_LDA, Global_top_terms_LDA["topic"], head, n=5)
+Global_top_terms_LDA <- rbind(d[[1]],d[[2]],d[[3]],d[[4]],d[[5]],d[[6]],d[[7]],d[[8]],d[[9]],d[[10]],d[[11]],d[[12]],d[[13]],d[[14]],d[[15]],d[[16]])
+
 ```
 
-
+#Additional Statistics:
 ```{r}
+
 #Topics found out by our model:
 lda.topics_News24 = as.matrix(topics(News24_lda))
 lda.topics_TimesLIVE = as.matrix(topics(TimesLIVE_lda))
@@ -647,7 +668,7 @@ lda.topics_eNCA = as.matrix(topics(eNCA_lda))
 lda.topics_IOL = as.matrix(topics(IOL_lda))
 lda.topics_ewn = as.matrix(topics(ewn_lda))
 lda.topics_SABCNews = as.matrix(topics(SABCNews_lda))
-
+lda.topics_Global = as.matrix(topics(Global_lda))
 
 #summary(as.factor(lda.topics_News24[,1]))
 #summary(as.factor(lda.topics_TimesLIVE[,1]))
@@ -655,10 +676,8 @@ lda.topics_SABCNews = as.matrix(topics(SABCNews_lda))
 #summary(as.factor(lda.topics_IOL[,1]))
 #summary(as.factor(lda.topics_ewn[,1]))
 #summary(as.factor(lda.topics_SABCNews[,1]))
-```
+#summary(as.factor(lda.topics_Global[,1]))
 
-
-```{r}
 #document wise probability of each topic.
 topicprob_News24 = as.matrix(News24_lda@gamma)
 topicprob_TimesLIVE = as.matrix(TimesLIVE_lda@gamma)
@@ -666,6 +685,7 @@ topicprob_eNCA = as.matrix(eNCA_lda@gamma)
 topicprob_IOL = as.matrix(IOL_lda@gamma)
 topicprob_ewn = as.matrix(ewn_lda@gamma)
 topicprob_SABCNews = as.matrix(SABCNews_lda@gamma)
+topicprob_Global = as.matrix(Global_lda@gamma)
 
 
 #head(topicprob_News24,1)
@@ -674,7 +694,9 @@ topicprob_SABCNews = as.matrix(SABCNews_lda@gamma)
 #head(topicprob_IOL,1)
 #head(topicprob_ewn,1)
 #head(topicprob_SABCNews,1)
+#head(topicprob_Global,1)
 ```
+
 
 ### STM Topic Modelling
 ```{r}
@@ -757,31 +779,31 @@ plot(global_findingk)
 #Running STM per news agency
 
 News24_STM <- stm(documents = News24_docs, vocab = News24_vocab,
-              K = 10, max.em.its = 75, data = News24_meta,
+              K = 16, max.em.its = 75, data = News24_meta,
               init.type = "Spectral", verbose = FALSE)
 
 timesLIVE_STM <- stm(documents = TimesLIVE_docs, vocab = TimesLIVE_vocab,
-              K = 10, max.em.its = 75, data = TimesLIVE_meta,
+              K = 16, max.em.its = 75, data = TimesLIVE_meta,
               init.type = "Spectral", verbose = FALSE)
 
 Ewnupdate_STM <- stm(documents = ewn_docs, vocab = ewn_vocab,
-              K = 10, max.em.its = 75, data = ewn_meta,
+              K = 16, max.em.its = 75, data = ewn_meta,
               init.type = "Spectral", verbose = FALSE)
 
 IOL_STM <- stm(documents = IOL_docs, vocab = IOL_vocab,
-              K = 10, max.em.its = 75, data = IOL_meta,
+              K = 16, max.em.its = 75, data = IOL_meta,
               init.type = "Spectral", verbose = FALSE)
 
 eNCA_STM <- stm(documents = eNCA_docs, vocab = eNCA_vocab,
-              K = 10, max.em.its = 75, data = eNCA_meta,
+              K = 16, max.em.its = 75, data = eNCA_meta,
               init.type = "Spectral", verbose = FALSE)
 
 SABC_STM <- stm(documents = SABC_docs, vocab = SABC_vocab,
-              K = 10, max.em.its = 75, data = SABC_meta,
+              K = 16, max.em.its = 75, data = SABC_meta,
               init.type = "Spectral", verbose = FALSE)
 
 global_STM <- stm(documents = global_docs, vocab = global_vocab,
-              K = 10, max.em.its = 75, data = global_meta,
+              K = 16, max.em.its = 75, data = global_meta,
               init.type = "Spectral", verbose = FALSE)
 
 ```
@@ -847,27 +869,6 @@ global_top_terms <-
 
 ```
 
-
-
-```{r}
-#LDA
-write_rds(News24_top_terms_LDA, "Data/Final_Data/News24_top_terms_LDA.rds")
-write_rds(TimesLIVE_top_terms_LDA, "Data/Final_Data/timesLIVE_top_terms_LDA.rds")
-write_rds(ewn_top_terms_LDA, "Data/Final_Data/Ewnupdate_top_terms_LDA.rds")
-write_rds(IOL_top_terms_LDA, "Data/Final_Data/IOL_top_terms_LDA.rds")
-write_rds(eNCA_top_terms_LDA, "Data/Final_Data/eNCA_top_terms_LDA.rds")
-write_rds(SABCNews_top_terms_LDA, "Data/Final_Data/SABC_top_terms_LDA.rds")
-#write_rds(global_top_terms_LDA, "Data/Final_Data/global_top_terms_LDA.rds")
-
-#STM
-write_rds(News24_top_terms, "Data/Final_Data/News24_top_terms.rds")
-write_rds(timesLIVE_top_terms, "Data/Final_Data/timesLIVE_top_terms.rds")
-write_rds(Ewnupdate_top_terms, "Data/Final_Data/Ewnupdate_top_terms.rds")
-write_rds(IOL_top_terms, "Data/Final_Data/IOL_top_terms.rds")
-write_rds(eNCA_top_terms, "Data/Final_Data/eNCA_top_terms.rds")
-write_rds(SABC_top_terms, "Data/Final_Data/SABC_top_terms.rds")
-write_rds(global_top_terms, "Data/Final_Data/global_top_terms.rds")
-```
 
 ```{r}
 # other theme
@@ -984,13 +985,25 @@ ggplot(data, aes(x="", y=tweet_count, fill = tweet_type)) + geom_bar(stat = "ide
 ## Done
 
 # Exporting transformation results
-```{r echo=TRUE}
-#write_rds(News24_tweets, "Results/News24_tweets.rds")
-#write_rds(TimesLIVE_tweets, "Results/TimesLIVE_tweets.rds")
-#write_rds(eNCA_tweets, "Results/eNCA_tweets.rds")
-#write_rds(IOL_tweets,"Results/IOL_tweets.rds")
-#write_rds(SABCNews_tweets,"Results/SABCNews_tweets.rds")
-#write_rds(ewnupdates_tweets,"Results/ewnupdates_tweets")
+
+```{r}
+#LDA
+write_rds(News24_top_terms_LDA, "Data/Final_Data/News24_top_terms_LDA.rds")
+write_rds(TimesLIVE_top_terms_LDA, "Data/Final_Data/timesLIVE_top_terms_LDA.rds")
+write_rds(ewn_top_terms_LDA, "Data/Final_Data/Ewnupdate_top_terms_LDA.rds")
+write_rds(IOL_top_terms_LDA, "Data/Final_Data/IOL_top_terms_LDA.rds")
+write_rds(eNCA_top_terms_LDA, "Data/Final_Data/eNCA_top_terms_LDA.rds")
+write_rds(SABCNews_top_terms_LDA, "Data/Final_Data/SABC_top_terms_LDA.rds")
+write_rds(Global_top_terms_LDA, "Data/Final_Data/global_top_terms_LDA.rds")
+
+#STM
+write_rds(News24_top_terms, "Data/Final_Data/News24_top_terms.rds")
+write_rds(timesLIVE_top_terms, "Data/Final_Data/timesLIVE_top_terms.rds")
+write_rds(Ewnupdate_top_terms, "Data/Final_Data/Ewnupdate_top_terms.rds")
+write_rds(IOL_top_terms, "Data/Final_Data/IOL_top_terms.rds")
+write_rds(eNCA_top_terms, "Data/Final_Data/eNCA_top_terms.rds")
+write_rds(SABC_top_terms, "Data/Final_Data/SABC_top_terms.rds")
+write_rds(global_top_terms, "Data/Final_Data/global_top_terms.rds")
 ```
 
 ```{r}
