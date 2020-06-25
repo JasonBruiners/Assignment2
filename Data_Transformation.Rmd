@@ -852,32 +852,9 @@ global_top_terms <-
 ```
 
 
+# Additional Analysis
 ```{r}
-# other theme
-Other_theme <- theme(
-  axis.text.x=element_text(colour = "black",face = "bold"),
-  axis.text.y=element_text(colour = "black",face = "bold"),
-  axis.title.x=element_blank(),
-  axis.title.y=element_blank(),
-  panel.border=element_blank(),
-  panel.grid.major=element_line(colour = "black"),
-  panel.grid.major.x=element_blank(), 
-  panel.grid.minor=element_blank(),
-  plot.background=element_rect(fill = "grey"),
-  plot.caption = element_text(colour ="black",face = "bold" ,hjust = +1),
-  strip.text = element_text(face = "bold"),
-  plot.title = element_text(size = 20, colour ="black",face = "bold" ,hjust = 0.5),
-)
-
-```
-
-
-
-# Other Analysis
-```{r}
-# 3 week period
-# Frequency of tweets by day
- #%>% group_by(date)
+# Frequency of Tweets
 News24_freq <- News24_tweets %>% group_by(date) %>% summarise(News24 = n())
 timesLIVE_freq <- TimesLIVE_tweets %>% group_by(date) %>% summarise(timesLIVE = n()) %>% select(timesLIVE)
 Ewnupdate_freq <- ewnupdates_tweets %>% group_by(date) %>% summarise(Ewnupdate = n()) %>% select(Ewnupdate)
@@ -885,11 +862,10 @@ IOL_freq <- IOL_tweets %>% group_by(date) %>% summarise(IOL = n()) %>% select(IO
 eNCA_freq <- eNCA_tweets %>% group_by(date) %>% summarise(eNCA = n()) %>% select(eNCA)
 SABC_freq <- SABCNews_tweets %>% group_by(date) %>% summarise(SABC = n()) %>% select(SABC)
 
-# sum days and join together, then send to visualisation
+# sum days and join together
 Frequency_tweets <- bind_cols(News24_freq,timesLIVE_freq,Ewnupdate_freq,IOL_freq,eNCA_freq,SABC_freq)
 
-ggplot(Frequency_tweets, aes(x = date, y = News24)) + Other_theme + geom_line(color = "grey", size = 0.9) + geom_line(aes(x = date, y = timesLIVE), color = "blue", size = 0.9) + geom_line(aes(x = date, y = Ewnupdate), color = "red", size = 0.9) + geom_line(aes(x = date, y = IOL), color = "brown", size = 0.9) + geom_line(aes(x = date, y = eNCA), color = "green", size = 0.9) + geom_line(aes(x = date, y = SABC), color = "yellow", size = 0.9) + scale_x_date(breaks = "1 day",date_labels = "%d") + scale_y_continuous(breaks = seq(0, 160, by = 20)) + labs(x = NULL, y = NULL, title = "Frequency of Tweets", subtitle = "Three week period in June", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
-
+# EXPORT Frequency_tweets
 
 #retweet count 
 News24_retweet <- News24_tweets %>% group_by(date) %>% summarise(News24 = sum(retweet_count)) 
@@ -899,10 +875,10 @@ IOL_retweet <- IOL_tweets %>% group_by(date) %>% summarise(IOL = sum(retweet_cou
 eNCA_retweet <- eNCA_tweets %>% group_by(date) %>% summarise(eNCA = sum(retweet_count)) %>% select(eNCA)
 SABC_retweet <- SABCNews_tweets %>% group_by(date) %>% summarise(SABC = sum(retweet_count)) %>% select(SABC)
 
-# sum days and join together, then send to visualisation
+# sum days and join together
 retweet_tweets <- bind_cols(News24_retweet,timesLIVE_retweet,Ewnupdate_retweet,IOL_retweet,eNCA_retweet,SABC_retweet)
 
- 
+# EXPORT retweet_tweets 
 
 # like count
 News24_likes <- News24_tweets %>% group_by(date) %>% summarise(News24 = sum(favorite_count)) 
@@ -912,16 +888,11 @@ IOL_likes <- IOL_tweets %>% group_by(date) %>% summarise(IOL = sum(favorite_coun
 eNCA_likes <- eNCA_tweets %>% group_by(date) %>% summarise(eNCA = sum(favorite_count)) %>% select(eNCA)
 SABC_likes <- SABCNews_tweets %>% group_by(date) %>% summarise(SABC = sum(favorite_count)) %>% select(SABC)
 
-# sum days and join together, then send to visualisation
+# sum days and join together
 Likes_tweets <- bind_cols(News24_likes,timesLIVE_likes,Ewnupdate_likes,IOL_likes,eNCA_likes,SABC_likes)
 
-ggplot(Likes_tweets, aes(x = date, y = News24)) + Other_theme + geom_line(color = "grey", size = 0.9) + geom_line(aes(x = date, y = timesLIVE), color = "blue", size = 0.9) + geom_line(aes(x = date, y = Ewnupdate), color = "red", size = 0.9) + geom_line(aes(x = date, y = IOL), color = "brown", size = 0.9) + geom_line(aes(x = date, y = eNCA), color = "green", size = 0.9) + geom_line(aes(x = date, y = SABC), color = "yellow", size = 0.9) + scale_x_date(breaks = "1 day",date_labels = "%d") + scale_y_continuous(breaks = seq(0, 20000, by = 1500)) + labs(x = NULL, y = NULL, title = "Like counter", subtitle = "Three week period in June", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
+# EXPORT Likes_tweets
 
-
-
-```
-
-```{r}
 #count the total number of tweets vs covid tweets
 News24_Genposts <- nrow(News24_tweets)
 timesLIVE_Genposts <- nrow(TimesLIVE_tweets)
@@ -937,32 +908,20 @@ IOL_CVDposts <- nrow(tweets.IOL_sub_clean)
 eNCA_CVDposts<- nrow(tweets.eNCA_sub_clean)
 SABC_CVDposts <- nrow(tweets.SABCNews_sub_clean)
 
-
-
 Gen_tweets <- News24_Genposts + timesLIVE_Genposts + Ewnupdate_Genposts + IOL_Genposts +eNCA_Genposts + SABC_Genposts 
 
 CVD_tweets <- News24_CVDposts + timesLIVE_CVDposts + Ewnupdate_CVDposts + IOL_CVDposts + eNCA_CVDposts + SABC_CVDposts
 
-
 Other_tweets <- Gen_tweets - CVD_tweets
 
-
-Gen_tweets
 tweet_type <- c("General","Covid-related")
 tweet_count <- c(Other_tweets,CVD_tweets)
 
-data <- data.frame(tweet_type,tweet_count)
-data
+Type_data <- data.frame(tweet_type,tweet_count)
 
-ggplot(data, aes(x="", y=tweet_count, fill = tweet_type)) + geom_bar(stat = "identity", width = 1)+ coord_polar(theta="y", start = 0) + geom_text(aes(label = paste0(round(tweet_count/Gen_tweets*100), "%")), position = position_stack(vjust=0.5)) + theme_void() %+replace% theme(plot.caption = element_text(colour ="black",hjust = +1),) + labs(x = NULL, y = NULL, fill = NULL, title = "Comparison of Covid Coverage by News Media", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
-
-```
-
-
-```{r}
+#EXPORT Type_data and Gen_tweets
 
 ```
-
 
 ## Done
 

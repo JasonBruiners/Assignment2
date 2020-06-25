@@ -359,6 +359,23 @@ global_top_terms %>%
 
 # Additional Analysis
 ```{r}
+# Additional's theme
+Other_theme <- theme(
+  axis.text.x=element_text(colour = "black",face = "bold"),
+  axis.text.y=element_text(colour = "black",face = "bold"),
+  axis.title.x=element_blank(),
+  axis.title.y=element_blank(),
+  panel.border=element_blank(),
+  panel.grid.major=element_line(colour = "black"),
+  panel.grid.major.x=element_blank(), 
+  panel.grid.minor=element_blank(),
+  plot.background=element_rect(fill = "grey"),
+  plot.caption = element_text(colour ="black",face = "bold" ,hjust = +1),
+  strip.text = element_text(face = "bold"),
+  plot.title = element_text(size = 20, colour ="black",face = "bold" ,hjust = 0.5),
+)
+
+
 #frequency of tweets
 # import Frequency_tweets
 ggplot(Frequency_tweets, aes(x = date, y = News24)) + Other_theme + geom_line(color = "grey", size = 0.9) + geom_line(aes(x = date, y = timesLIVE), color = "blue", size = 0.9) + geom_line(aes(x = date, y = Ewnupdate), color = "red", size = 0.9) + geom_line(aes(x = date, y = IOL), color = "brown", size = 0.9) + geom_line(aes(x = date, y = eNCA), color = "green", size = 0.9) + geom_line(aes(x = date, y = SABC), color = "yellow", size = 0.9) + scale_x_date(breaks = "1 day",date_labels = "%d") + scale_y_continuous(breaks = seq(0, 160, by = 20)) + labs(x = NULL, y = NULL, title = "Frequency of Tweets", subtitle = "Three week period in June", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
@@ -375,8 +392,8 @@ ggplot(Likes_tweets, aes(x = date, y = News24)) + Other_theme + geom_line(color 
 
 
 #covid vs non covid tweets
-#import following variables: data, Gen_tweets
-ggplot(data, aes(x="", y=tweet_count, fill = tweet_type)) + geom_bar(stat = "identity", width = 1)+ coord_polar(theta="y", start = 0) + geom_text(aes(label = paste0(round(tweet_count/Gen_tweets*100), "%")), position = position_stack(vjust=0.5)) + theme_void() %+replace% theme(plot.caption = element_text(colour ="black",hjust = +1),) + labs(x = NULL, y = NULL, fill = NULL, title = "Comparison of Covid Coverage by News Media", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
+#import following variables: Type_data, Gen_tweets
+ggplot(Type_data, aes(x="", y=tweet_count, fill = tweet_type)) + geom_bar(stat = "identity", width = 1)+ coord_polar(theta="y", start = 0) + geom_text(aes(label = paste0(round(tweet_count/Gen_tweets*100), "%")), position = position_stack(vjust=0.5)) + theme_void() %+replace% theme(plot.caption = element_text(colour ="black",hjust = +1),) + labs(x = NULL, y = NULL, fill = NULL, title = "Comparison of Covid Coverage by News Media", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
 
 
 ```
