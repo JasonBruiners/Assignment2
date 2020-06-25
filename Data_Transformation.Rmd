@@ -690,10 +690,20 @@ plot(Third_STM)
 ```
 
 ```{r}
-findingk <- searchK(out$documents, out$vocab, K = c(10:30),
- prevalence =~ date, data = meta, verbose=FALSE)
+global_findingk <- searchK(documents = global_docs, vocab = global_vocab, K = c(5:50),
+ prevalence =~ date, data = global_meta, verbose=FALSE)
 ```
 
+```{r}
+global_findingk <- read_rds("Data/Final_Data/global_findingk.rds")
+write_rds(global_findingk, "Data/Final_Data/global_findingk.rds")
+```
+
+```{r}
+#load("./findingk.Rda")
+
+plot(global_findingk)
+```
 
 #####################################################################################################################
 
