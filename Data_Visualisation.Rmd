@@ -17,14 +17,19 @@ library(dplyr)
 
 # Load extracted data 
 ```{r}
-#News24_tweets <- read_rds("Data/News24_tweets.rds")
-#TimesLIVE_tweets <- read_rds("Data/TimesLIVE_tweets.rds")
-#eNCA_tweets <- read_rds("Data/eNCA_tweets.rds")
-#IOL_tweets <- read_rds("Data/IOL_tweets.rds")
-#SABCNews_tweets <- read_rds("Data/SABCNews_tweets.rds")
-#ewnupdates_tweets <- read_rds("Data/ewnupdates_tweets")
-
 # Sentiment Analysis
+afinn_news24 <- read_rds("Data/Final_Data/afinn_news24.rds")
+news24_score <- read_rds("Data/Final_Data/news24_score.rds")
+afinn_TimesLIVE <- read_rds("Data/Final_Data/afinn_TimesLIVE.rds")
+TimesLIVE_score <- read_rds("Data/Final_Data/TimesLIVE_score.rds")
+afinn_eNCA <- read_rds("Data/Final_Data/afinn_eNCA.rds")
+eNCA_score <- read_rds("Data/Final_Data/eNCA_score.rds")
+afinn_IOL <- read_rds("Data/Final_Data/afinn_IOL.rds")
+IOL_score <- read_rds("Data/Final_Data/IOL_score.rds")
+afinn_ewn <- read_rds("Data/Final_Data/afinn_ewn.rds")
+ewn_score <- read_rds("Data/Final_Data/ewn_score.rds")
+afinn_SABCNews <- read_rds("Data/Final_Data/afinn_SABCNews.rds")
+SABC_score <- read_rds("Data/Final_Data/SABC_score.rds")
 
 
 #Load Topic Modelling Data
@@ -432,7 +437,7 @@ ggplot(Likes_tweets, aes(x = date, y = News24)) + Other_theme + geom_line(color 
 
 
 #covid vs non covid tweets
-ggplot(Type_data, aes(x="", y=tweet_count, fill = tweet_type)) + geom_bar(stat = "identity", width = 1)+ coord_polar(theta="y", start = 0) + geom_text(aes(label = paste0(round(tweet_count/8901*100), "%")), position = position_stack(vjust=0.5)) + theme_void() %+replace% theme(plot.caption = element_text(colour ="black",hjust = +1),) + labs(x = NULL, y = NULL, fill = NULL, title = "Comparison of Covid Coverage by News Media", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
+ggplot(Type_data, aes(x="", y=tweet_count, fill = tweet_type)) + geom_bar(stat = "identity", width = 1)+ coord_polar(theta="y", start = 0) + geom_text(aes(label = paste0(round(tweet_count/8901*100), "%")), position = position_stack(vjust=0.5)) + theme_void() %+replace% theme(plot.caption = element_text(colour ="black",hjust = -1),) + labs(x = NULL, y = NULL, fill = NULL, title = "Comparison of Covid Coverage by News Media", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
 
 
 ```

@@ -395,14 +395,10 @@ afinn_news24 <- clean_tweets.News24 %>% inner_join(get_sentiments("afinn")) %>% 
 
 news24_score <- afinn_news24 %>% group_by(value) %>% summarise(count = sum(n))
 
-# EXPORT afinn_news24 and news24_score
-
 # TimesLIVE
 afinn_TimesLIVE <- clean_tweets.TimesLIVE %>% inner_join(get_sentiments("afinn")) %>% count(word, value, sort = TRUE) %>% ungroup()
 
 TimesLIVE_score <- afinn_TimesLIVE %>% group_by(value) %>% summarise(count = sum(n))
-
-# EXPORT afinn_TimesLIVE and TimesLIVE_score
 
 # eNCA
 afinn_eNCA <- clean_tweets.eNCA %>% inner_join(get_sentiments("afinn")) %>% count(word, value, sort = TRUE) %>% ungroup()
@@ -414,21 +410,15 @@ afinn_IOL <- clean_tweets.IOL %>% inner_join(get_sentiments("afinn")) %>% count(
 
 IOL_score <- afinn_IOL %>% group_by(value) %>% summarise(count = sum(n))
 
-# EXPORT afinn_IOL and IOL_score
-
 # ewnupdate
 afinn_ewn <- clean_tweets.ewn %>% inner_join(get_sentiments("afinn")) %>% count(word, value, sort = TRUE) %>% ungroup()
 
 ewn_score <- afinn_ewn %>% group_by(value) %>% summarise(count = sum(n))
 
-#  EXPORT afinn_ewn and ewn_score
-
 # SABCNEWS
 afinn_SABCNews <- clean_tweets.SABCNews %>% inner_join(get_sentiments("afinn")) %>% count(word, value, sort = TRUE) %>% ungroup()
 
 SABC_score <- afinn_SABCNews %>% group_by(value) %>% summarise(count = sum(n))
-
-# EXPORT afinn_SABCNews and SABC_score
 
 ```
 
@@ -872,7 +862,18 @@ Type_data <- data.frame(tweet_type,tweet_count)
 
 ```{r}
 # Sentiment Analysis
-
+write_rds(afinn_news24, "Data/Final_Data/afinn_news24.rds")
+write_rds(news24_score, "Data/Final_Data/news24_score.rds")
+write_rds(afinn_TimesLIVE, "Data/Final_Data/afinn_TimesLIVE.rds")
+write_rds(TimesLIVE_score, "Data/Final_Data/TimesLIVE_score.rds")
+write_rds(afinn_eNCA, "Data/Final_Data/afinn_eNCA.rds")
+write_rds(eNCA_score, "Data/Final_Data/eNCA_score.rds")
+write_rds(afinn_IOL, "Data/Final_Data/afinn_IOL.rds")
+write_rds(IOL_score, "Data/Final_Data/IOL_score.rds")
+write_rds(afinn_ewn, "Data/Final_Data/afinn_ewn.rds")
+write_rds(ewn_score, "Data/Final_Data/ewn_score.rds")
+write_rds(afinn_SABCNews, "Data/Final_Data/afinn_SABCNews.rds")
+write_rds(SABC_score, "Data/Final_Data/SABC_score.rds")
 
 #LDA
 write_rds(News24_top_terms_LDA, "Data/Final_Data/News24_top_terms_LDA.rds")
