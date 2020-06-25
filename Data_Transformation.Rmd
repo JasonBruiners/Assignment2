@@ -233,7 +233,8 @@ tweets.News24_clean$stripped_text = gsub(" +", " ", tweets.News24_clean$stripped
 
 
 tweets.News24_clean <- tweets.News24_clean %>% select(stripped_text)
-tweets.News24_sub_clean <- tweets.News24_clean %>% tweets.SABCNews_clean[grep("covid|corona|covid 19|covid19|coronavirus|sars cov 2|sars cov" ,tweets.SABCNews_clean$stripped_text),]
+tweets.News24_sub_clean <- tweets.News24_clean[grep("covid|corona|covid 19|covid19|coronavirus|sars cov 2|sars cov",tweets.News24_clean$stripped_text),]
+
 tweets.News24_stem <- tweets.News24_sub_clean %>% unnest_tokens(word, stripped_text)
 
 clean_tweets.News24 <- tweets.News24_stem %>% anti_join(stop_words)
@@ -263,7 +264,10 @@ tweets.TimesLIVE_clean$stripped_text = gsub(" +", " ", tweets.TimesLIVE_clean$st
 
 
 tweets.TimesLIVE_clean <- tweets.TimesLIVE_clean %>% select(stripped_text)
-tweets.TimesLIVE_stem <- tweets.TimesLIVE_clean  %>% unnest_tokens(word, stripped_text)
+
+tweets.TimesLIVE_sub_clean <- tweets.TimesLIVE_clean[grep("covid|corona|covid 19|covid19|coronavirus|sars cov 2|sars cov",tweets.TimesLIVE_clean$stripped_text),]
+
+tweets.TimesLIVE_stem <- tweets.TimesLIVE_sub_clean  %>% unnest_tokens(word, stripped_text)
 
 clean_tweets.TimesLIVE <- tweets.TimesLIVE_stem %>% anti_join(stop_words)
 
@@ -290,7 +294,10 @@ tweets.eNCA_clean$stripped_text = gsub(" $", "", tweets.eNCA_clean$stripped_text
 tweets.eNCA_clean$stripped_text = gsub(" +", " ", tweets.eNCA_clean$stripped_text) #general spaces
 
 tweets.eNCA_clean <- tweets.eNCA_clean %>% select(stripped_text)
-tweets.eNCA_stem <- tweets.eNCA_clean %>% unnest_tokens(word, stripped_text)
+
+tweets.eNCA_sub_clean <- tweets.eNCA_clean[grep("covid|corona|covid 19|covid19|coronavirus|sars cov 2|sars cov",tweets.eNCA_clean$stripped_text),]
+
+tweets.eNCA_stem <- tweets.eNCA_sub_clean %>% unnest_tokens(word, stripped_text)
 
 clean_tweets.eNCA <- tweets.eNCA_stem %>% anti_join(stop_words)
 
@@ -319,7 +326,10 @@ tweets.IOL_clean$stripped_text = gsub(" $", "", tweets.IOL_clean$stripped_text) 
 tweets.IOL_clean$stripped_text = gsub(" +", " ", tweets.IOL_clean$stripped_text) #general spaces
 
 tweets.IOL_clean <- tweets.IOL_clean %>% select(stripped_text)
-tweets.IOL_stem <- tweets.IOL_clean %>% unnest_tokens(word, stripped_text)
+
+tweets.IOL_sub_clean <- tweets.IOL_clean[grep("covid|corona|covid 19|covid19|coronavirus|sars cov 2|sars cov",tweets.IOL_clean$stripped_text),]
+
+tweets.IOL_stem <- tweets.IOL_sub_clean %>% unnest_tokens(word, stripped_text)
 
 clean_tweets.IOL <- tweets.IOL_stem %>% anti_join(stop_words)
 
@@ -347,7 +357,10 @@ tweets.ewn_clean$stripped_text = gsub(" +", " ", tweets.ewn_clean$stripped_text)
 
 
 tweets.ewn_clean <- tweets.ewn_clean %>% select(stripped_text)
-tweets.ewn_stem <- tweets.ewn_clean  %>% unnest_tokens(word, stripped_text)
+
+tweets.ewn_sub_clean <- tweets.ewn_clean[grep("covid|corona|covid 19|covid19|coronavirus|sars cov 2|sars cov",tweets.ewn_clean$stripped_text),]
+
+tweets.ewn_stem <- tweets.ewn_sub_clean  %>% unnest_tokens(word, stripped_text)
 
 clean_tweets.ewn <- tweets.ewn_stem %>% anti_join(stop_words)
 
@@ -374,7 +387,10 @@ tweets.SABCNews_clean$stripped_text = gsub(" $", "", tweets.SABCNews_clean$strip
 tweets.SABCNews_clean$stripped_text = gsub(" +", " ", tweets.SABCNews_clean$stripped_text) #general spaces
 
 tweets.SABCNews_clean <- tweets.SABCNews_clean %>% select(stripped_text)
-tweets.SABCNews_stem <- tweets.SABCNews_clean %>% unnest_tokens(word, stripped_text)
+
+tweets.SABCNews_sub_clean <- tweets.SABCNews_clean[grep("covid|corona|covid 19|covid19|coronavirus|sars cov 2|sars cov",tweets.SABCNews_clean$stripped_text),]
+
+tweets.SABCNews_stem <- tweets.SABCNews_sub_clean %>% unnest_tokens(word, stripped_text)
 
 clean_tweets.SABCNews <- tweets.SABCNews_stem  %>% anti_join(stop_words)
 
