@@ -860,7 +860,7 @@ Other_theme <- theme(
   axis.title.x=element_blank(),
   axis.title.y=element_blank(),
   panel.border=element_blank(),
-  panel.grid.major=element_line(colour = "black"), 
+  panel.grid.major.y=element_line(colour = "grey"), 
   panel.grid.minor=element_blank(),
   plot.background=element_rect(fill = "grey"),
   plot.caption = element_text(colour ="black",face = "bold" ,hjust = +1),
@@ -887,7 +887,7 @@ SABC_freq <- SABCNews_tweets %>% group_by(date) %>% summarise(SABC = n()) %>% se
 # sum days and join together, then send to visualisation
 Frequency_tweets <- bind_cols(News24_freq,timesLIVE_freq,Ewnupdate_freq,IOL_freq,eNCA_freq,SABC_freq)
 
-ggplot(Frequency_tweets, aes(x = date, y = News24)) + Other_theme + geom_line(color = "grey", size = 0.9) + geom_line(aes(x = date, y = timesLIVE), color = "blue", size = 0.9) + geom_line(aes(x = date, y = Ewnupdate), color = "red", size = 0.9) + geom_line(aes(x = date, y = IOL), color = "brown", size = 0.9) + geom_line(aes(x = date, y = eNCA), color = "green", size = 0.9) + geom_line(aes(x = date, y = SABC), color = "yellow", size = 0.9) + scale_x_date(breaks = "1 day",date_labels = "%d") + scale_y_continuous(breaks = seq(0, 160, by = 20)) + labs(x = NULL, y = NULL, title = "Frequency of Tweets", subtitle = "Three week period in June", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
+ggplot(Frequency_tweets, aes(x = date, y = News24)) + Other_theme + geom_line(color = "black", size = 0.9) + geom_line(aes(x = date, y = timesLIVE), color = "blue", size = 0.9) + geom_line(aes(x = date, y = Ewnupdate), color = "red", size = 0.9) + geom_line(aes(x = date, y = IOL), color = "brown", size = 0.9) + geom_line(aes(x = date, y = eNCA), color = "green", size = 0.9) + geom_line(aes(x = date, y = SABC), color = "yellow", size = 0.9) + scale_x_date(breaks = "1 day",date_labels = "%d") + scale_y_continuous(breaks = seq(0, 160, by = 20)) + labs(x = NULL, y = NULL, title = "Frequency of Tweets", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
 
 
 #retweet count 
@@ -901,7 +901,7 @@ SABC_retweet <- SABCNews_tweets %>% group_by(date) %>% summarise(SABC = sum(retw
 # sum days and join together, then send to visualisation
 retweet_tweets <- bind_cols(News24_retweet,timesLIVE_retweet,Ewnupdate_retweet,IOL_retweet,eNCA_retweet,SABC_retweet)
 
-ggplot(retweet_tweets, aes(x = date, y = News24)) + Other_theme + geom_line(color = "grey", size = 0.9) + geom_line(aes(x = date, y = timesLIVE), color = "blue", size = 0.9) + geom_line(aes(x = date, y = Ewnupdate), color = "red", size = 0.9) + geom_line(aes(x = date, y = IOL), color = "brown", size = 0.9) + geom_line(aes(x = date, y = eNCA), color = "green", size = 0.9) + geom_line(aes(x = date, y = SABC), color = "yellow", size = 0.9) + scale_x_date(breaks = "1 day",date_labels = "%d")+ scale_y_continuous(trans = "log2", breaks = c(250,500,750,1000,2000,4000,6000,8000)) + labs(x = NULL, y = NULL, title = "Retweet count", subtitle = "Three week period in June", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
+ggplot(retweet_tweets, aes(x = date, y = News24)) + Other_theme + geom_line(color = "black", size = 0.9) + geom_line(aes(x = date, y = timesLIVE), color = "blue", size = 0.9) + geom_line(aes(x = date, y = Ewnupdate), color = "red", size = 0.9) + geom_line(aes(x = date, y = IOL), color = "brown", size = 0.9) + geom_line(aes(x = date, y = eNCA), color = "green", size = 0.9) + geom_line(aes(x = date, y = SABC), color = "yellow", size = 0.9) + scale_x_date(breaks = "1 day",date_labels = "%d")+ scale_y_continuous(trans = "log2", breaks = c(250,500,750,1000,2000,4000,6000,8000)) + labs(x = NULL, y = NULL, title = "Retweet Count", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
 
 # like count
 News24_likes <- News24_tweets %>% group_by(date) %>% summarise(News24 = sum(favorite_count)) 
@@ -914,7 +914,7 @@ SABC_likes <- SABCNews_tweets %>% group_by(date) %>% summarise(SABC = sum(favori
 # sum days and join together, then send to visualisation
 Likes_tweets <- bind_cols(News24_likes,timesLIVE_likes,Ewnupdate_likes,IOL_likes,eNCA_likes,SABC_likes)
 
-ggplot(Likes_tweets, aes(x = date, y = News24)) + Other_theme + geom_line(color = "grey", size = 0.9) + geom_line(aes(x = date, y = timesLIVE), color = "blue", size = 0.9) + geom_line(aes(x = date, y = Ewnupdate), color = "red", size = 0.9) + geom_line(aes(x = date, y = IOL), color = "brown", size = 0.9) + geom_line(aes(x = date, y = eNCA), color = "green", size = 0.9) + geom_line(aes(x = date, y = SABC), color = "yellow", size = 0.9) + scale_x_date(breaks = "1 day",date_labels = "%d") + scale_y_continuous(breaks = seq(0, 20000, by = 2500)) + labs(x = NULL, y = NULL, title = "Like counter", subtitle = "Three week period in June", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
+ggplot(Likes_tweets, aes(x = date, y = News24)) + Other_theme + geom_line(color = "black", size = 0.9) + geom_line(aes(x = date, y = timesLIVE), color = "blue", size = 0.9) + geom_line(aes(x = date, y = Ewnupdate), color = "red", size = 0.9) + geom_line(aes(x = date, y = IOL), color = "brown", size = 0.9) + geom_line(aes(x = date, y = eNCA), color = "green", size = 0.9) + geom_line(aes(x = date, y = SABC), color = "yellow", size = 0.9) + scale_x_date(breaks = "1 day",date_labels = "%d") + scale_y_continuous(trans = "log2", breaks = c(600,800,1000,2000,4000,8000,12000,16000)) + labs(x = NULL, y = NULL, title = "Like Counter", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
 
 
 
