@@ -790,6 +790,40 @@ Followers_media <- data.frame(Media,rbind(News24_followers,TimesLIVE_followers,e
 
 ```
 
+
+```{r}
+bloem_nr <- nrow(tweets_bloem)
+cpt_nr <- nrow(tweets_cpt)
+durb_nr <- nrow(tweets_durb)
+jhb_nr <- nrow(tweets_jhb)
+kim_nr <- nrow(tweets_kim)
+klerk_nr <- nrow(tweets_klerk)
+mbomb_nr <- nrow(tweets_mbomb)
+pe_nr <- nrow(tweets_pe)
+polo_nr <- nrow(tweets_polo)
+
+
+city_tweets <- rbind(bloem_nr,cpt_nr,durb_nr,kim_nr,jhb_nr,klerk_nr,mbomb_nr,pe_nr,polo_nr)
+cityNames <- rbind("Bloem","CPT", "Durban", "Kimberley" ,"JHB", "Klerks", "Mbombela", "Polokwane", "P.E")
+
+cityCombined <- data.frame(cityNames,city_tweets)
+cityCombined <- cityCombined %>% add_column(Percentage = (city_tweets/(sum(city_tweets))) * 100)
+cityCombined
+
+ggplot(cityCombined, aes(x=cityNames, y=city_tweets, fill = cityNames)) + geom_bar(stat = "identity", width = 1) + geom_text(aes(label = paste0(round(Percentage,digits = 1), "%")), position = position_stack(vjust=0.5)) + labs(x = NULL, y = NULL, fill = NULL, title = "Distribution of Covid related tweets across major cities", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
+#scale_y_continuous(breaks = c(0.00, 0.005, 0.010, 0.015, 0.02),labels = c("0", ".05", ".01", ".015", ".02"))
+```
+
+```{r}
+
+geocoded <- lat_lng(tweets_za)
+par(mar = c(1, 1, 1, 1))
+drawThis <- map("world","South Africa", col="blue", fill=TRUE)
+with(geocoded, points(lng, lat, pch = 20, cex = .75, col = "red"))
+
+```
+
+
 ## Done
 
 # Exporting transformation results
