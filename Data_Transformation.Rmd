@@ -385,10 +385,17 @@ global_cleaned <- rbind(tweets.SABCNews_clean,tweets.ewn_clean,tweets.IOL_clean,
 
 global_tweets = rbind(SABCNews_tweets,eNCA_tweets,IOL_tweets,ewnupdates_tweets,TimesLIVE_tweets,News24_tweets)
 
+Clean_tweets.global <- global_cleaned %>% unnest_tokens(word, stripped_text)
+Clean_tweets.global <- Clean_tweets.global  %>% anti_join(stop_words)
 ```
 
 ```{r}
 # Sentiment Analysis
+
+# Global
+afinn_global <- Clean_tweets.global %>% inner_join(get_sentiments("afinn")) %>% count(word, value, sort = TRUE) %>% ungroup()
+
+global_score <- afinn_global %>% group_by(value) %>% summarise(count = sum(n))
 
 # News24
 afinn_news24 <- clean_tweets.News24 %>% inner_join(get_sentiments("afinn")) %>% count(word, value, sort = TRUE) %>% ungroup()
@@ -862,6 +869,8 @@ Type_data <- data.frame(tweet_type,tweet_count)
 
 ```{r}
 # Sentiment Analysis
+write_rds(afinn_global, "Data/Final_Data/afinn_global.rds")
+write_rds(global_score, "Data/Final_Data/global_score.rds")
 write_rds(afinn_news24, "Data/Final_Data/afinn_news24.rds")
 write_rds(news24_score, "Data/Final_Data/news24_score.rds")
 write_rds(afinn_TimesLIVE, "Data/Final_Data/afinn_TimesLIVE.rds")
