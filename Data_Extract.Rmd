@@ -15,19 +15,6 @@ library(topicmodels)
 library(maps)
 ```
 
-
-```{r eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
-
-#Define credentials
-app_name<-""
-consumer_key<-""
-consumer_secret<-""
-access_token<-""
-access_token_secret<-""
-
-
-```
-
 ## checking rate limits
 ```{r}
 # see rate limits
@@ -35,16 +22,6 @@ access_token_secret<-""
 rate_limits<-rate_limit()
 head(rate_limits[,1:4])
 ```
-
-
-```{r}
-#
-#create_token(app=app_name,
-#             consumer_key=consumer_key, consumer_secret=consumer_secret,
-#             access_token = access_token, access_secret = access_token_secret)
-
-```
-
 
 ## Searching for tweets...
 ### Collect first batch of tweets
