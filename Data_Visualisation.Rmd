@@ -163,12 +163,14 @@ News24_top_terms_LDA %>%
 ```
 
 ```{r}
+#Scale not applied due to plot 12 having a significant outlier
+
 TimesLIVE_top_terms_LDA %>%
   mutate(term = reorder(term, beta)) %>%
   ggplot(aes(term, beta, fill = factor(topic))) +
   geom_col(show.legend = FALSE) +
-  scale_y_continuous(breaks = c(0.00, 0.005, 0.010, 0.015, 0.02),labels = c("0", ".05", ".01", ".015", ".02")) +
-  expand_limits(y=c(0,0.02)) +
+  #scale_y_continuous(breaks = c(0.00, 0.005, 0.015,0.05,0.45),labels = c("0", ".05",".15",".5",".45")) +
+  #expand_limits(y=c(0,0.025)) +
   facet_wrap(~ topic, scales = "free") +
   coord_flip() +
   labs(title = "LDA Topic Modeling for TimesLive ", caption = "\nSource: Data collected from Twitter's REST API via rtweet"
@@ -185,8 +187,8 @@ ewn_top_terms_LDA %>%
   mutate(term = reorder(term, beta)) %>%
   ggplot(aes(term, beta, fill = factor(topic))) +
   geom_col(show.legend = FALSE) +
-  scale_y_continuous(breaks = c(0.00, 0.005, 0.010, 0.015, 0.02),labels = c("0", ".05", ".01", ".015", ".02")) +
-  expand_limits(y=c(0,0.05)) +
+  scale_y_continuous(breaks = c(0.00, 0.005, 0.015,0.05),labels = c("0", ".05",".15",".5")) +
+  expand_limits(y=c(0,0.015)) +
   facet_wrap(~ topic, scales = "free") +
   coord_flip() +
   labs(title = "LDA Topic Modeling for EWN ", caption = "\nSource: Data collected from Twitter's REST API via rtweet"
@@ -204,7 +206,7 @@ IOL_top_terms_LDA %>%
   ggplot(aes(term, beta, fill = factor(topic))) +
   geom_col(show.legend = FALSE) +
   scale_y_continuous(breaks = c(0.00, 0.005, 0.010, 0.015, 0.02),labels = c("0", ".05", ".01", ".015", ".02")) +
-  expand_limits(y=c(0,0.02)) +
+  expand_limits(y=c(0,0.015)) +
   facet_wrap(~ topic, scales = "free") +
   coord_flip() +
   labs(title = "LDA Topic Modeling for IOL ", caption = "\nSource: Data collected from Twitter's REST API via rtweet"
