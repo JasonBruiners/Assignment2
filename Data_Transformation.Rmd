@@ -413,7 +413,7 @@ sentiment_theme <- theme(
   axis.title.x=element_blank(),
   axis.title.y=element_blank(),
   panel.border=element_blank(),
-  panel.grid.major=element_line(colour = "black"),
+  panel.grid.major=element_line(colour = "grey"),
   panel.grid.major.x=element_blank(), 
   panel.grid.minor=element_blank(),
   plot.background=element_rect(fill = "grey"),
@@ -436,60 +436,62 @@ afinn_news24 <- clean_tweets.News24 %>% inner_join(get_sentiments("afinn")) %>% 
 
 news24_score <- afinn_news24 %>% group_by(value) %>% summarise(count = sum(n))
 
-news24_plot <- afinn_news24 %>% top_n(10) %>% mutate(word = reorder(word,n)) %>% ggplot(aes(x= word, y = n)) + geom_col() + coord_flip() + sentiment_theme + labs(x = NULL, y = NULL, title = "News24 Frequently Used Words", subtitle = "Top 10", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
+news24_plot <- afinn_news24 %>% top_n(10) %>% mutate(word = reorder(word,n)) %>% ggplot(aes(x= word, y = n)) + geom_col() + coord_flip() + sentiment_theme %+replace% theme(panel.grid.major=element_blank()) + labs(x = NULL, y = NULL, title = "News24 Frequently Used Words", subtitle = "Top 10", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
 news24_plot 
 
-ggplot(news24_score, aes(x=value,y=count)) + geom_bar(stat = "identity") + sentiment_theme + scale_x_continuous(breaks = c(-4,-3,-2,-1,0,1,2,3,4)) + labs(x = NULL, y = NULL, title = "News24 Sentiment Score", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
+ggplot(news24_score, aes(x=value,y=count)) + geom_bar(stat = "identity") + sentiment_theme + scale_x_continuous(breaks = c(-5,-4,-3,-2,-1,0,1,2,3,4,5)) + labs(x = NULL, y = NULL, title = "News24 Sentiment Score", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
 
 #############################
 afinn_TimesLIVE <- clean_tweets.TimesLIVE %>% inner_join(get_sentiments("afinn")) %>% count(word, value, sort = TRUE) %>% ungroup()
 
+afinn_TimesLIVE
+
 TimesLIVE_score <- afinn_TimesLIVE %>% group_by(value) %>% summarise(count = sum(n))
 
-TimesLIVE_plot <- afinn_TimesLIVE %>% top_n(10) %>% mutate(word = reorder(word,n)) %>% ggplot(aes(x= word, y = n)) + geom_col() + coord_flip() + sentiment_theme + labs(x = NULL, y = NULL, title = "TimesLIVE Frequently Used Words", subtitle = "Top 10", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
+TimesLIVE_plot <- afinn_TimesLIVE %>% top_n(10) %>% head(10) %>% mutate(word = reorder(word,n)) %>% ggplot(aes(x= word, y = n)) + geom_col() + coord_flip() + sentiment_theme %+replace% theme(panel.grid.major=element_blank()) + labs(x = NULL, y = NULL, title = "TimesLIVE Frequently Used Words", subtitle = "Top 10", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
 TimesLIVE_plot 
 
-ggplot(TimesLIVE_score, aes(x=value,y=count)) + geom_bar(stat = "identity") + sentiment_theme + scale_x_continuous(breaks = c(-4,-3,-2,-1,0,1,2,3,4)) + labs(x = NULL, y = NULL, title = "TimesLIVE Sentiment Score", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
+ggplot(TimesLIVE_score, aes(x=value,y=count)) + geom_bar(stat = "identity") + sentiment_theme + scale_x_continuous(breaks = c(-5,-4,-3,-2,-1,0,1,2,3,4,5)) + labs(x = NULL, y = NULL, title = "TimesLIVE Sentiment Score", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
 
 ##################3
 afinn_eNCA <- clean_tweets.eNCA %>% inner_join(get_sentiments("afinn")) %>% count(word, value, sort = TRUE) %>% ungroup()
 
 eNCA_score <- afinn_eNCA %>% group_by(value) %>% summarise(count = sum(n))
 
-eNCA_plot <- afinn_eNCA %>% top_n(10) %>% mutate(word = reorder(word,n)) %>% ggplot(aes(x= word, y = n)) + geom_col() + coord_flip() + sentiment_theme + labs(x = NULL, y = NULL, title = "eNCA Frequently Used Words", subtitle = "Top 10", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
+eNCA_plot <- afinn_eNCA %>% top_n(10) %>% mutate(word = reorder(word,n)) %>% head(10) %>% ggplot(aes(x= word, y = n)) + geom_col() + coord_flip() + sentiment_theme %+replace% theme(panel.grid.major=element_blank()) + labs(x = NULL, y = NULL, title = "eNCA Frequently Used Words", subtitle = "Top 10", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
 eNCA_plot 
 
-ggplot(eNCA_score, aes(x=value,y=count)) + geom_bar(stat = "identity") + sentiment_theme + scale_x_continuous(breaks = c(-4,-3,-2,-1,0,1,2,3,4)) + labs(x = NULL, y = NULL, title = "eNCA Sentiment Score", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
+ggplot(eNCA_score, aes(x=value,y=count)) + geom_bar(stat = "identity") + sentiment_theme + scale_x_continuous(breaks = c(-5,-4,-3,-2,-1,0,1,2,3,4,5)) + labs(x = NULL, y = NULL, title = "eNCA Sentiment Score", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
 
 #####################
 afinn_IOL <- clean_tweets.IOL %>% inner_join(get_sentiments("afinn")) %>% count(word, value, sort = TRUE) %>% ungroup()
 
 IOL_score <- afinn_IOL %>% group_by(value) %>% summarise(count = sum(n))
 
-IOL_plot <- afinn_IOL %>% top_n(10) %>% mutate(word = reorder(word,n)) %>% ggplot(aes(x= word, y = n)) + geom_col() + coord_flip() + sentiment_theme + labs(x = NULL, y = NULL, title = "IOL Frequently Used Words", subtitle = "Top 10", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
+IOL_plot <- afinn_IOL %>% top_n(10) %>% mutate(word = reorder(word,n)) %>% head(10) %>% ggplot(aes(x= word, y = n)) + geom_col() + coord_flip() + sentiment_theme %+replace% theme(panel.grid.major=element_blank()) + labs(x = NULL, y = NULL, title = "IOL Frequently Used Words", subtitle = "Top 10", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
 IOL_plot 
 
-ggplot(IOL_score, aes(x=value,y=count)) + geom_bar(stat = "identity") + sentiment_theme + scale_x_continuous(breaks = c(-4,-3,-2,-1,0,1,2,3,4)) + labs(x = NULL, y = NULL, title = "IOL Sentiment Score", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
+ggplot(IOL_score, aes(x=value,y=count)) + geom_bar(stat = "identity") + sentiment_theme + scale_x_continuous(breaks = c(-5,-4,-3,-2,-1,0,1,2,3,4,5)) + labs(x = NULL, y = NULL, title = "IOL Sentiment Score", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
 
 ###########################
 afinn_ewn <- clean_tweets.ewn %>% inner_join(get_sentiments("afinn")) %>% count(word, value, sort = TRUE) %>% ungroup()
 
 ewn_score <- afinn_ewn %>% group_by(value) %>% summarise(count = sum(n))
 
-ewn_plot <- afinn_ewn %>% top_n(10) %>% mutate(word = reorder(word,n)) %>% ggplot(aes(x= word, y = n)) + geom_col() + coord_flip() + sentiment_theme + labs(x = NULL, y = NULL, title = "EWN Frequently Used Words", subtitle = "Top 10", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
+ewn_plot <- afinn_ewn %>% top_n(10) %>% mutate(word = reorder(word,n)) %>% head(10) %>% ggplot(aes(x= word, y = n)) + geom_col() + coord_flip() + sentiment_theme %+replace% theme(panel.grid.major=element_blank()) + labs(x = NULL, y = NULL, title = "EWN Frequently Used Words", subtitle = "Top 10", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
 ewn_plot 
 
-ggplot(ewn_score, aes(x=value,y=count)) + geom_bar(stat = "identity") + sentiment_theme + scale_x_continuous(breaks = c(-4,-3,-2,-1,0,1,2,3,4)) + labs(x = NULL, y = NULL, title = "EWN Sentiment Score", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
+ggplot(ewn_score, aes(x=value,y=count)) + geom_bar(stat = "identity") + sentiment_theme + scale_x_continuous(breaks = c(-5,-4,-3,-2,-1,0,1,2,3,4,5)) + labs(x = NULL, y = NULL, title = "EWN Sentiment Score", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
 
 ###########################3
 afinn_SABCNews <- clean_tweets.SABCNews %>% inner_join(get_sentiments("afinn")) %>% count(word, value, sort = TRUE) %>% ungroup()
 
 SABC_score <- afinn_SABCNews %>% group_by(value) %>% summarise(count = sum(n))
 
-SABC_plot <- afinn_SABCNews %>% top_n(10) %>% mutate(word = reorder(word,n)) %>% ggplot(aes(x= word, y = n)) + geom_col() + coord_flip() + sentiment_theme + labs(x = NULL, y = NULL, title = "SABCNews Frequently Used Words", subtitle = "Top 10", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
+SABC_plot <- afinn_SABCNews %>% top_n(10) %>% mutate(word = reorder(word,n)) %>% head(10) %>% ggplot(aes(x= word, y = n)) + geom_col() + coord_flip() + sentiment_theme %+replace% theme(panel.grid.major=element_blank()) + labs(x = NULL, y = NULL, title = "SABCNews Frequently Used Words", subtitle = "Top 10", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
 SABC_plot 
 
-ggplot(SABC_score, aes(x=value,y=count)) + geom_bar(stat = "identity") + sentiment_theme + scale_x_continuous(breaks = c(-4,-3,-2,-1,0,1,2,3,4)) + labs(x = NULL, y = NULL, title = "SABCNews Sentiment Score", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
+ggplot(SABC_score, aes(x=value,y=count)) + geom_bar(stat = "identity") + sentiment_theme + scale_x_continuous(breaks = c(-5,-4,-3,-2,-1,0,1,2,3,4,5)) + labs(x = NULL, y = NULL, title = "SABCNews Sentiment Score", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
 
 ```
 
@@ -917,7 +919,7 @@ SABC_retweet <- SABCNews_tweets %>% group_by(date) %>% summarise(SABC = sum(retw
 # sum days and join together, then send to visualisation
 retweet_tweets <- bind_cols(News24_retweet,timesLIVE_retweet,Ewnupdate_retweet,IOL_retweet,eNCA_retweet,SABC_retweet)
 
-ggplot(retweet_tweets, aes(x = date, y = News24)) + Other_theme + geom_line(color = "grey", size = 0.9) + geom_line(aes(x = date, y = timesLIVE), color = "blue", size = 0.9) + geom_line(aes(x = date, y = Ewnupdate), color = "red", size = 0.9) + geom_line(aes(x = date, y = IOL), color = "brown", size = 0.9) + geom_line(aes(x = date, y = eNCA), color = "green", size = 0.9) + geom_line(aes(x = date, y = SABC), color = "yellow", size = 0.9) + scale_x_date(breaks = "1 day",date_labels = "%d")+ scale_y_continuous(trans = "log2", breaks = c(250,500,750,1000,2000,4000,6000,8000)) + labs(x = NULL, y = NULL, title = "Retweet count", subtitle = "Three week period in June", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
+ 
 
 # like count
 News24_likes <- News24_tweets %>% group_by(date) %>% summarise(News24 = sum(favorite_count)) 
@@ -937,24 +939,40 @@ ggplot(Likes_tweets, aes(x = date, y = News24)) + Other_theme + geom_line(color 
 ```
 
 ```{r}
-#count the total number of tweets for each media house
-News24_freq <- nrow(News24_freq)
-timesLIVE_freq <- nrow(timesLIVE_freq)
-Ewnupdate_freq <- nrow(Ewnupdate_freq)
-IOL_freq <- nrow(IOL_freq)
-eNCA_freq <- nrow(eNCA_freq)
-SABC_freq <- nrow(SABC_freq)
+#count the total number of tweets vs covid tweets
+News24_Genposts <- nrow(News24_tweets)
+timesLIVE_Genposts <- nrow(TimesLIVE_tweets)
+Ewnupdate_Genposts <- nrow(ewnupdates_tweets)
+IOL_Genposts <- nrow(IOL_tweets)
+eNCA_Genposts<- nrow(eNCA_tweets)
+SABC_Genposts <- nrow(SABCNews_tweets)
 
-News24_freq
-timesLIVE_freq
-Ewnupdate_freq
-IOL_freq
-eNCA_freq
-SABC_freq
-# Comparing stats of non-covid to covid
-# count row of tweets and compare to nrow in database that will be filtered tweets for covid relation
-#start
-#end
+News24_CVDposts <- nrow(tweets.News24_sub_clean)
+timesLIVE_CVDposts <- nrow(tweets.TimesLIVE_sub_clean)
+Ewnupdate_CVDposts <- nrow(tweets.ewn_sub_clean)
+IOL_CVDposts <- nrow(tweets.IOL_sub_clean)
+eNCA_CVDposts<- nrow(tweets.eNCA_sub_clean)
+SABC_CVDposts <- nrow(tweets.SABCNews_sub_clean)
+
+
+
+Gen_tweets <- News24_Genposts + timesLIVE_Genposts + Ewnupdate_Genposts + IOL_Genposts +eNCA_Genposts + SABC_Genposts 
+
+CVD_tweets <- News24_CVDposts + timesLIVE_CVDposts + Ewnupdate_CVDposts + IOL_CVDposts + eNCA_CVDposts + SABC_CVDposts
+
+
+Other_tweets <- Gen_tweets - CVD_tweets
+
+
+Gen_tweets
+tweet_type <- c("General","Covid-related")
+tweet_count <- c(Other_tweets,CVD_tweets)
+
+data <- data.frame(tweet_type,tweet_count)
+data
+
+ggplot(data, aes(x="", y=tweet_count, fill = tweet_type)) + geom_bar(stat = "identity", width = 1)+ coord_polar(theta="y", start = 0) + geom_text(aes(label = paste0(round(tweet_count/Gen_tweets*100), "%")), position = position_stack(vjust=0.5)) + theme_void() %+replace% theme(plot.caption = element_text(colour ="black",hjust = +1),) + labs(x = NULL, y = NULL, fill = NULL, title = "Comparison of Covid Coverage by News Media", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
+
 ```
 
 
