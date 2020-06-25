@@ -108,7 +108,10 @@ News24_top_terms_LDA %>%
   facet_wrap(~ topic, scales = "free") +
   coord_flip() +
   labs(title = "LDA Topic Modeling for News24 ", caption = "\nSource: Data collected from Twitter's REST API via rtweet"
-) + t %+replace% theme(strip.text = element_text(face = "bold"))
+) + t %+replace% theme(
+  strip.text = element_text(face = "bold"),
+  axis.text.y=element_text(colour = "black",face = "bold", size = 6),
+)
 ```
 
 ```{r}
