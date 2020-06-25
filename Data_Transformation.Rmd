@@ -158,6 +158,33 @@ tweets_pe <-rbind(tweets_pe_22,tweets_pe_21,tweets_pe_20,tweets_pe_19,tweets_pe_
 
 ```
 
+```{r}
+#write_rds(tweets_za, "Data/Final_Data/tweets_za.rds")
+#write_rds(tweets_bloem, "Data/Final_Data/tweets_bloem.rds")
+#write_rds(tweets_cpt, "Data/Final_Data/tweets_cpt.rds")
+#write_rds(tweets_durb, "Data/Final_Data/tweets_durb.rds")
+#write_rds(tweets_jhb, "Data/Final_Data/tweets_jhb.rds")
+#write_rds(tweets_kim, "Data/Final_Data/tweets_kim.rds")
+#write_rds(tweets_klerk, "Data/Final_Data/tweets_klerk.rds")
+#write_rds(tweets_mbomb, "Data/Final_Data/tweets_mbomb.rds")
+#write_rds(tweets_polo, "Data/Final_Data/tweets_polo.rds")
+#write_rds(tweets_pe, "Data/Final_Data/tweets_pe.rds")
+
+tweets_za <- read_rds("Data/Final_Data/tweets_za.rds")
+tweets_bloem <- read_rds("Data/Final_Data/tweets_bloem.rds")
+tweets_cpt <- read_rds("Data/Final_Data/tweets_cpt.rds")
+tweets_durb <- read_rds("Data/Final_Data/tweets_durb.rds")
+tweets_jhb <- read_rds("Data/Final_Data/tweets_jhb.rds")
+tweets_kim <- read_rds("Data/Final_Data/tweets_kim.rds")
+tweets_klerk <- read_rds("Data/Final_Data/tweets_klerk.rds")
+tweets_mbomb <- read_rds("Data/Final_Data/tweets_mbomb.rds")
+tweets_polo <- read_rds("Data/Final_Data/tweets_polo.rds")
+tweets_pe <- read_rds("Data/Final_Data/tweets_pe.rds")
+
+```
+
+
+
 # Performing transformations
 
 ## cleaning data (text)
@@ -193,190 +220,69 @@ SABCNews_tweets <- myfuncSABC(DATE1,DATE2)
 
 ```
 
+```{r}
+
+data_cleaning <- function(x){
+  
+x <- x %>% select(text)
+x <- unique(x)
+x$text <- iconv(x$text,"UTF-8", "ASCII", sub="")#to remove emoji's 
+x$stripped_text <- tolower(x$text)
+x$stripped_text <- gsub("http[^[:space:]]*", " ", x$stripped_text) # remove links
+x$stripped_text <- gsub("@\\S*","", x$stripped_text) # remove mentions
+x$stripped_text <- gsub("amp","", x$stripped_text) 
+x$stripped_text <- gsub("[\r\n]","", x$stripped_text)
+x$stripped_text <- gsub("[[:punct:]]"," ", x$stripped_text) #remove punctuation
+x$stripped_text = gsub("[ |\t]{2,}", " ", x$stripped_text) # remove tabs
+x$stripped_text = gsub("^ ", "", x$stripped_text) # leading blanks
+x$stripped_text = gsub(" $", "", x$stripped_text) #lagging blanks
+x$stripped_text = gsub(" +", " ", x$stripped_text) #general spaces
+x <- x %>% select(stripped_text)
+    
+}
+ 
+```
+
+
 # AddItional cleaning per dataframe
 ```{r}
-#News24 cleaning
-tweets.News24 <- News24_tweets %>% select(text)
-
-tweets.News24_clean <- unique(tweets.News24)
-tweets.News24_clean$text <- iconv(tweets.News24_clean$text,"UTF-8", "ASCII", sub="")#to remove emoji's 
-tweets.News24_clean$stripped_text <- tolower(tweets.News24_clean$text)
-
-
-tweets.News24_clean$stripped_text <- gsub("http[^[:space:]]*", " ", tweets.News24_clean$stripped_text) # remove links
-tweets.News24_clean$stripped_text <- gsub("@\\S*","", tweets.News24_clean$stripped_text) # remove mentions
-tweets.News24_clean$stripped_text <- gsub("amp","", tweets.News24_clean$stripped_text) 
-tweets.News24_clean$stripped_text <- gsub("[\r\n]","", tweets.News24_clean$stripped_text)
-tweets.News24_clean$stripped_text <- gsub("[[:punct:]]"," ", tweets.News24_clean$stripped_text) #remove punctuation
-tweets.News24_clean$stripped_text = gsub("[ |\t]{2,}", " ", tweets.News24_clean$stripped_text) # remove tabs
-tweets.News24_clean$stripped_text = gsub("^ ", "", tweets.News24_clean$stripped_text) # leading blanks
-tweets.News24_clean$stripped_text = gsub(" $", "", tweets.News24_clean$stripped_text) #lagging blanks
-tweets.News24_clean$stripped_text = gsub(" +", " ", tweets.News24_clean$stripped_text) #general spaces
+#News Agency cleaning
+tweets.News24_clean <- data_cleaning(News24_tweets)
+tweets.TimesLIVE_clean <- data_cleaning(TimesLIVE_tweets)
+tweets.eNCA_clean <- data_cleaning(eNCA_tweets)
+tweets.IOL_clean <- data_cleaning(IOL_tweets)
+tweets.ewn_clean <- data_cleaning(ewnupdates_tweets)
+tweets.SABCNews_clean <- data_cleaning(SABCNews_tweets)
 
 
-tweets.News24_clean <- tweets.News24_clean %>% select(stripped_text)
+#Filter to selected Coronavirus related topics
 tweets.News24_sub_clean <- tweets.News24_clean[grep("covid|corona|covid 19|covid19|coronavirus|sars cov 2|sars cov",tweets.News24_clean$stripped_text),]
-
-tweets.News24_stem <- tweets.News24_sub_clean %>% unnest_tokens(word, stripped_text)
-
-clean_tweets.News24 <- tweets.News24_stem %>% anti_join(stop_words)
-
-#clean_tweets.News24
-```
-
-
-```{r}
-#TimesLIVE cleaning
-tweets.TimesLIVE <- TimesLIVE_tweets %>% select(text)
-
-tweets.TimesLIVE_clean <- unique(tweets.TimesLIVE)
-tweets.TimesLIVE_clean$text <- iconv(tweets.TimesLIVE_clean$text,"UTF-8", "ASCII", sub="")#to remove emoji's 
-tweets.TimesLIVE_clean$stripped_text <- tolower(tweets.TimesLIVE_clean$text)
-
-
-tweets.TimesLIVE_clean$stripped_text <- gsub("http.+ |http.+$", " ", tweets.TimesLIVE_clean$stripped_text) # remove links
-tweets.TimesLIVE_clean$stripped_text <- gsub("@\\S*","", tweets.TimesLIVE_clean$stripped_text) # remove mentions
-tweets.TimesLIVE_clean$stripped_text <- gsub("amp","", tweets.TimesLIVE_clean$stripped_text) 
-tweets.TimesLIVE_clean$stripped_text <- gsub("[\r\n]","", tweets.TimesLIVE_clean$stripped_text)
-tweets.TimesLIVE_clean$stripped_text <- gsub("[[:punct:]]"," ", tweets.TimesLIVE_clean$stripped_text) #remove punctuation
-tweets.TimesLIVE_clean$stripped_text = gsub("[ |\t]{2,}", " ", tweets.TimesLIVE_clean$stripped_text) # remove tabs
-tweets.TimesLIVE_clean$stripped_text = gsub("^ ", "", tweets.TimesLIVE_clean$stripped_text) # leading blanks
-tweets.TimesLIVE_clean$stripped_text = gsub(" $", "", tweets.TimesLIVE_clean$stripped_text) #lagging blanks
-tweets.TimesLIVE_clean$stripped_text = gsub(" +", " ", tweets.TimesLIVE_clean$stripped_text) #general spaces
-
-
-tweets.TimesLIVE_clean <- tweets.TimesLIVE_clean %>% select(stripped_text)
-
 tweets.TimesLIVE_sub_clean <- tweets.TimesLIVE_clean[grep("covid|corona|covid 19|covid19|coronavirus|sars cov 2|sars cov",tweets.TimesLIVE_clean$stripped_text),]
-
-tweets.TimesLIVE_stem <- tweets.TimesLIVE_sub_clean  %>% unnest_tokens(word, stripped_text)
-
-clean_tweets.TimesLIVE <- tweets.TimesLIVE_stem %>% anti_join(stop_words)
-
-#clean_tweets.TimesLIVE
-```
-
-```{r}
-#eNCA cleaning
-tweets.eNCA <- eNCA_tweets %>% select(text)
-
-tweets.eNCA_clean <- unique(tweets.eNCA)
-tweets.eNCA_clean$text <- iconv(tweets.eNCA_clean$text,"UTF-8", "ASCII", sub="")#to remove emoji's 
-tweets.eNCA_clean$stripped_text <- tolower(tweets.eNCA_clean$text)
-
-
-tweets.eNCA_clean$stripped_text <- gsub("http.+ |http.+$", " ", tweets.eNCA_clean$stripped_text) # remove links
-tweets.eNCA_clean$stripped_text <- gsub("@\\S*","", tweets.eNCA_clean$stripped_text) # remove mentions
-tweets.eNCA_clean$stripped_text <- gsub("amp","", tweets.eNCA_clean$stripped_text) 
-tweets.eNCA_clean$stripped_text <- gsub("[\r\n]","", tweets.eNCA_clean$stripped_text)
-tweets.eNCA_clean$stripped_text <- gsub("[[:punct:]]"," ", tweets.eNCA_clean$stripped_text) #remove punctuation
-tweets.eNCA_clean$stripped_text = gsub("[ |\t]{2,}", " ", tweets.eNCA_clean$stripped_text) # remove tabs
-tweets.eNCA_clean$stripped_text = gsub("^ ", "", tweets.eNCA_clean$stripped_text) # leading blanks
-tweets.eNCA_clean$stripped_text = gsub(" $", "", tweets.eNCA_clean$stripped_text) #lagging blanks
-tweets.eNCA_clean$stripped_text = gsub(" +", " ", tweets.eNCA_clean$stripped_text) #general spaces
-
-tweets.eNCA_clean <- tweets.eNCA_clean %>% select(stripped_text)
-
 tweets.eNCA_sub_clean <- tweets.eNCA_clean[grep("covid|corona|covid 19|covid19|coronavirus|sars cov 2|sars cov",tweets.eNCA_clean$stripped_text),]
-
-tweets.eNCA_stem <- tweets.eNCA_sub_clean %>% unnest_tokens(word, stripped_text)
-
-clean_tweets.eNCA <- tweets.eNCA_stem %>% anti_join(stop_words)
-
-#clean_tweets.eNCA
-```
-
-
-```{r}
-#IOL cleaning
-tweets.IOL <- IOL_tweets %>% select(text)
-
-tweets.IOL_clean <- unique(tweets.IOL)
-tweets.IOL_clean$text <- iconv(tweets.IOL_clean$text,"UTF-8", "ASCII", sub="")#to remove emoji's 
-
-tweets.IOL_clean$stripped_text <- tolower(tweets.IOL_clean$text)
-
-
-tweets.IOL_clean$stripped_text <- gsub("http.+ |http.+$", " ", tweets.IOL_clean$stripped_text) # remove links
-tweets.IOL_clean$stripped_text <- gsub("@\\S*","", tweets.IOL_clean$stripped_text) # remove mentions
-tweets.IOL_clean$stripped_text <- gsub("amp","", tweets.IOL_clean$stripped_text) 
-tweets.IOL_clean$stripped_text <- gsub("[\r\n]","", tweets.IOL_clean$stripped_text)
-tweets.IOL_clean$stripped_text <- gsub("[[:punct:]]"," ", tweets.IOL_clean$stripped_text) #remove punctuation
-tweets.IOL_clean$stripped_text = gsub("[ |\t]{2,}", " ", tweets.IOL_clean$stripped_text) # remove tabs
-tweets.IOL_clean$stripped_text = gsub("^ ", "", tweets.IOL_clean$stripped_text) # leading blanks
-tweets.IOL_clean$stripped_text = gsub(" $", "", tweets.IOL_clean$stripped_text) #lagging blanks
-tweets.IOL_clean$stripped_text = gsub(" +", " ", tweets.IOL_clean$stripped_text) #general spaces
-
-tweets.IOL_clean <- tweets.IOL_clean %>% select(stripped_text)
-
 tweets.IOL_sub_clean <- tweets.IOL_clean[grep("covid|corona|covid 19|covid19|coronavirus|sars cov 2|sars cov",tweets.IOL_clean$stripped_text),]
-
-tweets.IOL_stem <- tweets.IOL_sub_clean %>% unnest_tokens(word, stripped_text)
-
-clean_tweets.IOL <- tweets.IOL_stem %>% anti_join(stop_words)
-
-#clean_tweets.IOL
-```
-
-```{r}
-#ewn cleaning
-tweets.ewn <- ewnupdates_tweets %>% select(text)
-
-tweets.ewn_clean <- unique(tweets.ewn)
-tweets.ewn_clean$text <- iconv(tweets.ewn_clean$text,"UTF-8", "ASCII", sub="")#to remove emojis 
-tweets.ewn_clean$stripped_text <- tolower(tweets.ewn_clean$text)
-
-
-tweets.ewn_clean$stripped_text <- gsub("http.+ |http.+$", " ", tweets.ewn_clean$stripped_text) # remove links
-tweets.ewn_clean$stripped_text <- gsub("@\\S*","", tweets.ewn_clean$stripped_text) # remove mentions
-tweets.ewn_clean$stripped_text <- gsub("amp","", tweets.ewn_clean$stripped_text) 
-tweets.ewn_clean$stripped_text <- gsub("[\r\n]","", tweets.ewn_clean$stripped_text)
-tweets.ewn_clean$stripped_text <- gsub("[[:punct:]]"," ", tweets.ewn_clean$stripped_text) #remove punctuation
-tweets.ewn_clean$stripped_text = gsub("[ |\t]{2,}", " ", tweets.ewn_clean$stripped_text) # remove tabs
-tweets.ewn_clean$stripped_text = gsub("^ ", "", tweets.ewn_clean$stripped_text) # leading blanks
-tweets.ewn_clean$stripped_text = gsub(" $", "", tweets.ewn_clean$stripped_text) #lagging blanks
-tweets.ewn_clean$stripped_text = gsub(" +", " ", tweets.ewn_clean$stripped_text) #general spaces
-
-
-tweets.ewn_clean <- tweets.ewn_clean %>% select(stripped_text)
-
 tweets.ewn_sub_clean <- tweets.ewn_clean[grep("covid|corona|covid 19|covid19|coronavirus|sars cov 2|sars cov",tweets.ewn_clean$stripped_text),]
-
-tweets.ewn_stem <- tweets.ewn_sub_clean  %>% unnest_tokens(word, stripped_text)
-
-clean_tweets.ewn <- tweets.ewn_stem %>% anti_join(stop_words)
-
-#clean_tweets.ewn
-```
-
-```{r}
-#SABCNews cleaning
-tweets.SABCNews <- SABCNews_tweets %>% select(text)
-
-tweets.SABCNews_clean <- unique(tweets.SABCNews)
-tweets.SABCNews_clean$text <- iconv(tweets.SABCNews_clean$text,"UTF-8", "ASCII", sub="")#to remove emoji's 
-tweets.SABCNews_clean$stripped_text <- tolower(tweets.SABCNews_clean$text)
-
-
-tweets.SABCNews_clean$stripped_text <- gsub("http.+ |http.+$", " ", tweets.SABCNews_clean$stripped_text) # remove links
-tweets.SABCNews_clean$stripped_text <- gsub("@\\S*","", tweets.SABCNews_clean$stripped_text) # remove mentions
-tweets.SABCNews_clean$stripped_text <- gsub("amp","", tweets.SABCNews_clean$stripped_text) 
-tweets.SABCNews_clean$stripped_text <- gsub("[\r\n]","", tweets.SABCNews_clean$stripped_text)
-tweets.SABCNews_clean$stripped_text <- gsub("[[:punct:]]"," ", tweets.SABCNews_clean$stripped_text) #remove punctuation
-tweets.SABCNews_clean$stripped_text = gsub("[ |\t]{2,}", " ", tweets.SABCNews_clean$stripped_text) # remove tabs
-tweets.SABCNews_clean$stripped_text = gsub("^ ", "", tweets.SABCNews_clean$stripped_text) # leading blanks
-tweets.SABCNews_clean$stripped_text = gsub(" $", "", tweets.SABCNews_clean$stripped_text) #lagging blanks
-tweets.SABCNews_clean$stripped_text = gsub(" +", " ", tweets.SABCNews_clean$stripped_text) #general spaces
-
-tweets.SABCNews_clean <- tweets.SABCNews_clean %>% select(stripped_text)
-
 tweets.SABCNews_sub_clean <- tweets.SABCNews_clean[grep("covid|corona|covid 19|covid19|coronavirus|sars cov 2|sars cov",tweets.SABCNews_clean$stripped_text),]
 
-tweets.SABCNews_stem <- tweets.SABCNews_sub_clean %>% unnest_tokens(word, stripped_text)
 
+#Preparation for Sentiment Analysis - Tokenize & Stem
+tweets.News24_stem <- tweets.News24_sub_clean %>% unnest_tokens(word, stripped_text)
+clean_tweets.News24 <- tweets.News24_stem %>% anti_join(stop_words)
+
+tweets.TimesLIVE_stem <- tweets.TimesLIVE_sub_clean  %>% unnest_tokens(word, stripped_text)
+clean_tweets.TimesLIVE <- tweets.TimesLIVE_stem %>% anti_join(stop_words)
+
+tweets.eNCA_stem <- tweets.eNCA_sub_clean %>% unnest_tokens(word, stripped_text)
+clean_tweets.eNCA <- tweets.eNCA_stem %>% anti_join(stop_words)
+
+tweets.IOL_stem <- tweets.IOL_sub_clean %>% unnest_tokens(word, stripped_text)
+clean_tweets.IOL <- tweets.IOL_stem %>% anti_join(stop_words)
+
+tweets.ewn_stem <- tweets.ewn_sub_clean  %>% unnest_tokens(word, stripped_text)
+clean_tweets.ewn <- tweets.ewn_stem %>% anti_join(stop_words)
+
+tweets.SABCNews_stem <- tweets.SABCNews_sub_clean %>% unnest_tokens(word, stripped_text)
 clean_tweets.SABCNews <- tweets.SABCNews_stem  %>% anti_join(stop_words)
 
-#clean_tweets.SABCNews
 ```
 
 ```{r}
