@@ -25,6 +25,16 @@ library(dplyr)
 #ewnupdates_tweets <- read_rds("Data/ewnupdates_tweets")
 
 #Load Topic Modelling Data
+#LDA
+News24_top_terms_LDA <- read_rds("Data/Final_Data/News24_top_terms_LDA.rds")
+TimesLIVE_top_terms_LDA <- read_rds("Data/Final_Data/timesLIVE_top_terms_LDA.rds")
+ewn_top_terms_LDA <- read_rds("Data/Final_Data/Ewnupdate_top_terms_LDA.rds")
+IOL_top_terms_LDA <- read_rds("Data/Final_Data/IOL_top_terms_LDA.rds")
+eNCA_top_terms_LDA <- read_rds("Data/Final_Data/eNCA_top_terms_LDA.rds")
+SABC_top_terms_LDA <- read_rds("Data/Final_Data/SABC_top_terms_LDA.rds")
+#global_top_terms_LDA <- read_rds("Data/Final_Data/global_top_terms_LDA.rds")
+
+#STM
 News24_top_terms <- read_rds("Data/Final_Data/News24_top_terms.rds")
 TimesLIVE_top_terms <- read_rds("Data/Final_Data/timesLIVE_top_terms.rds")
 ewnupdate_top_terms <- read_rds("Data/Final_Data/Ewnupdate_top_terms.rds")
@@ -88,7 +98,75 @@ affin_tweets %>% group_by(sentiment) %>% top_n(10) %>% ungroup() %>% mutate(word
 ```
 
 
-## Topic visuals
+## Topic Modelling visuals
+###  Latent Dirichlet Allocation 
+```{r}
+News24_top_terms_LDA %>%
+  mutate(term = reorder(term, beta)) %>%
+  ggplot(aes(term, beta, fill = factor(topic))) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~ topic, scales = "free") +
+  coord_flip() +
+  labs(title = "LDA Topic Modeling for News24 ", caption = "\nSource: Data collected from Twitter's REST API via rtweet"
+) + t %+replace% theme(strip.text = element_text(face = "bold"))
+```
+
+```{r}
+TimesLIVE_top_terms_LDA %>%
+  mutate(term = reorder(term, beta)) %>%
+  ggplot(aes(term, beta, fill = factor(topic))) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~ topic, scales = "free") +
+  coord_flip() +
+  labs(title = "LDA Topic Modeling for TimesLIVE ", caption = "\nSource: Data collected from Twitter's REST API via rtweet"
+) + t %+replace% theme(strip.text = element_text(face = "bold"))
+```
+```{r}
+ewn_top_terms_LDA %>%
+  mutate(term = reorder(term, beta)) %>%
+  ggplot(aes(term, beta, fill = factor(topic))) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~ topic, scales = "free") +
+  coord_flip() +
+  labs(title = "LDA Topic Modeling for EWN ", caption = "\nSource: Data collected from Twitter's REST API via rtweet"
+) + t %+replace% theme(strip.text = element_text(face = "bold"))
+```
+
+
+```{r}
+IOL_top_terms_LDA %>%
+  mutate(term = reorder(term, beta)) %>%
+  ggplot(aes(term, beta, fill = factor(topic))) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~ topic, scales = "free") +
+  coord_flip() +
+  labs(title = "LDA Topic Modeling for IOL ", caption = "\nSource: Data collected from Twitter's REST API via rtweet"
+) + t %+replace% theme(strip.text = element_text(face = "bold"))
+```
+
+```{r}
+eNCA_top_terms_LDA %>%
+  mutate(term = reorder(term, beta)) %>%
+  ggplot(aes(term, beta, fill = factor(topic))) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~ topic, scales = "free") +
+  coord_flip() +
+  labs(title = "LDA Topic Modeling for eNCA ", caption = "\nSource: Data collected from Twitter's REST API via rtweet"
+) + t %+replace% theme(strip.text = element_text(face = "bold"))
+```
+
+```{r}
+SABC_top_terms_LDA %>%
+  mutate(term = reorder(term, beta)) %>%
+  ggplot(aes(term, beta, fill = factor(topic))) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~ topic, scales = "free") +
+  coord_flip() +
+  labs(title = "LDA Topic Modeling for SABCNews ", caption = "\nSource: Data collected from Twitter's REST API via rtweet"
+) + t %+replace% theme(strip.text = element_text(face = "bold"))
+```
+
+### Structural Topic Modelling
 ```{r}
 #Global STM Plot
 global_top_terms %>%
@@ -190,3 +268,10 @@ SABC_top_terms %>%
   labs(title = "Structural Topic Modeling for SABC ", caption = "\nSource: Data collected from Twitter's REST API via rtweet"
 ) + t %+replace% theme(strip.text = element_text(face = "bold"))
 ```
+
+
+# Additional Analysis
+```{r}
+
+```
+

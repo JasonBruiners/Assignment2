@@ -217,6 +217,7 @@ SABCNews_tweets <- myfuncSABC(DATE1,DATE2)
 tweets.News24 <- News24_tweets %>% select(text)
 
 tweets.News24_clean <- unique(tweets.News24)
+tweets.News24_clean$text <- iconv(tweets.News24_clean$text,"UTF-8", "ASCII", sub="")#to remove emoji's 
 tweets.News24_clean$stripped_text <- tolower(tweets.News24_clean$text)
 
 
@@ -229,6 +230,7 @@ tweets.News24_clean$stripped_text = gsub("[ |\t]{2,}", " ", tweets.News24_clean$
 tweets.News24_clean$stripped_text = gsub("^ ", "", tweets.News24_clean$stripped_text) # leading blanks
 tweets.News24_clean$stripped_text = gsub(" $", "", tweets.News24_clean$stripped_text) #lagging blanks
 tweets.News24_clean$stripped_text = gsub(" +", " ", tweets.News24_clean$stripped_text) #general spaces
+
 
 tweets.News24_clean <- tweets.News24_clean %>% select(stripped_text) 
 tweets.News24_stem <- tweets.News24_clean %>% unnest_tokens(word, stripped_text)
@@ -244,6 +246,7 @@ clean_tweets.News24 <- tweets.News24_stem %>% anti_join(stop_words)
 tweets.TimesLIVE <- TimesLIVE_tweets %>% select(text)
 
 tweets.TimesLIVE_clean <- unique(tweets.TimesLIVE)
+tweets.TimesLIVE_clean$text <- iconv(tweets.TimesLIVE_clean$text,"UTF-8", "ASCII", sub="")#to remove emoji's 
 tweets.TimesLIVE_clean$stripped_text <- tolower(tweets.TimesLIVE_clean$text)
 
 
@@ -271,6 +274,7 @@ clean_tweets.TimesLIVE <- tweets.TimesLIVE_stem %>% anti_join(stop_words)
 tweets.eNCA <- eNCA_tweets %>% select(text)
 
 tweets.eNCA_clean <- unique(tweets.eNCA)
+tweets.eNCA_clean$text <- iconv(tweets.eNCA_clean$text,"UTF-8", "ASCII", sub="")#to remove emoji's 
 tweets.eNCA_clean$stripped_text <- tolower(tweets.eNCA_clean$text)
 
 
@@ -298,6 +302,8 @@ clean_tweets.eNCA <- tweets.eNCA_stem %>% anti_join(stop_words)
 tweets.IOL <- IOL_tweets %>% select(text)
 
 tweets.IOL_clean <- unique(tweets.IOL)
+tweets.IOL_clean$text <- iconv(tweets.IOL_clean$text,"UTF-8", "ASCII", sub="")#to remove emoji's 
+
 tweets.IOL_clean$stripped_text <- tolower(tweets.IOL_clean$text)
 
 
@@ -324,6 +330,7 @@ clean_tweets.IOL <- tweets.IOL_stem %>% anti_join(stop_words)
 tweets.ewn <- ewnupdates_tweets %>% select(text)
 
 tweets.ewn_clean <- unique(tweets.ewn)
+tweets.ewn_clean$text <- iconv(tweets.ewn_clean$text,"UTF-8", "ASCII", sub="")#to remove emojis 
 tweets.ewn_clean$stripped_text <- tolower(tweets.ewn_clean$text)
 
 
@@ -337,7 +344,6 @@ tweets.ewn_clean$stripped_text = gsub("^ ", "", tweets.ewn_clean$stripped_text) 
 tweets.ewn_clean$stripped_text = gsub(" $", "", tweets.ewn_clean$stripped_text) #lagging blanks
 tweets.ewn_clean$stripped_text = gsub(" +", " ", tweets.ewn_clean$stripped_text) #general spaces
 
-tweets.ewn_clean$stripped_text <- iconv(tweets.ewn_clean$stripped_text,"UTF-8", "ASCII", sub="")#to remove emojis 
 
 tweets.ewn_clean <- tweets.ewn_clean %>% select(stripped_text)
 tweets.ewn_stem <- tweets.ewn_clean  %>% unnest_tokens(word, stripped_text)
@@ -352,6 +358,7 @@ clean_tweets.ewn <- tweets.ewn_stem %>% anti_join(stop_words)
 tweets.SABCNews <- SABCNews_tweets %>% select(text)
 
 tweets.SABCNews_clean <- unique(tweets.SABCNews)
+tweets.SABCNews_clean$text <- iconv(tweets.SABCNews_clean$text,"UTF-8", "ASCII", sub="")#to remove emoji's 
 tweets.SABCNews_clean$stripped_text <- tolower(tweets.SABCNews_clean$text)
 
 
@@ -425,22 +432,40 @@ corpusNews24 <- tm_map(corpusNews24, stemDocument)
 dtmNews24 = DocumentTermMatrix(corpusNews24)
 
 corpusTimesLIVE <- Corpus(VectorSource(clean_tweets.TimesLIVE))
+corpusTimesLIVE <- tm_map(corpusTimesLIVE, removeWords, stopwords("english"))  
+corpusTimesLIVE <- tm_map(corpusTimesLIVE, removeNumbers)
+corpusTimesLIVE <- tm_map(corpusTimesLIVE, stemDocument)
 dtmTimesLIVE = DocumentTermMatrix(corpusTimesLIVE)
 
 corpuseNCA <- Corpus(VectorSource(clean_tweets.eNCA))
+corpuseNCA <- tm_map(corpuseNCA, removeWords, stopwords("english"))  
+corpuseNCA <- tm_map(corpuseNCA, removeNumbers)
+corpuseNCA <- tm_map(corpuseNCA, stemDocument)
 dtmeNCA = DocumentTermMatrix(corpuseNCA)
 
 corpusIOL <- Corpus(VectorSource(clean_tweets.IOL))
+corpusIOL <- tm_map(corpusIOL, removeWords, stopwords("english"))  
+corpusIOL <- tm_map(corpusIOL, removeNumbers)
+corpusIOL <- tm_map(corpusIOL, stemDocument)
 dtmIOL = DocumentTermMatrix(corpusIOL)
 
 corpusewn <- Corpus(VectorSource(clean_tweets.ewn))
+corpusewn <- tm_map(corpusewn, removeWords, stopwords("english"))  
+corpusewn <- tm_map(corpusewn, removeNumbers)
+corpusewn <- tm_map(corpusewn, stemDocument)
 dtmewn = DocumentTermMatrix(corpusewn)
 
 corpusSABCNews <- Corpus(VectorSource(clean_tweets.SABCNews))
+corpusSABCNews <- tm_map(corpusSABCNews, removeWords, stopwords("english"))  
+corpusSABCNews <- tm_map(corpusSABCNews, removeNumbers)
+corpusSABCNews <- tm_map(corpusSABCNews, stemDocument)
 dtmSABCNews = DocumentTermMatrix(corpusSABCNews)
+
+
 ```
 
-
+#####################################################################################################################
+Remember to delete chunk
 ```{r}
 #News24 LDA topic analysis
 
@@ -464,147 +489,149 @@ News24_lda_10 = LDA(dtmNews24, k = 10, method = 'Gibbs',
 #                         thin = 500, burnin = 4000, iter = 2000))
 
 
-#News24_lda_50 = LDA(dtmNews24, k = 50, method = 'Gibbs', control = list(seed = 1234))
-
+News24_lda = LDA(dtmNews24, k = 10, method = t, control = list(seed = 1234))
+News24_lda = LDA(dtmNews24, k = 10, control = list(nstart = 5, seed = list(1505,99,36,56,88), best = TRUE, 
+                         thin = 500, burnin = 4000, iter = 2000))
 # comparing total tweets by medias vs the amount that was related to COVID-19 COULD THIS BE SEEN AS TOPIC ANALYSIS???????
-#start
-#end
-#lda_2
-#lda_5
-#lda_10
-```
 
+```
+#####################################################################################################################
 
 ```{r}
-#LDA model with 2 topics selected
-TimesLIVE_lda_5 = LDA(dtmTimesLIVE, k = 5, method = 'Gibbs', 
+#LDA model with 10 topics selected
+#News24_lda = LDA(dtmNews24, k = 10, method = 'Gibbs', control = list(seed = 1234))
+News24_lda = LDA(dtmNews24, k = 10, method = 'Gibbs', 
           control = list(nstart = 5, seed = list(1505,99,36,56,88), best = TRUE, 
                          thin = 500, burnin = 4000, iter = 2000))
 
-#LDA model with 2 topics selected
-TimesLIVE_lda_2 = LDA(dtmTimesLIVE, k = 2, method = 'Gibbs', 
+
+#LDA model with 10 topics selected
+TimesLIVE_lda = LDA(dtmTimesLIVE, k = 10, method = 'Gibbs', control = list(seed = 1234))
+TimesLIVE_lda = LDA(dtmTimesLIVE, k = 10, method = 'Gibbs', 
           control = list(nstart = 5, seed = list(1505,99,36,56,88), best = TRUE, 
                          thin = 500, burnin = 4000, iter = 2000))
 
 #LDA model with 10 topics selected
-TimesLIVE_lda_10 = LDA(dtmTimesLIVE, k = 10, method = 'Gibbs', 
-          control = list(nstart = 5, seed = list(1505,99,36,56,88), best = TRUE, 
-                         thin = 500, burnin = 4000, iter = 2000))
-```
-
-```{r}
-#LDA model with 2 topics selected
-eNCA_lda_5 = LDA(dtmeNCA, k = 5, method = 'Gibbs', 
-          control = list(nstart = 5, seed = list(1505,99,36,56,88), best = TRUE, 
-                         thin = 500, burnin = 4000, iter = 2000))
-
-#LDA model with 2 topics selected
-eNCA_lda_2 = LDA(dtmeNCA, k = 2, method = 'Gibbs', 
-          control = list(nstart = 5, seed = list(1505,99,36,56,88), best = TRUE, 
-                         thin = 500, burnin = 4000, iter = 2000))
+eNCA_lda = LDA(dtmeNCA, k = 10, method = 'Gibbs', control = list(seed = 1234))
 
 #LDA model with 10 topics selected
-eNCA_lda_10 = LDA(dtmeNCA, k = 10, method = 'Gibbs', 
-          control = list(nstart = 5, seed = list(1505,99,36,56,88), best = TRUE, 
-                         thin = 500, burnin = 4000, iter = 2000))
-```
-
-```{r}
-#LDA model with 2 topics selected
-IOL_lda_5 = LDA(dtmIOL, k = 5, method = 'Gibbs', 
-          control = list(nstart = 5, seed = list(1505,99,36,56,88), best = TRUE, 
-                         thin = 500, burnin = 4000, iter = 2000))
-
-#LDA model with 2 topics selected
-IOL_lda_2 = LDA(dtmIOL, k = 2, method = 'Gibbs', 
-          control = list(nstart = 5, seed = list(1505,99,36,56,88), best = TRUE, 
-                         thin = 500, burnin = 4000, iter = 2000))
+IOL_lda = LDA(dtmIOL, k = 10, method = 'Gibbs', control = list(seed = 1234))
 
 #LDA model with 10 topics selected
-IOL_lda_10 = LDA(dtmIOL, k = 10, method = 'Gibbs', 
-          control = list(nstart = 5, seed = list(1505,99,36,56,88), best = TRUE, 
-                         thin = 500, burnin = 4000, iter = 2000))
-```
-
-```{r}
-#LDA model with 2 topics selected
-ewn_lda_5 = LDA(dtmewn, k = 5, method = 'Gibbs', 
-          control = list(nstart = 5, seed = list(1505,99,36,56,88), best = TRUE, 
-                         thin = 500, burnin = 4000, iter = 2000))
-
-#LDA model with 2 topics selected
-ewn_lda_2 = LDA(dtmewn, k = 2, method = 'Gibbs', 
-          control = list(nstart = 5, seed = list(1505,99,36,56,88), best = TRUE, 
-                         thin = 500, burnin = 4000, iter = 2000))
+ewn_lda = LDA(dtmewn, k = 10, method = 'Gibbs', control = list(seed = 1234))
 
 #LDA model with 10 topics selected
-ewn_lda_10 = LDA(dtmewn, k = 10, method = 'Gibbs', 
-          control = list(nstart = 5, seed = list(1505,99,36,56,88), best = TRUE, 
-                         thin = 500, burnin = 4000, iter = 2000))
-```
-
-```{r}
-#LDA model with 2 topics selected
-SABCNews_lda_5 = LDA(dtmSABCNews, k = 5, method = 'Gibbs', 
-          control = list(nstart = 5, seed = list(1505,99,36,56,88), best = TRUE, 
-                         thin = 500, burnin = 4000, iter = 2000))
-
-#LDA model with 2 topics selected
-SABCNews_lda_2 = LDA(dtmSABCNews, k = 2, method = 'Gibbs', 
-          control = list(nstart = 5, seed = list(1505,99,36,56,88), best = TRUE, 
-                         thin = 500, burnin = 4000, iter = 2000))
-
-#LDA model with 10 topics selected
-SABCNews_lda_10 = LDA(dtmSABCNews, k = 10, method = 'Gibbs', 
-          control = list(nstart = 5, seed = list(1505,99,36,56,88), best = TRUE, 
-                         thin = 500, burnin = 4000, iter = 2000))
+SABCNews_lda = LDA(dtmSABCNews, k = 10, method = 'Gibbs', control = list(seed = 1234))
 ```
 
 
 ```{r}
 #Top 5 terms or words under each topic
-top10terms_2 = as.matrix(terms(News24_lda_2,5))
-top10terms_5 = as.matrix(terms(News24_lda_5,5))
-top10terms_10 = as.matrix(terms(News24_lda_10,5))
-#top10terms_20 = as.matrix(terms(News24_lda_20,5))
-#top10terms_50 = as.matrix(terms(News24_lda_50,5))
+top5terms_News24 = as.matrix(terms(News24_lda,5))
+top5terms_TimesLIVE = as.matrix(terms(TimesLIVE_lda,5))
+top5terms_eNCA = as.matrix(terms(eNCA_lda,5))
+top5terms_IOL = as.matrix(terms(IOL_lda,5))
+top5terms_ewn = as.matrix(terms(ewn_lda,5))
+top5terms_SABCNews = as.matrix(terms(SABCNews_lda,5))
 
-top10terms_2
-top10terms_5
-top10terms_10
-#top10terms_20
-#top10terms_50
+
+top5terms_News24
+top5terms_TimesLIVE
+top5terms_eNCA
+top5terms_IOL
+top5terms_ewn
+top5terms_SABCNews
 
 ```
 
 ```{r}
-#Topics found out by our model:
-lda.topics_2 = as.matrix(topics(News24_lda_2))
-lda.topics_5 = as.matrix(topics(News24_lda_5))
-lda.topics_10 = as.matrix(topics(News24_lda_10))
-#write.csv(lda.topics_5,file = paste('LDAGibbs',5,'DocsToTopics.csv'))
-#write.csv(lda.topics_2,file = paste('LDAGibbs',2,'DocsToTopics.csv'))
-#write.csv(lda.topics_10,file = paste('LDAGibbs',10,'DocsToTopics.csv'))
+News24_topics_LDA <- tidy(News24_lda, matrix = "beta")
+TimesLIVE_topics_LDA <- tidy(TimesLIVE_lda, matrix = "beta")
+eNCA_topics_LDA <- tidy(eNCA_lda, matrix = "beta")
+IOL_topics_LDA <- tidy(IOL_lda, matrix = "beta")
+ewn_topics_LDA <- tidy(ewn_lda, matrix = "beta")
+SABCNews_topics_LDA <- tidy(SABCNews_lda, matrix = "beta")
 
-summary(as.factor(lda.topics_2[,1]))
-summary(as.factor(lda.topics_5[,1]))
-summary(as.factor(lda.topics_10[,1]))
+News24_top_terms_LDA <- 
+  News24_topics_LDA %>%
+  group_by(topic) %>%
+  top_n(5, beta) %>%
+  ungroup() %>%
+  arrange(topic, -beta)
+
+TimesLIVE_top_terms_LDA <- 
+  TimesLIVE_topics_LDA %>%
+  group_by(topic) %>%
+  top_n(5, beta) %>%
+  ungroup() %>%
+  arrange(topic, -beta)
+
+eNCA_top_terms_LDA <- 
+  eNCA_topics_LDA %>%
+  group_by(topic) %>%
+  top_n(5, beta) %>%
+  ungroup() %>%
+  arrange(topic, -beta)
+
+IOL_top_terms_LDA <- 
+  IOL_topics_LDA %>%
+  group_by(topic) %>%
+  top_n(5, beta) %>%
+  ungroup() %>%
+  arrange(topic, -beta)
+
+ewn_top_terms_LDA <- 
+  ewn_topics_LDA %>%
+  group_by(topic) %>%
+  top_n(5, beta) %>%
+  ungroup() %>%
+  arrange(topic, -beta)
+
+SABCNews_top_terms_LDA <- 
+  SABCNews_topics_LDA %>%
+  group_by(topic) %>%
+  top_n(5, beta) %>%
+  ungroup() %>%
+  arrange(topic, -beta)
+
+```
+
+
+```{r}
+#Topics found out by our model:
+lda.topics_News24 = as.matrix(topics(News24_lda))
+lda.topics_TimesLIVE = as.matrix(topics(TimesLIVE_lda))
+lda.topics_eNCA = as.matrix(topics(eNCA_lda))
+lda.topics_IOL = as.matrix(topics(IOL_lda))
+lda.topics_ewn = as.matrix(topics(ewn_lda))
+lda.topics_SABCNews = as.matrix(topics(SABCNews_lda))
+
+
+summary(as.factor(lda.topics_News24[,1]))
+summary(as.factor(lda.topics_TimesLIVE[,1]))
+summary(as.factor(lda.topics_eNCA[,1]))
+summary(as.factor(lda.topics_IOL[,1]))
+summary(as.factor(lda.topics_ewn[,1]))
+summary(as.factor(lda.topics_SABCNews[,1]))
 ```
 
 
 ```{r}
 #document wise probability of each topic.
-topicprob_2 = as.matrix(News24_lda_2@gamma)
-topicprob_5 = as.matrix(News24_lda_5@gamma)
-topicprob_10 = as.matrix(News24_lda_10@gamma)
+topicprob_News24 = as.matrix(News24_lda@gamma)
+topicprob_TimesLIVE = as.matrix(TimesLIVE_lda@gamma)
+topicprob_eNCA = as.matrix(eNCA_lda@gamma)
+topicprob_IOL = as.matrix(IOL_lda@gamma)
+topicprob_ewn = as.matrix(ewn_lda@gamma)
+topicprob_SABCNews = as.matrix(SABCNews_lda@gamma)
 
-#write.csv(topicprob_5, file = paste('LDAGibbs', 5, 'DoctToTopicProb.csv'))
-#write.csv(topicprob_2, file = paste('LDAGibbs', 2, 'DoctToTopicProb.csv'))
-#write.csv(topicprob_10, file = paste('LDAGibbs', 10, 'DoctToTopicProb.csv'))
 
-head(topicprob_2,1)
-head(topicprob_5,1)
-head(topicprob_10,1)
+head(topicprob_News24,1)
+head(topicprob_TimesLIVE,1)
+head(topicprob_eNCA,1)
+head(topicprob_IOL,1)
+head(topicprob_ewn,1)
+head(topicprob_SABCNews,1)
 ```
 
 ### STM Topic Modelling
@@ -804,11 +831,18 @@ global_top_terms <-
 ```
 
 
-## Global Topic Modelling
-
-
 
 ```{r}
+#LDA
+write_rds(News24_top_terms_LDA, "Data/Final_Data/News24_top_terms_LDA.rds")
+write_rds(TimesLIVE_top_terms_LDA, "Data/Final_Data/timesLIVE_top_terms_LDA.rds")
+write_rds(ewn_top_terms_LDA, "Data/Final_Data/Ewnupdate_top_terms_LDA.rds")
+write_rds(IOL_top_terms_LDA, "Data/Final_Data/IOL_top_terms_LDA.rds")
+write_rds(eNCA_top_terms_LDA, "Data/Final_Data/eNCA_top_terms_LDA.rds")
+write_rds(SABCNews_top_terms_LDA, "Data/Final_Data/SABC_top_terms_LDA.rds")
+#write_rds(global_top_terms_LDA, "Data/Final_Data/global_top_terms_LDA.rds")
+
+#STM
 write_rds(News24_top_terms, "Data/Final_Data/News24_top_terms.rds")
 write_rds(timesLIVE_top_terms, "Data/Final_Data/timesLIVE_top_terms.rds")
 write_rds(Ewnupdate_top_terms, "Data/Final_Data/Ewnupdate_top_terms.rds")
@@ -836,12 +870,11 @@ Other_theme <- theme(
 
 ```
 
-# 3 week period
 
 
-```{r}
 # Other Analysis
-
+```{r}
+# 3 week period
 # Frequency of tweets by day
  #%>% group_by(date)
 News24_freq <- News24_tweets %>% group_by(date) %>% summarise(News24 = n())
@@ -906,6 +939,11 @@ SABC_freq
 # count row of tweets and compare to nrow in database that will be filtered tweets for covid relation
 #start
 #end
+```
+
+
+```{r}
+
 ```
 
 
