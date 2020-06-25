@@ -232,8 +232,9 @@ tweets.News24_clean$stripped_text = gsub(" $", "", tweets.News24_clean$stripped_
 tweets.News24_clean$stripped_text = gsub(" +", " ", tweets.News24_clean$stripped_text) #general spaces
 
 
-tweets.News24_clean <- tweets.News24_clean %>% select(stripped_text) 
-tweets.News24_stem <- tweets.News24_clean %>% unnest_tokens(word, stripped_text)
+tweets.News24_clean <- tweets.News24_clean %>% select(stripped_text)
+tweets.News24_sub_clean <- tweets.News24_clean %>% tweets.SABCNews_clean[grep("covid|corona|covid 19|covid19|coronavirus|sars cov 2|sars cov" ,tweets.SABCNews_clean$stripped_text),]
+tweets.News24_stem <- tweets.News24_sub_clean %>% unnest_tokens(word, stripped_text)
 
 clean_tweets.News24 <- tweets.News24_stem %>% anti_join(stop_words)
 
@@ -430,12 +431,17 @@ corpusNews24 <- tm_map(corpusNews24, removeNumbers)
 corpusNews24 <- tm_map(corpusNews24, stemDocument)
 #Remove search terms -->
 dtmNews24 = DocumentTermMatrix(corpusNews24)
+doc.length = apply(dtmNews24, 1, sum)
+dtmNews24 = dtmNews24[doc.length > 0,]
+
 
 corpusTimesLIVE <- Corpus(VectorSource(clean_tweets.TimesLIVE))
 corpusTimesLIVE <- tm_map(corpusTimesLIVE, removeWords, stopwords("english"))  
 corpusTimesLIVE <- tm_map(corpusTimesLIVE, removeNumbers)
 corpusTimesLIVE <- tm_map(corpusTimesLIVE, stemDocument)
 dtmTimesLIVE = DocumentTermMatrix(corpusTimesLIVE)
+doc.length = apply(dtmTimesLIVE, 1, sum)
+dtmTimesLIVE = dtmTimesLIVE[doc.length > 0,]
 
 corpuseNCA <- Corpus(VectorSource(clean_tweets.eNCA))
 corpuseNCA <- tm_map(corpuseNCA, removeWords, stopwords("english"))  
@@ -696,16 +702,16 @@ global_meta <-out_global$meta
 #Delete after final K has been found
 #####################################################################################################################
 ```{r}
-First_STM <- stm(documents = docs, vocab = vocab,
-              K = 10, max.em.its = 75, data = meta,
+First_STM <- stm(documents = News24_docs, vocab = News24_vocab,
+              K = 12, max.em.its = 75, data = News24_meta,
               init.type = "Spectral", verbose = FALSE)
 
-Second_STM <- stm(documents = out$documents, vocab = out$vocab,
-              K = 15, max.em.its = 75, data = out$meta,
+Second_STM <- stm(documents = News24_docs, vocab = News24_vocab,
+              K = 16, max.em.its = 75, data = News24_meta,
               init.type = "Spectral", verbose = FALSE)
 
-Third_STM <- stm(documents = out$documents, vocab = out$vocab,
-              K = 20, max.em.its = 75, data = out$meta,
+Third_STM <- stm(documents = News24_docs, vocab = News24_vocab,
+              K = 20, max.em.its = 75, data = News24_meta,
               init.type = "Spectral", verbose = FALSE)
 ```
 
@@ -714,6 +720,80 @@ Third_STM <- stm(documents = out$documents, vocab = out$vocab,
 plot(First_STM)
 plot(Second_STM)
 plot(Third_STM)
+```
+
+```{r}
+News24_topics <- tidy(First_STM, matrix = "beta")
+
+News24_top_terms <- 
+  News24_topics %>%
+  group_by(topic) %>%
+  top_n(5, beta) %>%
+  ungroup() %>%
+  arrange(topic, -beta)
+
+News24_topics2 <- tidy(Second_STM, matrix = "beta")
+
+News24_top_terms2 <- 
+  News24_topics2 %>%
+  group_by(topic) %>%
+  top_n(5, beta) %>%
+  ungroup() %>%
+  arrange(topic, -beta)
+
+News24_topics3 <- tidy(Third_STM, matrix = "beta")
+
+News24_top_terms3 <- 
+  News24_topics3 %>%
+  group_by(topic) %>%
+  top_n(5, beta) %>%
+  ungroup() %>%
+  arrange(topic, -beta)
+```
+
+
+```{r}
+#TimesLIVE STM Plot
+News24_top_terms %>%
+  mutate(term = reorder(term, beta)) %>%
+  ggplot(aes(term, beta, fill = factor(topic))) +
+  geom_col(show.legend = FALSE) + 
+  scale_y_continuous(breaks = c(0.00, 0.02, 0.04, 0.060, 0.080),labels = c("0", ".02", ".04", ".06", ".08")) +
+  expand_limits(y=c(0,0.08)) + 
+  facet_wrap(~ topic, scales = "free") + 
+  coord_flip() +
+  labs(title = "Structural Topic Modeling for TimesLIVE ", caption = "\nSource: Data collected from Twitter's REST API via rtweet"
+)
+
+#TimesLIVE STM Plot
+News24_top_terms2 %>%
+  mutate(term = reorder(term, beta)) %>%
+  ggplot(aes(term, beta, fill = factor(topic))) +
+  geom_col(show.legend = FALSE) + 
+  scale_y_continuous(breaks = c(0.00, 0.02, 0.04, 0.060, 0.080),labels = c("0", ".02", ".04", ".06", ".08")) +
+  expand_limits(y=c(0,0.08)) + 
+  facet_wrap(~ topic, scales = "free") + 
+  coord_flip() + theme(
+    axis.text.x=element_text(colour = "black",face = "bold", size =6),
+    axis.text.y=element_text(colour = "black",face = "bold", size =6),
+  ) +
+  labs(title = "Structural Topic Modeling for TimesLIVE ", caption = "\nSource: Data collected from Twitter's REST API via rtweet"
+)
+
+#TimesLIVE STM Plot
+News24_top_terms3 %>%
+  mutate(term = reorder(term, beta)) %>%
+  ggplot(aes(term, beta, fill = factor(topic))) +
+  geom_col(show.legend = FALSE) + 
+  scale_y_continuous(breaks = c(0.00, 0.02, 0.04, 0.060, 0.080),labels = c("0", ".02", ".04", ".06", ".08")) +
+  expand_limits(y=c(0,0.08)) + 
+  facet_wrap(~ topic, scales = "free") + 
+  coord_flip() + theme(
+    axis.text.x=element_text(colour = "black",face = "bold", size =6),
+    axis.text.y=element_text(colour = "black",face = "bold", size =6),
+  ) +
+  labs(title = "Structural Topic Modeling for TimesLIVE ", caption = "\nSource: Data collected from Twitter's REST API via rtweet"
+)
 ```
 
 ```{r}
@@ -860,7 +940,8 @@ Other_theme <- theme(
   axis.title.x=element_blank(),
   axis.title.y=element_blank(),
   panel.border=element_blank(),
-  panel.grid.major.y=element_line(colour = "grey"), 
+  panel.grid.major=element_line(colour = "black"),
+  panel.grid.major.x=element_blank(), 
   panel.grid.minor=element_blank(),
   plot.background=element_rect(fill = "grey"),
   plot.caption = element_text(colour ="black",face = "bold" ,hjust = +1),
@@ -887,7 +968,7 @@ SABC_freq <- SABCNews_tweets %>% group_by(date) %>% summarise(SABC = n()) %>% se
 # sum days and join together, then send to visualisation
 Frequency_tweets <- bind_cols(News24_freq,timesLIVE_freq,Ewnupdate_freq,IOL_freq,eNCA_freq,SABC_freq)
 
-ggplot(Frequency_tweets, aes(x = date, y = News24)) + Other_theme + geom_line(color = "black", size = 0.9) + geom_line(aes(x = date, y = timesLIVE), color = "blue", size = 0.9) + geom_line(aes(x = date, y = Ewnupdate), color = "red", size = 0.9) + geom_line(aes(x = date, y = IOL), color = "brown", size = 0.9) + geom_line(aes(x = date, y = eNCA), color = "green", size = 0.9) + geom_line(aes(x = date, y = SABC), color = "yellow", size = 0.9) + scale_x_date(breaks = "1 day",date_labels = "%d") + scale_y_continuous(breaks = seq(0, 160, by = 20)) + labs(x = NULL, y = NULL, title = "Frequency of Tweets", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
+ggplot(Frequency_tweets, aes(x = date, y = News24)) + Other_theme + geom_line(color = "grey", size = 0.9) + geom_line(aes(x = date, y = timesLIVE), color = "blue", size = 0.9) + geom_line(aes(x = date, y = Ewnupdate), color = "red", size = 0.9) + geom_line(aes(x = date, y = IOL), color = "brown", size = 0.9) + geom_line(aes(x = date, y = eNCA), color = "green", size = 0.9) + geom_line(aes(x = date, y = SABC), color = "yellow", size = 0.9) + scale_x_date(breaks = "1 day",date_labels = "%d") + scale_y_continuous(breaks = seq(0, 160, by = 20)) + labs(x = NULL, y = NULL, title = "Frequency of Tweets", subtitle = "Three week period in June", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
 
 
 #retweet count 
@@ -901,7 +982,7 @@ SABC_retweet <- SABCNews_tweets %>% group_by(date) %>% summarise(SABC = sum(retw
 # sum days and join together, then send to visualisation
 retweet_tweets <- bind_cols(News24_retweet,timesLIVE_retweet,Ewnupdate_retweet,IOL_retweet,eNCA_retweet,SABC_retweet)
 
-ggplot(retweet_tweets, aes(x = date, y = News24)) + Other_theme + geom_line(color = "black", size = 0.9) + geom_line(aes(x = date, y = timesLIVE), color = "blue", size = 0.9) + geom_line(aes(x = date, y = Ewnupdate), color = "red", size = 0.9) + geom_line(aes(x = date, y = IOL), color = "brown", size = 0.9) + geom_line(aes(x = date, y = eNCA), color = "green", size = 0.9) + geom_line(aes(x = date, y = SABC), color = "yellow", size = 0.9) + scale_x_date(breaks = "1 day",date_labels = "%d")+ scale_y_continuous(trans = "log2", breaks = c(250,500,750,1000,2000,4000,6000,8000)) + labs(x = NULL, y = NULL, title = "Retweet Count", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
+ggplot(retweet_tweets, aes(x = date, y = News24)) + Other_theme + geom_line(color = "grey", size = 0.9) + geom_line(aes(x = date, y = timesLIVE), color = "blue", size = 0.9) + geom_line(aes(x = date, y = Ewnupdate), color = "red", size = 0.9) + geom_line(aes(x = date, y = IOL), color = "brown", size = 0.9) + geom_line(aes(x = date, y = eNCA), color = "green", size = 0.9) + geom_line(aes(x = date, y = SABC), color = "yellow", size = 0.9) + scale_x_date(breaks = "1 day",date_labels = "%d")+ scale_y_continuous(trans = "log2", breaks = c(250,500,750,1000,2000,4000,6000,8000)) + labs(x = NULL, y = NULL, title = "Retweet count", subtitle = "Three week period in June", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
 
 # like count
 News24_likes <- News24_tweets %>% group_by(date) %>% summarise(News24 = sum(favorite_count)) 
@@ -914,7 +995,7 @@ SABC_likes <- SABCNews_tweets %>% group_by(date) %>% summarise(SABC = sum(favori
 # sum days and join together, then send to visualisation
 Likes_tweets <- bind_cols(News24_likes,timesLIVE_likes,Ewnupdate_likes,IOL_likes,eNCA_likes,SABC_likes)
 
-ggplot(Likes_tweets, aes(x = date, y = News24)) + Other_theme + geom_line(color = "black", size = 0.9) + geom_line(aes(x = date, y = timesLIVE), color = "blue", size = 0.9) + geom_line(aes(x = date, y = Ewnupdate), color = "red", size = 0.9) + geom_line(aes(x = date, y = IOL), color = "brown", size = 0.9) + geom_line(aes(x = date, y = eNCA), color = "green", size = 0.9) + geom_line(aes(x = date, y = SABC), color = "yellow", size = 0.9) + scale_x_date(breaks = "1 day",date_labels = "%d") + scale_y_continuous(trans = "log2", breaks = c(600,800,1000,2000,4000,8000,12000,16000)) + labs(x = NULL, y = NULL, title = "Like Counter", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
+ggplot(Likes_tweets, aes(x = date, y = News24)) + Other_theme + geom_line(color = "grey", size = 0.9) + geom_line(aes(x = date, y = timesLIVE), color = "blue", size = 0.9) + geom_line(aes(x = date, y = Ewnupdate), color = "red", size = 0.9) + geom_line(aes(x = date, y = IOL), color = "brown", size = 0.9) + geom_line(aes(x = date, y = eNCA), color = "green", size = 0.9) + geom_line(aes(x = date, y = SABC), color = "yellow", size = 0.9) + scale_x_date(breaks = "1 day",date_labels = "%d") + scale_y_continuous(breaks = seq(0, 20000, by = 1500)) + labs(x = NULL, y = NULL, title = "Like counter", subtitle = "Three week period in June", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
 
 
 
