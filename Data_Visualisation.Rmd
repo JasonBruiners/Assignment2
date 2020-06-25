@@ -58,6 +58,8 @@ Frequency_tweets <- read_rds("Data/Final_Data/Frequency_tweets.rds")
 retweet_tweets <- read_rds("Data/Final_Data/retweet_tweets.rds")
 Likes_tweets <- read_rds("Data/Final_Data/Like_tweets.rds")
 Type_data <- read_rds("Data/Final_Data/Tweet_Type.rds")
+tweets_za <- read_rds("Data/Final_Data/tweets_za.rds")
+cityCombined <- read_rds("Data/Final_Data/cityCombined.rds")
 ```
 
 
@@ -456,7 +458,6 @@ geocoded <- lat_lng(tweets_za)
 par(mar = c(1, 1, 1, 1))
 drawThis <- map("world","South Africa", col="blue", fill=TRUE)
 with(geocoded, points(lng, lat, pch = 20, cex = .75, col = "red"))
-
 ```
 
 

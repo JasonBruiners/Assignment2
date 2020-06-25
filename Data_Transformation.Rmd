@@ -808,7 +808,6 @@ cityNames <- rbind("Bloem","CPT", "Durban", "Kimberley" ,"JHB", "Klerks", "Mbomb
 
 cityCombined <- data.frame(cityNames,city_tweets)
 cityCombined <- cityCombined %>% add_column(Percentage = (city_tweets/(sum(city_tweets))) * 100)
-cityCombined
 
 ggplot(cityCombined, aes(x=cityNames, y=city_tweets, fill = cityNames)) + geom_bar(stat = "identity", width = 1) + geom_text(aes(label = paste0(round(Percentage,digits = 1), "%")), position = position_stack(vjust=0.5)) + labs(x = NULL, y = NULL, fill = NULL, title = "Distribution of Covid related tweets across major cities", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
 #scale_y_continuous(breaks = c(0.00, 0.005, 0.010, 0.015, 0.02),labels = c("0", ".05", ".01", ".015", ".02"))
@@ -870,6 +869,10 @@ write_rds(Likes_tweets,"Data/Final_Data/Like_tweets.rds")
 write_rds(Type_data,"Data/Final_Data/Tweet_Type.rds")
 write_rds(RSA_data,"Data/Final_Data/RSA_data.rds")
 write_rds(Followers_media,"Data/Final_Data/Followers_media.rds")
+write_rds(tweets_za,"Data/Final_Data/tweets_za.rds")
+write_rds(cityCombined,"Data/Final_Data/cityCombined.rds")
+
+
 
 ```
 
