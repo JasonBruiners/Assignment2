@@ -878,11 +878,11 @@ Other_theme <- theme(
 # Frequency of tweets by day
  #%>% group_by(date)
 News24_freq <- News24_tweets %>% group_by(date) %>% summarise(News24 = n())
-timesLIVE_freq <- timesLIVE_tweets %>% group_by(date) %>% summarise(timesLIVE = n()) %>% select(timesLIVE)
-Ewnupdate_freq <- Ewnupdate_tweets %>% group_by(date) %>% summarise(Ewnupdate = n()) %>% select(Ewnupdate)
+timesLIVE_freq <- TimesLIVE_tweets %>% group_by(date) %>% summarise(timesLIVE = n()) %>% select(timesLIVE)
+Ewnupdate_freq <- ewnupdates_tweets %>% group_by(date) %>% summarise(Ewnupdate = n()) %>% select(Ewnupdate)
 IOL_freq <- IOL_tweets %>% group_by(date) %>% summarise(IOL = n()) %>% select(IOL)
 eNCA_freq <- eNCA_tweets %>% group_by(date) %>% summarise(eNCA = n()) %>% select(eNCA)
-SABC_freq <- SABC_tweets %>% group_by(date) %>% summarise(SABC = n()) %>% select(SABC)
+SABC_freq <- SABCNews_tweets %>% group_by(date) %>% summarise(SABC = n()) %>% select(SABC)
 
 # sum days and join together, then send to visualisation
 Frequency_tweets <- bind_cols(News24_freq,timesLIVE_freq,Ewnupdate_freq,IOL_freq,eNCA_freq,SABC_freq)
@@ -892,11 +892,11 @@ ggplot(Frequency_tweets, aes(x = date, y = News24)) + Other_theme + geom_line(co
 
 #retweet count 
 News24_retweet <- News24_tweets %>% group_by(date) %>% summarise(News24 = sum(retweet_count)) 
-timesLIVE_retweet <- timesLIVE_tweets %>% group_by(date) %>% summarise(timesLIVE = sum(retweet_count)) %>% select(timesLIVE)
-Ewnupdate_retweet <- Ewnupdate_tweets %>% group_by(date) %>% summarise(Ewnupdate = sum(retweet_count)) %>% select(Ewnupdate)
+timesLIVE_retweet <- TimesLIVE_tweets %>% group_by(date) %>% summarise(timesLIVE = sum(retweet_count)) %>% select(timesLIVE)
+Ewnupdate_retweet <- ewnupdates_tweets %>% group_by(date) %>% summarise(Ewnupdate = sum(retweet_count)) %>% select(Ewnupdate)
 IOL_retweet <- IOL_tweets %>% group_by(date) %>% summarise(IOL = sum(retweet_count)) %>% select(IOL)
 eNCA_retweet <- eNCA_tweets %>% group_by(date) %>% summarise(eNCA = sum(retweet_count)) %>% select(eNCA)
-SABC_retweet <- SABC_tweets %>% group_by(date) %>% summarise(SABC = sum(retweet_count)) %>% select(SABC)
+SABC_retweet <- SABCNews_tweets %>% group_by(date) %>% summarise(SABC = sum(retweet_count)) %>% select(SABC)
 
 # sum days and join together, then send to visualisation
 retweet_tweets <- bind_cols(News24_retweet,timesLIVE_retweet,Ewnupdate_retweet,IOL_retweet,eNCA_retweet,SABC_retweet)
@@ -905,11 +905,11 @@ ggplot(retweet_tweets, aes(x = date, y = News24)) + Other_theme + geom_line(colo
 
 # like count
 News24_likes <- News24_tweets %>% group_by(date) %>% summarise(News24 = sum(favorite_count)) 
-timesLIVE_likes <- timesLIVE_tweets %>% group_by(date) %>% summarise(timesLIVE = sum(favorite_count)) %>% select(timesLIVE) 
-Ewnupdate_likes <- Ewnupdate_tweets %>% group_by(date) %>% summarise(Ewnupdate = sum(favorite_count)) %>% select(Ewnupdate)
+timesLIVE_likes <- TimesLIVE_tweets %>% group_by(date) %>% summarise(timesLIVE = sum(favorite_count)) %>% select(timesLIVE) 
+Ewnupdate_likes <- ewnupdates_tweets %>% group_by(date) %>% summarise(Ewnupdate = sum(favorite_count)) %>% select(Ewnupdate)
 IOL_likes <- IOL_tweets %>% group_by(date) %>% summarise(IOL = sum(favorite_count)) %>% select(IOL)
 eNCA_likes <- eNCA_tweets %>% group_by(date) %>% summarise(eNCA = sum(favorite_count)) %>% select(eNCA)
-SABC_likes <- SABC_tweets %>% group_by(date) %>% summarise(SABC = sum(favorite_count)) %>% select(SABC)
+SABC_likes <- SABCNews_tweets %>% group_by(date) %>% summarise(SABC = sum(favorite_count)) %>% select(SABC)
 
 # sum days and join together, then send to visualisation
 Likes_tweets <- bind_cols(News24_likes,timesLIVE_likes,Ewnupdate_likes,IOL_likes,eNCA_likes,SABC_likes)
