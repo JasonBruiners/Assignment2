@@ -388,96 +388,47 @@ global_tweets = rbind(SABCNews_tweets,eNCA_tweets,IOL_tweets,ewnupdates_tweets,T
 ```
 
 ```{r}
-# sentiment theme
-sentiment_theme <- theme(
-  axis.text.x=element_text(colour = "black",face = "bold"),
-  axis.text.y=element_text(colour = "black",face = "bold"),
-  axis.title.x=element_blank(),
-  axis.title.y=element_blank(),
-  panel.border=element_blank(),
-  panel.grid.major=element_line(colour = "grey"),
-  panel.grid.major.x=element_blank(), 
-  panel.grid.minor=element_blank(),
-  plot.background=element_rect(fill = "grey"),
-  plot.caption = element_text(colour ="black",face = "bold" ,hjust = +1),
-  strip.text = element_text(face = "bold"),
-  plot.title = element_text(size = 20, colour ="black",face = "bold" ,hjust = 0.5),
-)
+# Sentiment Analysis
 
-```
-
-```{r}
-# AFFIN Sentiment Analysis
-# this example uses 
-
-#bing_news24 <- clean_tweets.News24 %>% inner_join(get_sentiments("bing")) %>% count(word, sentiment, sort = TRUE) %>% ungroup()
-
-#bing_news24
-####################
+# News24
 afinn_news24 <- clean_tweets.News24 %>% inner_join(get_sentiments("afinn")) %>% count(word, value, sort = TRUE) %>% ungroup()
 
 news24_score <- afinn_news24 %>% group_by(value) %>% summarise(count = sum(n))
 
-news24_plot <- afinn_news24 %>% top_n(10) %>% mutate(word = reorder(word,n)) %>% ggplot(aes(x= word, y = n)) + geom_col() + coord_flip() + sentiment_theme %+replace% theme(panel.grid.major=element_blank()) + labs(x = NULL, y = NULL, title = "News24 Frequently Used Words", subtitle = "Top 10", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
-news24_plot 
+# EXPORT afinn_news24 and news24_score
 
-ggplot(news24_score, aes(x=value,y=count)) + geom_bar(stat = "identity") + sentiment_theme + scale_x_continuous(breaks = c(-5,-4,-3,-2,-1,0,1,2,3,4,5)) + labs(x = NULL, y = NULL, title = "News24 Sentiment Score", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
-
-#############################
+# TimesLIVE
 afinn_TimesLIVE <- clean_tweets.TimesLIVE %>% inner_join(get_sentiments("afinn")) %>% count(word, value, sort = TRUE) %>% ungroup()
-
-afinn_TimesLIVE
 
 TimesLIVE_score <- afinn_TimesLIVE %>% group_by(value) %>% summarise(count = sum(n))
 
+# EXPORT afinn_TimesLIVE and TimesLIVE_score
 
-TimesLIVE_plot <- afinn_TimesLIVE %>% top_n(10) %>% head(10) %>% mutate(word = reorder(word,n)) %>% ggplot(aes(x= word, y = n)) + geom_col() + coord_flip() + sentiment_theme %+replace% theme(panel.grid.major=element_blank()) + labs(x = NULL, y = NULL, title = "TimesLIVE Frequently Used Words", subtitle = "Top 10", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
-
-TimesLIVE_plot <- afinn_TimesLIVE %>% top_n(10) %>% mutate(word = reorder(word,n)) %>% head(10)  %>% ggplot(aes(x= word, y = n)) + geom_col() + coord_flip() + sentiment_theme + labs(x = NULL, y = NULL, title = "TimesLIVE Frequently Used Words", subtitle = "Top 10", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
-
-TimesLIVE_plot 
-
-ggplot(TimesLIVE_score, aes(x=value,y=count)) + geom_bar(stat = "identity") + sentiment_theme + scale_x_continuous(breaks = c(-5,-4,-3,-2,-1,0,1,2,3,4,5)) + labs(x = NULL, y = NULL, title = "TimesLIVE Sentiment Score", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
-
-##################3
+# eNCA
 afinn_eNCA <- clean_tweets.eNCA %>% inner_join(get_sentiments("afinn")) %>% count(word, value, sort = TRUE) %>% ungroup()
 
 eNCA_score <- afinn_eNCA %>% group_by(value) %>% summarise(count = sum(n))
 
-eNCA_plot <- afinn_eNCA %>% top_n(10) %>% mutate(word = reorder(word,n)) %>% head(10) %>% ggplot(aes(x= word, y = n)) + geom_col() + coord_flip() + sentiment_theme %+replace% theme(panel.grid.major=element_blank()) + labs(x = NULL, y = NULL, title = "eNCA Frequently Used Words", subtitle = "Top 10", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
-eNCA_plot 
-
-ggplot(eNCA_score, aes(x=value,y=count)) + geom_bar(stat = "identity") + sentiment_theme + scale_x_continuous(breaks = c(-5,-4,-3,-2,-1,0,1,2,3,4,5)) + labs(x = NULL, y = NULL, title = "eNCA Sentiment Score", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
-
-#####################
+# IOL
 afinn_IOL <- clean_tweets.IOL %>% inner_join(get_sentiments("afinn")) %>% count(word, value, sort = TRUE) %>% ungroup()
 
 IOL_score <- afinn_IOL %>% group_by(value) %>% summarise(count = sum(n))
 
-IOL_plot <- afinn_IOL %>% top_n(10) %>% mutate(word = reorder(word,n)) %>% head(10) %>% ggplot(aes(x= word, y = n)) + geom_col() + coord_flip() + sentiment_theme %+replace% theme(panel.grid.major=element_blank()) + labs(x = NULL, y = NULL, title = "IOL Frequently Used Words", subtitle = "Top 10", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
-IOL_plot 
+# EXPORT afinn_IOL and IOL_score
 
-ggplot(IOL_score, aes(x=value,y=count)) + geom_bar(stat = "identity") + sentiment_theme + scale_x_continuous(breaks = c(-5,-4,-3,-2,-1,0,1,2,3,4,5)) + labs(x = NULL, y = NULL, title = "IOL Sentiment Score", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
-
-###########################
+# ewnupdate
 afinn_ewn <- clean_tweets.ewn %>% inner_join(get_sentiments("afinn")) %>% count(word, value, sort = TRUE) %>% ungroup()
 
 ewn_score <- afinn_ewn %>% group_by(value) %>% summarise(count = sum(n))
 
-ewn_plot <- afinn_ewn %>% top_n(10) %>% mutate(word = reorder(word,n)) %>% head(10) %>% ggplot(aes(x= word, y = n)) + geom_col() + coord_flip() + sentiment_theme %+replace% theme(panel.grid.major=element_blank()) + labs(x = NULL, y = NULL, title = "EWN Frequently Used Words", subtitle = "Top 10", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
-ewn_plot 
+#  EXPORT afinn_ewn and ewn_score
 
-ggplot(ewn_score, aes(x=value,y=count)) + geom_bar(stat = "identity") + sentiment_theme + scale_x_continuous(breaks = c(-5,-4,-3,-2,-1,0,1,2,3,4,5)) + labs(x = NULL, y = NULL, title = "EWN Sentiment Score", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
-
-###########################3
+# SABCNEWS
 afinn_SABCNews <- clean_tweets.SABCNews %>% inner_join(get_sentiments("afinn")) %>% count(word, value, sort = TRUE) %>% ungroup()
 
 SABC_score <- afinn_SABCNews %>% group_by(value) %>% summarise(count = sum(n))
 
-SABC_plot <- afinn_SABCNews %>% top_n(10) %>% mutate(word = reorder(word,n)) %>% head(10) %>% ggplot(aes(x= word, y = n)) + geom_col() + coord_flip() + sentiment_theme %+replace% theme(panel.grid.major=element_blank()) + labs(x = NULL, y = NULL, title = "SABCNews Frequently Used Words", subtitle = "Top 10", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
-SABC_plot 
-
-ggplot(SABC_score, aes(x=value,y=count)) + geom_bar(stat = "identity") + sentiment_theme + scale_x_continuous(breaks = c(-5,-4,-3,-2,-1,0,1,2,3,4,5)) + labs(x = NULL, y = NULL, title = "SABCNews Sentiment Score", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
+# EXPORT afinn_SABCNews and SABC_score
 
 ```
 
@@ -865,8 +816,6 @@ SABC_freq <- SABCNews_tweets %>% group_by(date) %>% summarise(SABC = n()) %>% se
 # sum days and join together
 Frequency_tweets <- bind_cols(News24_freq,timesLIVE_freq,Ewnupdate_freq,IOL_freq,eNCA_freq,SABC_freq)
 
-# EXPORT Frequency_tweets
-
 #retweet count 
 News24_retweet <- News24_tweets %>% group_by(date) %>% summarise(News24 = sum(retweet_count)) 
 timesLIVE_retweet <- TimesLIVE_tweets %>% group_by(date) %>% summarise(timesLIVE = sum(retweet_count)) %>% select(timesLIVE)
@@ -878,8 +827,6 @@ SABC_retweet <- SABCNews_tweets %>% group_by(date) %>% summarise(SABC = sum(retw
 # sum days and join together
 retweet_tweets <- bind_cols(News24_retweet,timesLIVE_retweet,Ewnupdate_retweet,IOL_retweet,eNCA_retweet,SABC_retweet)
 
-# EXPORT retweet_tweets 
-
 # like count
 News24_likes <- News24_tweets %>% group_by(date) %>% summarise(News24 = sum(favorite_count)) 
 timesLIVE_likes <- TimesLIVE_tweets %>% group_by(date) %>% summarise(timesLIVE = sum(favorite_count)) %>% select(timesLIVE) 
@@ -890,8 +837,6 @@ SABC_likes <- SABCNews_tweets %>% group_by(date) %>% summarise(SABC = sum(favori
 
 # sum days and join together
 Likes_tweets <- bind_cols(News24_likes,timesLIVE_likes,Ewnupdate_likes,IOL_likes,eNCA_likes,SABC_likes)
-
-# EXPORT Likes_tweets
 
 #count the total number of tweets vs covid tweets
 News24_Genposts <- nrow(News24_tweets)
@@ -919,8 +864,6 @@ tweet_count <- c(Other_tweets,CVD_tweets)
 
 Type_data <- data.frame(tweet_type,tweet_count)
 
-#EXPORT Type_data and Gen_tweets
-
 ```
 
 ## Done
@@ -928,6 +871,9 @@ Type_data <- data.frame(tweet_type,tweet_count)
 # Exporting transformation results
 
 ```{r}
+# Sentiment Analysis
+
+
 #LDA
 write_rds(News24_top_terms_LDA, "Data/Final_Data/News24_top_terms_LDA.rds")
 write_rds(TimesLIVE_top_terms_LDA, "Data/Final_Data/timesLIVE_top_terms_LDA.rds")
@@ -945,20 +891,12 @@ write_rds(IOL_top_terms, "Data/Final_Data/IOL_top_terms.rds")
 write_rds(eNCA_top_terms, "Data/Final_Data/eNCA_top_terms.rds")
 write_rds(SABC_top_terms, "Data/Final_Data/SABC_top_terms.rds")
 write_rds(global_top_terms, "Data/Final_Data/global_top_terms.rds")
-```
 
-```{r}
-
-
-
-
-```
-
-
+# Additional Analysis
+write_rds(Frequency_tweets,"Data/Final_Data/Frequency_tweets.rds")
+write_rds(retweet_tweets,"Data/Final_Data/retweet_tweets.rds")
+write_rds(Likes_tweets,"Data/Final_Data/Like_tweets.rds")
+write_rds(Type_data,"Data/Final_Data/Tweet_Type.rds")
 
 ```
 
-## Exporting results
-```{r}
-
-```
