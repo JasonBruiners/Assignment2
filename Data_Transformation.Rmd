@@ -151,10 +151,8 @@ tweets_pe <-rbind(tweets_pe_22,tweets_pe_21,tweets_pe_20,tweets_pe_19,tweets_pe_
 
 ```
 
+Export and import created to allow for loading of combined locational data. This is done so that the above chunk does not need to be run again
 ```{r eval=FALSE,include=FALSE}
-#Export and import created to allow for loading of combined locational data
-#This is done so that the above chunk does not need to be run again
-
 write_rds(tweets_za, "Data/Final_Data/tweets_za.rds")
 write_rds(tweets_bloem, "Data/Final_Data/tweets_bloem.rds")
 write_rds(tweets_cpt, "Data/Final_Data/tweets_cpt.rds")
@@ -229,7 +227,6 @@ SABCNews_tweets <- myfuncSABC(DATE1,DATE2)
 ### Text Cleaning Function
 
 ```{r}
-#Function created to handle the cleaning of all the timeline dataframes
 data_cleaning <- function(x){
   
 x <- x %>% select(text)
@@ -254,7 +251,7 @@ x <- x %>% select(stripped_text)
 
 ### Final Cleaning
 
-```{r}
+```{r message=FALSE}
 #News Agency cleaning
 tweets.News24_clean <- data_cleaning(News24_tweets)
 tweets.TimesLIVE_clean <- data_cleaning(TimesLIVE_tweets)
@@ -294,8 +291,8 @@ clean_tweets.SABCNews <- tweets.SABCNews_stem  %>% anti_join(stop_words)
 
 ```
 
-```{r}
-#Global Data across all media agencies
+```{r message=FALSE}
+#Data across all media agencies
 #Combined from cleaned versions of datasets
 global_cleaned <- rbind(tweets.SABCNews_clean,tweets.ewn_clean,tweets.IOL_clean,tweets.eNCA_clean,tweets.TimesLIVE_clean,tweets.News24_clean)
 
@@ -308,8 +305,8 @@ Clean_tweets.global <- Clean_tweets.global  %>% anti_join(stop_words)
 
 
 ## 2.3 Sentiment Analysis
-
-```{r}
+Example of resultant data for News24 seen in output
+```{r echo=TRUE, message=FALSE}
 
 # Global
 afinn_global <- Clean_tweets.global %>% inner_join(get_sentiments("afinn")) %>% count(word, value, sort = TRUE) %>% ungroup()
@@ -320,6 +317,8 @@ global_score <- afinn_global %>% group_by(value) %>% summarise(count = sum(n))
 afinn_news24 <- clean_tweets.News24 %>% inner_join(get_sentiments("afinn")) %>% count(word, value, sort = TRUE) %>% ungroup()
 
 news24_score <- afinn_news24 %>% group_by(value) %>% summarise(count = sum(n))
+
+news24_score
 
 # TimesLIVE
 afinn_TimesLIVE <- clean_tweets.TimesLIVE %>% inner_join(get_sentiments("afinn")) %>% count(word, value, sort = TRUE) %>% ungroup()
@@ -754,11 +753,12 @@ tweet_type <- c("General","Covid-related")
 tweet_count <- c(Other_tweets,CVD_tweets)
 
 Type_data <- data.frame(tweet_type,tweet_count)
+Type_data
 ```
 
 
 ### General tweets RSA vs those belonging to selected news agencies
-```{r}
+```{r echo=TRUE}
 Media_tweets <- tweets_za %>% filter(screen_name == "TimesLIVE" | screen_name == "IOL" | screen_name == "eNCA" | screen_name == "ewnupdates" | screen_name == "SABCNews" | screen_name == "News24") %>% nrow()
 
 RSA_other_tweets <- nrow(tweets_za) - Media_tweets
@@ -767,11 +767,12 @@ RSA_tweeter <- c("Selected Media","Other")
 RSA_tweet_value <- c(Media_tweets,RSA_other_tweets)
 
 RSA_data <- data.frame(RSA_tweeter,RSA_tweet_value)
+RSA_data
 ```
 
 
 ### Followers for selected news agency
-```{r}
+```{r echo=TRUE}
 News24_followers <- tweets_za %>% filter(screen_name == "News24") %>% head(1) %>% select(followers_count)
 TimesLIVE_followers <- tweets_za %>% filter(screen_name == "TimesLIVE") %>% head(1) %>% select(followers_count)
 ewn_followers <- tweets_za %>% filter(screen_name == "ewnupdates") %>% head(1) %>% select(followers_count)
@@ -781,6 +782,7 @@ SABC_followers <- tweets_za %>% filter(screen_name == "SABCNews") %>% head(1) %>
 
 Media <- c("News24","TimesLIVE","ewnupdates","IOL","eNCA","SABCNews")
 Followers_media <- data.frame(Media,rbind(News24_followers,TimesLIVE_followers,ewn_followers,IOL_followers,eNCA_followers,SABC_followers))
+Followers_media
 ```
 
 
