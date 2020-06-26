@@ -496,45 +496,6 @@ Global_top_terms_LDA <- rbind(d[[1]],d[[2]],d[[3]],d[[4]],d[[5]],d[[6]],d[[7]],d
 
 ```
 
-#### Additional Statistics:
-```{r}
-
-#Topics found out by our model:
-lda.topics_News24 = as.matrix(topics(News24_lda))
-lda.topics_TimesLIVE = as.matrix(topics(TimesLIVE_lda))
-lda.topics_eNCA = as.matrix(topics(eNCA_lda))
-lda.topics_IOL = as.matrix(topics(IOL_lda))
-lda.topics_ewn = as.matrix(topics(ewn_lda))
-lda.topics_SABCNews = as.matrix(topics(SABCNews_lda))
-lda.topics_Global = as.matrix(topics(Global_lda))
-
-#summary(as.factor(lda.topics_News24[,1]))
-#summary(as.factor(lda.topics_TimesLIVE[,1]))
-#summary(as.factor(lda.topics_eNCA[,1]))
-#summary(as.factor(lda.topics_IOL[,1]))
-#summary(as.factor(lda.topics_ewn[,1]))
-#summary(as.factor(lda.topics_SABCNews[,1]))
-#summary(as.factor(lda.topics_Global[,1]))
-
-#document wise probability of each topic.
-topicprob_News24 = as.matrix(News24_lda@gamma)
-topicprob_TimesLIVE = as.matrix(TimesLIVE_lda@gamma)
-topicprob_eNCA = as.matrix(eNCA_lda@gamma)
-topicprob_IOL = as.matrix(IOL_lda@gamma)
-topicprob_ewn = as.matrix(ewn_lda@gamma)
-topicprob_SABCNews = as.matrix(SABCNews_lda@gamma)
-topicprob_Global = as.matrix(Global_lda@gamma)
-
-
-#head(topicprob_News24,1)
-#head(topicprob_TimesLIVE,1)
-#head(topicprob_eNCA,1)
-#head(topicprob_IOL,1)
-#head(topicprob_ewn,1)
-#head(topicprob_SABCNews,1)
-#head(topicprob_Global,1)
-```
-
 
 ### 2.4.2 Structured Topic Modelling
 

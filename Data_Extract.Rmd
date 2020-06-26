@@ -29,7 +29,6 @@ Table of Contents:
 
 
 
-
 # 1. Data Collection
 
 ```{r message=FALSE, warning=FALSE, include=FALSE}
@@ -56,7 +55,7 @@ head(rate_limits[,1:4])
 
 
 ### Collect first batch of tweets
-```{r echo=TRUE, message=TRUE, warning=TRUE}
+```{r eval=FALSE, echo=TRUE, message=FALSE, warning=FALSE}
 #PULL FINAL VERSION ON MONDAY OR TUESDAY
 News24_tweets <- get_timelines(c("News24"), n = 3200, include_rts=FALSE)
 TimesLIVE_tweets <- get_timelines(c("TimesLIVE"), n = 3200, include_rts=FALSE)
@@ -66,14 +65,14 @@ eNCA_tweets <- get_timelines(c("eNCA"), n = 3200, include_rts=FALSE)
 
 
 ### Collect second batch of tweets
-```{r echo=TRUE, message=TRUE, warning=TRUE}
+```{r eval=FALSE, echo=TRUE, message=FALSE, warning=FALSE}
 IOL_tweets <- get_timelines(c("IOL"), n=3200, include_rts=FALSE)
 SABCNews_tweets <- get_timelines(c("SABCNews"), n=3200, include_rts=FALSE)
 ewnupdates_tweets <- get_timelines(c("ewnupdates"), n=3200, include_rts=FALSE)
 ```
 
 ### Collecting additional tweets
-```{r}
+```{r eval=FALSE, echo=TRUE, message=FALSE, warning=FALSE}
 #Not used
 SAgovnews_tweets <- get_timelines(c("SAgovnews"), n=3200, include_rts=FALSE)
 SowetanLIVE_tweets <- get_timelines(c("SowetanLIVE"), n=3200, include_rts=FALSE)
@@ -84,20 +83,20 @@ mailandguardian_tweets <- get_timelines(c("mailandguardian"), n=3200, include_rt
 
 ### Collect third batch of tweets
 
-```{r echo=TRUE, message=FALSE, warning=FALSE}
+```{r eval=FALSE, echo=TRUE, message=FALSE, warning=FALSE}
 #Not used
 trend_tweets <- get_trends("South Africa")
 ```
 
 ### Collect fourth batch of tweets
 
-```{r}
+```{r eval=FALSE, echo=TRUE, message=FALSE, warning=FALSE}
 #Define terms to search by
 q1 <- "Covid OR Corona OR Covid-19 OR Covid19 OR Coronavirus OR SARS-CoV-2 OR SARS-CoV"
 q2 <- "OR #Covid OR #Corona OR #Covid-19 OR #Covid19 OR #Coronavirus OR #SARS-CoV-2 OR #SARS-CoV"
 q <- paste(q1,q2)
 
-#UPDATE DAILY
+#UPDATED DAILY
 #Collecting tweets for South Africa
 tweets_za_22 <- search_tweets(q,geocode = lookup_coords("South Africa"), since="2020-06-22", until="2020-06-23", type="recent", include_rts=FALSE, n=18000)
 
@@ -116,7 +115,7 @@ tweets_pe_22 <- search_tweets(q,geocode = lookup_coords("Port Elizabeth"), since
 
 ### Collect fifth batch of tweets
 
-```{r}
+```{r eval=FALSE, echo=TRUE, message=FALSE, warning=FALSE}
 #Retrieve profiles
 News24_profile <- lookup_users("News24")
 TimesLIVE_profile <- lookup_users("TimesLIVE")
@@ -146,9 +145,9 @@ ewnupdates_followers <- ewnupdates_profile$friends_count
 
 
 ## 1.2 Data Export
-```{r}
+```{r eval=FALSE}
 #UPDATE DAILY
-#Export Filtered Data for 21/06/2020
+#Export Filtered Data for 22/06/2020
 write_rds(tweets_za_22, "Data/Raw_Filtered_Data/tweets_za_22.rds")
 write_rds(tweets_bloem_22, "Data/Raw_Filtered_Data/tweets_bloem_22.rds")
 write_rds(tweets_cpt_22, "Data/Raw_Filtered_Data/tweets_cpt_22.rds")
@@ -160,10 +159,6 @@ write_rds(tweets_mbomb_22, "Data/Raw_Filtered_Data/tweets_mbomb_22.rds")
 write_rds(tweets_polo_22, "Data/Raw_Filtered_Data/tweets_polo_22.rds")
 write_rds(tweets_pe_22, "Data/Raw_Filtered_Data/tweets_pe_22.rds")
 
-```
-
-
-```{r echo=TRUE}
 # Exporting Timeline Data
 write_rds(News24_tweets, "Data/Raw_Timeline_Data/News24_tweets.rds")
 write_rds(TimesLIVE_tweets, "Data/Raw_Timeline_Data/TimesLIVE_tweets.rds")
@@ -177,8 +172,5 @@ write_rds(City_Press_tweets,"Data/Raw_Timeline_Data/City_Press.rds")
 write_rds(mailandguardian_tweets,"Data/Raw_Timeline_Data/mailandguardian.rds")
 ```
 
-```{r}
-#Exporting followers and following counts
 
-```
 

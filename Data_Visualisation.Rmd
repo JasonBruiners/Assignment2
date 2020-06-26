@@ -124,6 +124,7 @@ ggplot(global_score, aes(x=value,y=count)) + geom_bar(stat = "identity", color =
 
 ```
 
+
 ```{r}
 # following performed wit following topics "covid|corona|covid 19|covid19|coronavirus|sars cov 2|sars cov"
 # News24
@@ -516,7 +517,17 @@ ggplot(Followers_media, aes(x=Media,y=followers_count)) + geom_bar(stat = "ident
 
 ```{r}
 #distribution across provinces
-ggplot(cityCombined, aes(x=cityNames, y=city_tweets, fill = cityNames)) + geom_bar(stat = "identity", width = 1) + geom_text(aes(label = paste0(round(Percentage,digits = 1), "%")), position = position_stack(vjust=0.5)) + labs(x = NULL, y = NULL, fill = NULL, title = "Distribution of Covid related tweets across major cities", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
+ggplot(cityCombined, aes(x=cityNames, y=city_tweets, fill = cityNames)) + geom_bar(stat = "identity", width = 0.9) + geom_text(aes(label = paste0(round(Percentage,digits = 1), "%")), position = position_stack(vjust=0.5)) +
+  labs(x = NULL, y = "Number of tweets", fill = NULL, title = "Distribution of Covid related tweets across major cities", caption = "\nSource: Data collected from Twitter's REST API via rtweet") + guides(cityNames = FALSE) + 
+  t %+replace% theme(
+      panel.grid.major.y = element_line(colour = "grey"),
+      panel.grid.major.x = element_blank(),
+      panel.grid.minor=element_blank(),
+      plot.title = element_text(size = 15, colour ="black",face = "bold" ,hjust = 0.5),
+      axis.title.y = element_text(colour = "black",face = "bold"),
+      legend.position="none",
+
+  )
 #scale_y_continuous(breaks = c(0.00, 0.005, 0.010, 0.015, 0.02),labels = c("0", ".05", ".01", ".015", ".02"))
 ```
 
