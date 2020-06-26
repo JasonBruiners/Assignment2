@@ -84,7 +84,7 @@ t <- theme(
 
 ```
 
-## 3.1 Sentiment visuals
+## 3.1 Sentiment Visuals
 Six news agencies were selected and their most frequent words and overall sentiment score was graphed
 ```{r include=FALSE}
 # Sentiment's theme
@@ -194,7 +194,9 @@ ggplot(SABC_score, aes(x=value,y=count)) + geom_bar(stat = "identity", color = "
 ```
 
 
-## 3.2 Topic Modelling visuals
+## 3.2 Topic Modelling Visuals
+Both STM and LDA results for each news agencies were graphed
+
 ### 3.2.1 Structural Topic Modelling
 
 ```{r echo=FALSE}
@@ -215,7 +217,6 @@ News24_top_terms %>%
   )
 ```
 
-#### TimesLIVE
 ```{r echo=FALSE}
 #TimesLIVE STM Plot
 TimesLIVE_top_terms %>%
@@ -329,7 +330,7 @@ global_top_terms %>%
 ```
 
 ### 3.2.2 Latent Dirichlet Allocation 
-News24 LDA
+
 ```{r echo=FALSE}
 News24_top_terms_LDA %>%
   mutate(term = reorder(term, beta)) %>%
@@ -456,6 +457,7 @@ global_top_terms_LDA %>%
 ```
 
 ## 3.3 Additional Visuals
+
 ```{r include=FALSE}
 # Additional's theme
 Other_theme <- theme(
@@ -474,49 +476,44 @@ Other_theme <- theme(
 )
 ```
 
-## Frequency of tweets by selected media agencies over a three week period
+
 ```{r echo=FALSE}
 #frequency of tweets
 ggplot(Frequency_tweets, aes(x = date, y = News24)) + Other_theme + geom_line(color = "black", size = 0.9) + geom_line(aes(x = date, y = timesLIVE), color = "blue", size = 0.9) + geom_line(aes(x = date, y = Ewnupdate), color = "red", size = 0.9) + geom_line(aes(x = date, y = IOL), color = "brown", size = 0.9) + geom_line(aes(x = date, y = eNCA), color = "green", size = 0.9) + geom_line(aes(x = date, y = SABC), color = "yellow", size = 0.9) + scale_x_date(breaks = "1 day",date_labels = "%d") + scale_y_continuous(breaks = seq(0, 160, by = 20)) + labs(x = NULL, y = NULL, title = "Frequency of Tweets", subtitle = "Three week period in June", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
 
 ```
 
-## Retweet count by selected media agencies over a three week period
+
 ```{r echo=FALSE}
 #retweet Count
-ggplot(retweet_tweets, aes(x = date, y = News24)) + Other_theme + geom_line(color = "black", size = 0.9) + geom_line(aes(x = date, y = timesLIVE), color = "blue", size = 0.9) + geom_line(aes(x = date, y = Ewnupdate), color = "red", size = 0.9) + geom_line(aes(x = date, y = IOL), color = "brown", size = 0.9) + geom_line(aes(x = date, y = eNCA), color = "green", size = 0.9) + geom_line(aes(x = date, y = SABC), color = "yellow", size = 0.9) + scale_x_date(breaks = "1 day",date_labels = "%d")+ scale_y_continuous(trans = "log2", breaks = c(250,500,750,1000,2000,4000,6000,8000)) + labs(x = NULL, y = NULL, title = "Retweet count", subtitle = "Three week period in June", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
+ggplot(retweet_tweets, aes(x = date, y = News24)) + Other_theme + geom_line(color = "black", size = 0.9) + geom_line(aes(x = date, y = timesLIVE), color = "blue", size = 0.9) + geom_line(aes(x = date, y = Ewnupdate), color = "red", size = 0.9) + geom_line(aes(x = date, y = IOL), color = "brown", size = 0.9) + geom_line(aes(x = date, y = eNCA), color = "green", size = 0.9) + geom_line(aes(x = date, y = SABC), color = "yellow", size = 0.9) + scale_x_date(breaks = "1 day",date_labels = "%d")+ scale_y_continuous(trans = "log2", breaks = c(250,500,750,1000,2000,4000,6000,8000)) + labs(x = NULL, y = NULL, title = "Retweet Count", subtitle = "Three week period in June", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
 
 ```
 
-## Like Count by selected media agencies over a three week period
 ```{r echo=FALSE}
 #Like Count
 ggplot(Likes_tweets, aes(x = date, y = News24)) + Other_theme + geom_line(color = "black", size = 0.9) + geom_line(aes(x = date, y = timesLIVE), color = "blue", size = 0.9) + geom_line(aes(x = date, y = Ewnupdate), color = "red", size = 0.9) + geom_line(aes(x = date, y = IOL), color = "brown", size = 0.9) + geom_line(aes(x = date, y = eNCA), color = "green", size = 0.9) + geom_line(aes(x = date, y = SABC), color = "yellow", size = 0.9) + scale_x_date(breaks = "1 day",date_labels = "%d") + scale_y_continuous(breaks = seq(0, 20000, by = 1500)) + labs(x = NULL, y = NULL, title = "Like counter", subtitle = "Three week period in June", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
 
 ```
 
-## Covid 19 tweets by selected media vs other tweeted news
 ```{r echo=FALSE}
 #covid vs non covid tweets
 ggplot(Type_data, aes(x="", y=tweet_count, fill = tweet_type)) + geom_bar(stat = "identity", width = 1)+ coord_polar(theta="y", start = 0) + geom_text(aes(label = paste0(formatC(as.integer(tweet_count),big.mark=","), " (", round(tweet_count/8901*100), "%", ")")), position = position_stack(vjust=0.5)) + theme_void() %+replace% theme(plot.caption = element_text(colour ="black",hjust = -1),) + labs(x = NULL, y = NULL, fill = NULL, title = "Comparison of Covid Coverage by News Media", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
 
 ```
 
-## Tweets of selected media vs rest of RSA
 ```{r echo=FALSE}
 # Media Vs others
 ggplot(RSA_data, aes(x="", y=RSA_tweet_value, fill = RSA_tweeter)) + geom_bar(stat = "identity", width = 1)+ coord_polar(theta="y", start = 0) + geom_text(aes(label = paste0(formatC(as.integer(RSA_tweet_value),big.mark=",")," (", round(RSA_tweet_value/62594*100), "%", ")")), position = position_stack(vjust=0.5)) + theme_void() %+replace% theme(plot.caption = element_text(colour ="black",hjust = -1),) + labs(x = NULL, y = NULL, fill = NULL, title = "Selected Media Tweets In RSA", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
 
 ```
 
-## Follower count of selected media
 ```{r echo=FALSE}
 # follower count on 22nd
 ggplot(Followers_media, aes(x=Media,y=followers_count)) + geom_bar(stat = "identity", color = "black", fill = "red") + scale_y_continuous(label = comma) + Other_theme + labs(x = NULL, y = NULL, title = "Follower Count", subtitle = "Latest update: 22 June", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
 
 ```
 
-## Tweet distribution in RSA
 ```{r echo=FALSE}
 #distribution across provinces
 ggplot(cityCombined, aes(x=cityNames, y=city_tweets, fill = cityNames)) + geom_bar(stat = "identity", width = 0.9) + geom_text(aes(label = paste0(round(Percentage,digits = 1), "%")), position = position_stack(vjust=0.5)) +
@@ -533,7 +530,7 @@ ggplot(cityCombined, aes(x=cityNames, y=city_tweets, fill = cityNames)) + geom_b
 #scale_y_continuous(breaks = c(0.00, 0.005, 0.010, 0.015, 0.02),labels = c("0", ".05", ".01", ".015", ".02"))
 ```
 
-## mp visualisation of tweet distribution
+## Map Visualisation of Tweet Distribution
 ```{r echo=FALSE}
 #Map distribution of tweets across the country
 geocoded <- lat_lng(tweets_za)
