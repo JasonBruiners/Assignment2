@@ -5,7 +5,7 @@ output: html_notebook
 
 # 3. Data Visualisation 
 
-```{r}
+```{r include=FALSE}
 # Libraries
 library(usethis)
 library(ggplot2)
@@ -18,8 +18,7 @@ library(scales)
 
 ```
 
-## 3.1 Data Loading 
-```{r}
+```{r include=FALSE}
 # Sentiment Analysis
 afinn_global <- read_rds("Data/Final_Data/afinn_global.rds")
 global_score <- read_rds("Data/Final_Data/global_score.rds")
@@ -67,11 +66,7 @@ tweets_za <- read_rds("Data/Final_Data/tweets_za.rds")
 cityCombined <- read_rds("Data/Final_Data/cityCombined.rds")
 ```
 
-
-# 3.2 Generating visuals
-
-## Global Theme
-```{r}
+```{r include=FALSE}
 t <- theme(
   axis.text.x=element_text(colour = "black",face = "bold"),
   axis.text.y=element_text(colour = "black",face = "bold"),
@@ -89,9 +84,9 @@ t <- theme(
 
 ```
 
-
-## 3.3 Sentiment visuals
-```{r}
+## 3.1 Sentiment visuals
+#### Six news agencies were selected and their most frequent words and overall sentiment score was graphed
+```{r include=FALSE}
 # Sentiment's theme
 sentiment_theme <- theme(
   axis.text.x=element_text(colour = "black",face = "bold"),
@@ -110,22 +105,22 @@ sentiment_theme <- theme(
 
 ```
 
-```{r}
-# sentiment analysis
-
+### 3.1.1 Sentiment Analysis In General
+```{r echo=FALSE, message=FALSE}
 # all agencies
 news24_plot <- afinn_global %>% top_n(10) %>% mutate(word = reorder(word,n)) %>% ggplot(aes(x= word, y = n)) + geom_col(color = "black", fill = "red") + coord_flip() + sentiment_theme %+replace% theme(panel.grid.major=element_blank()) + scale_y_continuous(breaks = seq(0, 300, by = 50)) + labs(x = NULL, y = NULL, title = "Frequently Used Words by News Media", subtitle = "Top 10", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
 news24_plot 
 
 ```
 
-```{r}
+```{r echo=FALSE, message=FALSE}
 ggplot(global_score, aes(x=value,y=count)) + geom_bar(stat = "identity", color = "black", fill = "red") + sentiment_theme + scale_x_continuous(breaks = c(-5,-4,-3,-2,-1,0,1,2,3,4,5)) + expand_limits(x = c(-5,5)) +   labs(x = NULL, y = NULL, title = "Sentiment Score of News Media", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
 
 ```
 
-
-```{r}
+## Sentement Analysis of topics
+##### Topics: covid, corona, covid19, coronavirus, sars cov 
+```{r echo=FALSE, message=FALSE}
 # following performed wit following topics "covid|corona|covid 19|covid19|coronavirus|sars cov 2|sars cov"
 # News24
 news24_plot <- afinn_news24 %>% top_n(10) %>% mutate(word = reorder(word,n)) %>% ggplot(aes(x= word, y = n)) + geom_col(color = "black", fill = "red") + coord_flip() + sentiment_theme %+replace% theme(panel.grid.major=element_blank()) + labs(x = NULL, y = NULL, title = "News24 Frequently Used Words", subtitle = "Top 10", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
@@ -133,76 +128,209 @@ news24_plot
 
 ```
 
-```{r}
+```{r echo=FALSE, message=FALSE}
 ggplot(news24_score, aes(x=value,y=count)) + geom_bar(stat = "identity", color = "black", fill = "red") + sentiment_theme + scale_x_continuous(breaks = c(-5,-4,-3,-2,-1,0,1,2,3,4,5)) + expand_limits(x = c(-5,5)) +   labs(x = NULL, y = NULL, title = "News24 Sentiment Score", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
 
 ```
 
-```{r}
+```{r echo=FALSE, message=FALSE}
 # TimesLIVE
 TimesLIVE_plot <- afinn_TimesLIVE %>% top_n(10) %>% head(10) %>% mutate(word = reorder(word,n)) %>% ggplot(aes(x= word, y = n)) + geom_col(color = "black", fill = "red") + coord_flip() + sentiment_theme %+replace% theme(panel.grid.major=element_blank()) + labs(x = NULL, y = NULL, title = "TimesLIVE Frequently Used Words", subtitle = "Top 10", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
 TimesLIVE_plot 
 
 ```
 
-```{r}
+```{r echo=FALSE, message=FALSE}
 ggplot(TimesLIVE_score, aes(x=value,y=count)) + geom_bar(stat = "identity", color = "black", fill = "red") + sentiment_theme + scale_x_continuous(breaks = c(-5,-4,-3,-2,-1,0,1,2,3,4,5)) + expand_limits(x = c(-5,5)) + labs(x = NULL, y = NULL, title = "TimesLIVE Sentiment Score", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
 
 ```
 
-```{r}
+```{r echo=FALSE, message=FALSE}
 # eNCA
 eNCA_plot <- afinn_eNCA %>% top_n(10) %>% mutate(word = reorder(word,n)) %>% head(10) %>% ggplot(aes(x= word, y = n)) + geom_col(color = "black", fill = "red") + coord_flip() + sentiment_theme %+replace% theme(panel.grid.major=element_blank()) + labs(x = NULL, y = NULL, title = "eNCA Frequently Used Words", subtitle = "Top 10", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
 eNCA_plot 
 
 ```
 
-```{r}
+```{r echo=FALSE, message=FALSE}
 ggplot(eNCA_score, aes(x=value,y=count)) + geom_bar(stat = "identity", color = "black", fill = "red") + sentiment_theme + scale_x_continuous(breaks = c(-5,-4,-3,-2,-1,0,1,2,3,4,5)) + expand_limits(x = c(-5,5)) + labs(x = NULL, y = NULL, title = "eNCA Sentiment Score", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
 
 ```
 
-```{r}
+```{r echo=FALSE, message=FALSE}
 # IOL
 IOL_plot <- afinn_IOL %>% top_n(10) %>% mutate(word = reorder(word,n)) %>% head(10) %>% ggplot(aes(x= word, y = n)) + geom_col(color = "black", fill = "red") + coord_flip() + sentiment_theme %+replace% theme(panel.grid.major=element_blank()) + labs(x = NULL, y = NULL, title = "IOL Frequently Used Words", subtitle = "Top 10", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
 IOL_plot 
 
 ```
 
-```{r}
+```{r echo=FALSE, message=FALSE}
 ggplot(IOL_score, aes(x=value,y=count)) + geom_bar(stat = "identity", color = "black", fill = "red") + sentiment_theme + scale_x_continuous(breaks = c(-5,-4,-3,-2,-1,0,1,2,3,4,5)) + expand_limits(x = c(-5,5)) + labs(x = NULL, y = NULL, title = "IOL Sentiment Score", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
 
 ```
 
-```{r}
+```{r echo=FALSE, message=FALSE}
 # ewnupdate
 ewn_plot <- afinn_ewn %>% top_n(10) %>% mutate(word = reorder(word,n)) %>% head(10) %>% ggplot(aes(x= word, y = n)) + geom_col(color = "black", fill = "red") + coord_flip() + sentiment_theme %+replace% theme(panel.grid.major=element_blank()) + labs(x = NULL, y = NULL, title = "EWN Frequently Used Words", subtitle = "Top 10", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
 ewn_plot 
 
 ```
 
-```{r}
+```{r echo=FALSE, message=FALSE}
 ggplot(ewn_score, aes(x=value,y=count)) + geom_bar(stat = "identity", color = "black", fill = "red") + sentiment_theme + scale_x_continuous(breaks = c(-5,-4,-3,-2,-1,0,1,2,3,4,5)) + expand_limits(x = c(-5,5)) + labs(x = NULL, y = NULL, title = "EWN Sentiment Score", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
 
 ```
 
-```{r}
+```{r echo=FALSE, message=FALSE}
 # SABCNEWS
 SABC_plot <- afinn_SABCNews %>% top_n(10) %>% mutate(word = reorder(word,n)) %>% head(10) %>% ggplot(aes(x= word, y = n)) + geom_col(color = "black", fill = "red") + coord_flip() + sentiment_theme %+replace% theme(panel.grid.major=element_blank()) + labs(x = NULL, y = NULL, title = "SABCNews Frequently Used Words", subtitle = "Top 10", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
 SABC_plot 
 
 ```
 
-```{r}
+```{r echo=FALSE, message=FALSE}
 ggplot(SABC_score, aes(x=value,y=count)) + geom_bar(stat = "identity", color = "black", fill = "red") + sentiment_theme + scale_x_continuous(breaks = c(-5,-4,-3,-2,-1,0,1,2,3,4,5)) + expand_limits(x = c(-5,5)) + labs(x = NULL, y = NULL, title = "SABCNews Sentiment Score", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
 
 ```
 
 
 ## 3.4 Topic Modelling visuals
-### 3.4.1 Latent Dirichlet Allocation 
+### 3.4.1 Structural Topic Modelling
+#### New24
+```{r echo=FALSE}
+#News24 STM Plot
+News24_top_terms %>%
+  mutate(term = reorder(term, beta)) %>%
+  ggplot(aes(term, beta, fill = factor(topic))) +
+  geom_col(show.legend = FALSE) + 
+  scale_y_continuous(breaks = c(0.00, 0.02, 0.04, 0.060, 0.080),labels = c("0", ".02", ".04", ".06", ".08")) +
+  expand_limits(y=c(0,0.08)) + 
+  facet_wrap(~ topic, scales = "free") + 
+  coord_flip() +
+  labs(title = "Structural Topic Modeling for News24 ", caption = "\nSource: Data collected from Twitter's REST API via rtweet"
+) + t %+replace% theme(
+  strip.text = element_text(face = "bold"),
+  axis.text.y=element_text(colour = "black",face = "bold", size = 7),
+  axis.text.x=element_text(colour = "black",face = "bold", size = 7),
+  )
+```
+
+#### TimesLIVE
+```{r echo=FALSE}
+#TimesLIVE STM Plot
+TimesLIVE_top_terms %>%
+  mutate(term = reorder(term, beta)) %>%
+  ggplot(aes(term, beta, fill = factor(topic))) +
+  geom_col(show.legend = FALSE) + 
+  scale_y_continuous(breaks = c(0.00, 0.02, 0.04, 0.060, 0.080),labels = c("0", ".02", ".04", ".06", ".08")) +
+  expand_limits(y=c(0,0.08)) + 
+  facet_wrap(~ topic, scales = "free") + 
+  coord_flip() +
+  labs(title = "Structural Topic Modeling for TimesLIVE ", caption = "\nSource: Data collected from Twitter's REST API via rtweet"
+) + t %+replace% theme(
+  strip.text = element_text(face = "bold"),
+  axis.text.y=element_text(colour = "black",face = "bold", size = 7),
+  axis.text.x=element_text(colour = "black",face = "bold", size = 7),
+  )
+```
+
+
+```{r echo=FALSE}
+#ewn STM Plot
+ewnupdate_top_terms %>%
+  mutate(term = reorder(term, beta)) %>%
+  ggplot(aes(term, beta, fill = factor(topic))) +
+  geom_col(show.legend = FALSE) + 
+  scale_y_continuous(breaks = c(0.00, 0.02, 0.04, 0.060, 0.080),labels = c("0", ".02", ".04", ".06", ".08")) +
+  expand_limits(y=c(0,0.08)) + 
+  facet_wrap(~ topic, scales = "free") + 
+  coord_flip() +
+  labs(title = "Structural Topic Modeling for EWN ", caption = "\nSource: Data collected from Twitter's REST API via rtweet"
+) + t %+replace% theme(
+  strip.text = element_text(face = "bold"),
+  axis.text.y=element_text(colour = "black",face = "bold", size = 7),
+  axis.text.x=element_text(colour = "black",face = "bold", size = 7),
+  )
+```
+
+
+```{r echo=FALSE}
+#IOL STM Plot
+IOL_top_terms %>%
+  mutate(term = reorder(term, beta)) %>%
+  ggplot(aes(term, beta, fill = factor(topic))) +
+  geom_col(show.legend = FALSE) + 
+  scale_y_continuous(breaks = c(0.00, 0.02, 0.04, 0.060, 0.080),labels = c("0", ".02", ".04", ".06", ".08")) +
+  expand_limits(y=c(0,0.08)) + 
+  facet_wrap(~ topic, scales = "free") + 
+  coord_flip() +
+  labs(title = "Structural Topic Modeling for IOL ", caption = "\nSource: Data collected from Twitter's REST API via rtweet"
+) + t %+replace% theme(
+  strip.text = element_text(face = "bold"),
+  axis.text.y=element_text(colour = "black",face = "bold", size = 7),
+  axis.text.x=element_text(colour = "black",face = "bold", size = 7),
+  )
+```
+
+
+```{r echo=FALSE}
+#eNCA STM Plot
+eNCA_top_terms %>%
+  mutate(term = reorder(term, beta)) %>%
+  ggplot(aes(term, beta, fill = factor(topic))) +
+  geom_col(show.legend = FALSE) + 
+  scale_y_continuous(breaks = c(0.00, 0.02, 0.04, 0.060, 0.080),labels = c("0", ".02", ".04", ".06", ".08")) +
+  expand_limits(y=c(0,0.08)) + 
+  facet_wrap(~ topic, scales = "free") + 
+  coord_flip() +
+  labs(title = "Structural Topic Modeling for eNCA ", caption = "\nSource: Data collected from Twitter's REST API via rtweet"
+) + t %+replace% theme(
+  strip.text = element_text(face = "bold"),
+  axis.text.y=element_text(colour = "black",face = "bold", size = 7),
+  axis.text.x=element_text(colour = "black",face = "bold", size = 7),
+  )
+```
+
+
+```{r echo=FALSE}
+#SABC STM Plot
+SABC_top_terms %>%
+  mutate(term = reorder(term, beta)) %>%
+  ggplot(aes(term, beta, fill = factor(topic))) +
+  geom_col(show.legend = FALSE) + 
+  scale_y_continuous(breaks = c(0.00, 0.02, 0.04, 0.060, 0.080),labels = c("0", ".02", ".04", ".06", ".08")) +
+  expand_limits(y=c(0,0.08)) + 
+  facet_wrap(~ topic, scales = "free") + 
+  coord_flip() +
+  labs(title = "Structural Topic Modeling for SABC ", caption = "\nSource: Data collected from Twitter's REST API via rtweet"
+) + t %+replace% theme(
+  strip.text = element_text(face = "bold"),
+  axis.text.y=element_text(colour = "black",face = "bold", size = 7),
+  axis.text.x=element_text(colour = "black",face = "bold", size = 7),
+  )
+```
+
+```{r echo=FALSE}
+#Global STM Plot
+global_top_terms %>%
+  mutate(term = reorder(term, beta)) %>%
+  ggplot(aes(term, beta, fill = factor(topic))) +
+  geom_col(show.legend = FALSE) + 
+  scale_y_continuous(breaks = c(0.00, 0.02, 0.04, 0.060, 0.080),labels = c("0", ".02", ".04", ".06", ".08")) +
+  expand_limits(y=c(0,0.08)) + 
+  facet_wrap(~ topic, scales = "free") + 
+  coord_flip() +
+  labs(title = "Structural Topic Modeling for News24 ", caption = "\nSource: Data collected from Twitter's REST API via rtweet"
+) + t %+replace% theme(
+  strip.text = element_text(face = "bold"),
+  axis.text.y=element_text(colour = "black",face = "bold", size = 7),
+  axis.text.x=element_text(colour = "black",face = "bold", size = 7),
+  )
+```
+
+### 3.4.2 Latent Dirichlet Allocation 
 ####  News24 LDA
-```{r}
+```{r echo=FALSE}
 News24_top_terms_LDA %>%
   mutate(term = reorder(term, beta)) %>%
   ggplot(aes(term, beta, fill = factor(topic))) +
@@ -220,7 +348,7 @@ News24_top_terms_LDA %>%
 
 ```
 
-```{r}
+```{r echo=FALSE}
 #Scale not applied due to plot 12 having a significant outlier
 
 TimesLIVE_top_terms_LDA %>%
@@ -240,7 +368,7 @@ TimesLIVE_top_terms_LDA %>%
 ```
 
 
-```{r}
+```{r echo=FALSE}
 ewn_top_terms_LDA %>%
   mutate(term = reorder(term, beta)) %>%
   ggplot(aes(term, beta, fill = factor(topic))) +
@@ -258,7 +386,7 @@ ewn_top_terms_LDA %>%
 ```
 
 
-```{r}
+```{r echo=FALSE}
 IOL_top_terms_LDA %>%
   mutate(term = reorder(term, beta)) %>%
   ggplot(aes(term, beta, fill = factor(topic))) +
@@ -275,7 +403,7 @@ IOL_top_terms_LDA %>%
 )
 ```
 
-```{r}
+```{r echo=FALSE}
 eNCA_top_terms_LDA %>%
   mutate(term = reorder(term, beta)) %>%
   ggplot(aes(term, beta, fill = factor(topic))) +
@@ -292,7 +420,7 @@ eNCA_top_terms_LDA %>%
 )
 ```
 
-```{r}
+```{r echo=FALSE}
 SABC_top_terms_LDA %>%
   mutate(term = reorder(term, beta)) %>%
   ggplot(aes(term, beta, fill = factor(topic))) +
@@ -309,7 +437,7 @@ SABC_top_terms_LDA %>%
 )
 ```
 
-```{r}
+```{r echo=FALSE}
 global_top_terms_LDA %>%
   mutate(term = reorder(term, beta)) %>%
   ggplot(aes(term, beta, fill = factor(topic))) +
@@ -327,141 +455,8 @@ global_top_terms_LDA %>%
 
 ```
 
-
-### 3.4.2 Structural Topic Modelling
-
-```{r}
-#News24 STM Plot
-News24_top_terms %>%
-  mutate(term = reorder(term, beta)) %>%
-  ggplot(aes(term, beta, fill = factor(topic))) +
-  geom_col(show.legend = FALSE) + 
-  scale_y_continuous(breaks = c(0.00, 0.02, 0.04, 0.060, 0.080),labels = c("0", ".02", ".04", ".06", ".08")) +
-  expand_limits(y=c(0,0.08)) + 
-  facet_wrap(~ topic, scales = "free") + 
-  coord_flip() +
-  labs(title = "Structural Topic Modeling for News24 ", caption = "\nSource: Data collected from Twitter's REST API via rtweet"
-) + t %+replace% theme(
-  strip.text = element_text(face = "bold"),
-  axis.text.y=element_text(colour = "black",face = "bold", size = 7),
-  axis.text.x=element_text(colour = "black",face = "bold", size = 7),
-  )
-```
-
-```{r}
-#TimesLIVE STM Plot
-TimesLIVE_top_terms %>%
-  mutate(term = reorder(term, beta)) %>%
-  ggplot(aes(term, beta, fill = factor(topic))) +
-  geom_col(show.legend = FALSE) + 
-  scale_y_continuous(breaks = c(0.00, 0.02, 0.04, 0.060, 0.080),labels = c("0", ".02", ".04", ".06", ".08")) +
-  expand_limits(y=c(0,0.08)) + 
-  facet_wrap(~ topic, scales = "free") + 
-  coord_flip() +
-  labs(title = "Structural Topic Modeling for TimesLIVE ", caption = "\nSource: Data collected from Twitter's REST API via rtweet"
-) + t %+replace% theme(
-  strip.text = element_text(face = "bold"),
-  axis.text.y=element_text(colour = "black",face = "bold", size = 7),
-  axis.text.x=element_text(colour = "black",face = "bold", size = 7),
-  )
-```
-
-
-```{r}
-#ewn STM Plot
-ewnupdate_top_terms %>%
-  mutate(term = reorder(term, beta)) %>%
-  ggplot(aes(term, beta, fill = factor(topic))) +
-  geom_col(show.legend = FALSE) + 
-  scale_y_continuous(breaks = c(0.00, 0.02, 0.04, 0.060, 0.080),labels = c("0", ".02", ".04", ".06", ".08")) +
-  expand_limits(y=c(0,0.08)) + 
-  facet_wrap(~ topic, scales = "free") + 
-  coord_flip() +
-  labs(title = "Structural Topic Modeling for EWN ", caption = "\nSource: Data collected from Twitter's REST API via rtweet"
-) + t %+replace% theme(
-  strip.text = element_text(face = "bold"),
-  axis.text.y=element_text(colour = "black",face = "bold", size = 7),
-  axis.text.x=element_text(colour = "black",face = "bold", size = 7),
-  )
-```
-
-
-```{r}
-#IOL STM Plot
-IOL_top_terms %>%
-  mutate(term = reorder(term, beta)) %>%
-  ggplot(aes(term, beta, fill = factor(topic))) +
-  geom_col(show.legend = FALSE) + 
-  scale_y_continuous(breaks = c(0.00, 0.02, 0.04, 0.060, 0.080),labels = c("0", ".02", ".04", ".06", ".08")) +
-  expand_limits(y=c(0,0.08)) + 
-  facet_wrap(~ topic, scales = "free") + 
-  coord_flip() +
-  labs(title = "Structural Topic Modeling for IOL ", caption = "\nSource: Data collected from Twitter's REST API via rtweet"
-) + t %+replace% theme(
-  strip.text = element_text(face = "bold"),
-  axis.text.y=element_text(colour = "black",face = "bold", size = 7),
-  axis.text.x=element_text(colour = "black",face = "bold", size = 7),
-  )
-```
-
-
-```{r}
-#eNCA STM Plot
-eNCA_top_terms %>%
-  mutate(term = reorder(term, beta)) %>%
-  ggplot(aes(term, beta, fill = factor(topic))) +
-  geom_col(show.legend = FALSE) + 
-  scale_y_continuous(breaks = c(0.00, 0.02, 0.04, 0.060, 0.080),labels = c("0", ".02", ".04", ".06", ".08")) +
-  expand_limits(y=c(0,0.08)) + 
-  facet_wrap(~ topic, scales = "free") + 
-  coord_flip() +
-  labs(title = "Structural Topic Modeling for eNCA ", caption = "\nSource: Data collected from Twitter's REST API via rtweet"
-) + t %+replace% theme(
-  strip.text = element_text(face = "bold"),
-  axis.text.y=element_text(colour = "black",face = "bold", size = 7),
-  axis.text.x=element_text(colour = "black",face = "bold", size = 7),
-  )
-```
-
-
-```{r}
-#SABC STM Plot
-SABC_top_terms %>%
-  mutate(term = reorder(term, beta)) %>%
-  ggplot(aes(term, beta, fill = factor(topic))) +
-  geom_col(show.legend = FALSE) + 
-  scale_y_continuous(breaks = c(0.00, 0.02, 0.04, 0.060, 0.080),labels = c("0", ".02", ".04", ".06", ".08")) +
-  expand_limits(y=c(0,0.08)) + 
-  facet_wrap(~ topic, scales = "free") + 
-  coord_flip() +
-  labs(title = "Structural Topic Modeling for SABC ", caption = "\nSource: Data collected from Twitter's REST API via rtweet"
-) + t %+replace% theme(
-  strip.text = element_text(face = "bold"),
-  axis.text.y=element_text(colour = "black",face = "bold", size = 7),
-  axis.text.x=element_text(colour = "black",face = "bold", size = 7),
-  )
-```
-
-```{r}
-#Global STM Plot
-global_top_terms %>%
-  mutate(term = reorder(term, beta)) %>%
-  ggplot(aes(term, beta, fill = factor(topic))) +
-  geom_col(show.legend = FALSE) + 
-  scale_y_continuous(breaks = c(0.00, 0.02, 0.04, 0.060, 0.080),labels = c("0", ".02", ".04", ".06", ".08")) +
-  expand_limits(y=c(0,0.08)) + 
-  facet_wrap(~ topic, scales = "free") + 
-  coord_flip() +
-  labs(title = "Structural Topic Modeling for News24 ", caption = "\nSource: Data collected from Twitter's REST API via rtweet"
-) + t %+replace% theme(
-  strip.text = element_text(face = "bold"),
-  axis.text.y=element_text(colour = "black",face = "bold", size = 7),
-  axis.text.x=element_text(colour = "black",face = "bold", size = 7),
-  )
-```
-
 ## 3.5 Additional visuals
-```{r}
+```{r include=FALSE}
 # Additional's theme
 Other_theme <- theme(
   axis.text.x=element_text(colour = "black",face = "bold"),
@@ -479,43 +474,50 @@ Other_theme <- theme(
 )
 ```
 
-```{r}
+## Frequency of tweets by selected media agencies over a three week period
+```{r echo=FALSE}
 #frequency of tweets
 ggplot(Frequency_tweets, aes(x = date, y = News24)) + Other_theme + geom_line(color = "black", size = 0.9) + geom_line(aes(x = date, y = timesLIVE), color = "blue", size = 0.9) + geom_line(aes(x = date, y = Ewnupdate), color = "red", size = 0.9) + geom_line(aes(x = date, y = IOL), color = "brown", size = 0.9) + geom_line(aes(x = date, y = eNCA), color = "green", size = 0.9) + geom_line(aes(x = date, y = SABC), color = "yellow", size = 0.9) + scale_x_date(breaks = "1 day",date_labels = "%d") + scale_y_continuous(breaks = seq(0, 160, by = 20)) + labs(x = NULL, y = NULL, title = "Frequency of Tweets", subtitle = "Three week period in June", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
 
 ```
 
-```{r}
+## Retweet count by selected media agencies over a three week period
+```{r echo=FALSE}
 #retweet Count
 ggplot(retweet_tweets, aes(x = date, y = News24)) + Other_theme + geom_line(color = "black", size = 0.9) + geom_line(aes(x = date, y = timesLIVE), color = "blue", size = 0.9) + geom_line(aes(x = date, y = Ewnupdate), color = "red", size = 0.9) + geom_line(aes(x = date, y = IOL), color = "brown", size = 0.9) + geom_line(aes(x = date, y = eNCA), color = "green", size = 0.9) + geom_line(aes(x = date, y = SABC), color = "yellow", size = 0.9) + scale_x_date(breaks = "1 day",date_labels = "%d")+ scale_y_continuous(trans = "log2", breaks = c(250,500,750,1000,2000,4000,6000,8000)) + labs(x = NULL, y = NULL, title = "Retweet count", subtitle = "Three week period in June", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
 
 ```
 
-```{r}
+## Like Count by selected media agencies over a three week period
+```{r echo=FALSE}
 #Like Count
 ggplot(Likes_tweets, aes(x = date, y = News24)) + Other_theme + geom_line(color = "black", size = 0.9) + geom_line(aes(x = date, y = timesLIVE), color = "blue", size = 0.9) + geom_line(aes(x = date, y = Ewnupdate), color = "red", size = 0.9) + geom_line(aes(x = date, y = IOL), color = "brown", size = 0.9) + geom_line(aes(x = date, y = eNCA), color = "green", size = 0.9) + geom_line(aes(x = date, y = SABC), color = "yellow", size = 0.9) + scale_x_date(breaks = "1 day",date_labels = "%d") + scale_y_continuous(breaks = seq(0, 20000, by = 1500)) + labs(x = NULL, y = NULL, title = "Like counter", subtitle = "Three week period in June", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
 
 ```
 
-```{r}
+## Covid 19 tweets by selected media vs other tweeted news
+```{r echo=FALSE}
 #covid vs non covid tweets
 ggplot(Type_data, aes(x="", y=tweet_count, fill = tweet_type)) + geom_bar(stat = "identity", width = 1)+ coord_polar(theta="y", start = 0) + geom_text(aes(label = paste0(formatC(as.integer(tweet_count),big.mark=","), " (", round(tweet_count/8901*100), "%", ")")), position = position_stack(vjust=0.5)) + theme_void() %+replace% theme(plot.caption = element_text(colour ="black",hjust = -1),) + labs(x = NULL, y = NULL, fill = NULL, title = "Comparison of Covid Coverage by News Media", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
 
 ```
 
-```{r}
+## Tweets of selected media vs rest of RSA
+```{r echo=FALSE}
 # Media Vs others
 ggplot(RSA_data, aes(x="", y=RSA_tweet_value, fill = RSA_tweeter)) + geom_bar(stat = "identity", width = 1)+ coord_polar(theta="y", start = 0) + geom_text(aes(label = paste0(formatC(as.integer(RSA_tweet_value),big.mark=",")," (", round(RSA_tweet_value/62594*100), "%", ")")), position = position_stack(vjust=0.5)) + theme_void() %+replace% theme(plot.caption = element_text(colour ="black",hjust = -1),) + labs(x = NULL, y = NULL, fill = NULL, title = "Selected Media Tweets In RSA", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
 
 ```
 
-```{r}
+## Follower count of selected media
+```{r echo=FALSE}
 # follower count on 22nd
 ggplot(Followers_media, aes(x=Media,y=followers_count)) + geom_bar(stat = "identity", color = "black", fill = "red") + scale_y_continuous(label = comma) + Other_theme + labs(x = NULL, y = NULL, title = "Follower Count", subtitle = "Latest update: 22 June", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
 
 ```
 
-```{r}
+## Tweet distribution in RSA
+```{r echo=FALSE}
 #distribution across provinces
 ggplot(cityCombined, aes(x=cityNames, y=city_tweets, fill = cityNames)) + geom_bar(stat = "identity", width = 0.9) + geom_text(aes(label = paste0(round(Percentage,digits = 1), "%")), position = position_stack(vjust=0.5)) +
   labs(x = NULL, y = "Number of tweets", fill = NULL, title = "Distribution of Covid related tweets across major cities", caption = "\nSource: Data collected from Twitter's REST API via rtweet") + guides(cityNames = FALSE) + 
@@ -531,7 +533,8 @@ ggplot(cityCombined, aes(x=cityNames, y=city_tweets, fill = cityNames)) + geom_b
 #scale_y_continuous(breaks = c(0.00, 0.005, 0.010, 0.015, 0.02),labels = c("0", ".05", ".01", ".015", ".02"))
 ```
 
-```{r}
+## mp visualisation of tweet distribution
+```{r echo=FALSE}
 #Map distribution of tweets across the country
 geocoded <- lat_lng(tweets_za)
 par(mar = c(1, 1, 1, 1))
