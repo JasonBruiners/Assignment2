@@ -5,7 +5,7 @@ output: html_notebook
 
 # 2. Data Transformation
 
-```{r eval=FALSE,include=FALSE}
+```{r include=FALSE}
 #Packages
 library(usethis)
 library(devtools)
@@ -16,6 +16,7 @@ library(topicmodels)
 library(tidyverse)
 library(maps)
 library(tidytext)
+library(tidyr)
 library(textdata)
 library(tm)
 library(stm)
@@ -303,9 +304,21 @@ Clean_tweets.global <- global_cleaned %>% unnest_tokens(word, stripped_text)
 Clean_tweets.global <- Clean_tweets.global  %>% anti_join(stop_words)
 ```
 
+### Cleaning Output Example 
+
+```{r}
+head(tweets.News24_clean)
+```
+
+### Cleaning Output Example 2 - Tokenize & Anti-join
+
+```{r}
+head(Clean_tweets.global)
+```
+
 
 ## 2.3 Sentiment Analysis
-Example of resultant data for News24 seen in output
+Afinn was the chosen lexicon, due to its ability to show negativity and positivity through the range -5 to 5.
 ```{r echo=TRUE, message=FALSE}
 
 # Global
@@ -317,8 +330,6 @@ global_score <- afinn_global %>% group_by(value) %>% summarise(count = sum(n))
 afinn_news24 <- clean_tweets.News24 %>% inner_join(get_sentiments("afinn")) %>% count(word, value, sort = TRUE) %>% ungroup()
 
 news24_score <- afinn_news24 %>% group_by(value) %>% summarise(count = sum(n))
-
-news24_score
 
 # TimesLIVE
 afinn_TimesLIVE <- clean_tweets.TimesLIVE %>% inner_join(get_sentiments("afinn")) %>% count(word, value, sort = TRUE) %>% ungroup()
@@ -347,14 +358,19 @@ SABC_score <- afinn_SABCNews %>% group_by(value) %>% summarise(count = sum(n))
 
 ```
 
+Example of resultant data for News24 seen in output
+```{r}
+head(news24_score)
+```
 
 ## 2.4 Topic Modeliing
 
 ### 2.4.1 Structured Topic Modelling
+STM is a  high quality R package that is useful for validating topic models, determining the appropriate value of k and visualizing or further interpreting topic models. STM employs meta data about documents to improve the assignment of words to latent topics in a corpus of k and visualizing or further interpreting topic models. Therefore, STM was chosen for topic modelling.
 
 ### Data Preparation
 
-```{r}
+```{r message=FALSE, warning=FALSE, include=FALSE}
 processed_News24 <- textProcessor(tweets.News24_clean$stripped_text, metadata = News24_tweets)
 processed_TimesLIVE <- textProcessor(tweets.TimesLIVE_clean$stripped_text, metadata = TimesLIVE_tweets)
 processed_ewn <- textProcessor(tweets.ewn_clean$stripped_text, metadata = ewnupdates_tweets)
@@ -365,7 +381,7 @@ processed_global <- textProcessor(tweets.SABCNews_clean$stripped_text, metadata 
 
 ```
 
-```{r}
+```{r message=FALSE, warning=FALSE, include=FALSE}
 out_News24 <- prepDocuments(processed_News24$documents, processed_News24$vocab, processed_News24$meta)
 out_TimesLIVE <- prepDocuments(processed_TimesLIVE$documents, processed_TimesLIVE$vocab, processed_TimesLIVE$meta)
 out_ewn <- prepDocuments(processed_ewn$documents, processed_ewn$vocab, processed_ewn$meta)
@@ -413,6 +429,7 @@ global_meta <-out_global$meta
 ```
 
 ### Find Best K value
+Upon visual inspection of the graphs produced. A K value of 16 was chosen and applied throughout.
 ```{r eval=FALSE}
 #NO RUN
 global_findingk <- searchK(documents = global_docs, vocab = global_vocab, K = c(5:50),
@@ -460,7 +477,7 @@ global_STM <- stm(documents = global_docs, vocab = global_vocab,
 ```
 
 ### Final tidying of data
-```{r}
+```{r message=FALSE, warning=FALSE}
 News24_topics <- tidy(News24_STM, matrix = "beta")
 timesLIVE_topics <- tidy(timesLIVE_STM, matrix = "beta")
 Ewnupdate_topics <- tidy(Ewnupdate_STM, matrix = "beta")
@@ -520,11 +537,17 @@ global_top_terms <-
 
 ```
 
+### Example of output
+```{r}
+head(global_top_terms)
+```
+
 
 ### 2.4.2 Latent Dirichlet Allocation Topic Modelling
+LDA is a generative model and is able to generalize the model it uses to separate documents into topics to documents outside the corpora. LDA represents documents as random mixtures over topics in the corpus. This proves useful since any work of writing is rarely about a single subject.Therefore, LDA was also chosen for topic modelling.
 
 ### Create corpus datatypes
-```{r}
+```{r message=FALSE, warning=FALSE}
 corpusNews24 <- Corpus(VectorSource(tweets.News24_clean))
 corpusNews24 <- tm_map(corpusNews24, removeWords, stopwords("english"))  
 corpusNews24 <- tm_map(corpusNews24, removeNumbers)
@@ -570,6 +593,7 @@ dtmGlobal = DocumentTermMatrix(corpusGlobal)
 ```
 
 ### Running Latent Dirichlet Allocation Model
+The Gibbs method was chosen as the LDA method. The Gibbs method produced more accurate topics, however it is important to note that the method introduced anomalies.
 ```{r}
 #LDA model with 16 topics selected
 News24_lda = LDA(dtmNews24, k = 16, method = 'Gibbs', control = list(nstart = 5, seed = list(1505,99,36,56,88), best = TRUE,thin = 500, burnin = 4000, iter = 2000))
@@ -676,11 +700,16 @@ Global_top_terms_LDA <- rbind(d[[1]],d[[2]],d[[3]],d[[4]],d[[5]],d[[6]],d[[7]],d
 
 ```
 
+### Example of output
+```{r}
+head(Global_top_terms_LDA)
+```
+
 
 ## 2.5 Additional Analysis
 
 ### Frequency of Tweets
-```{r}
+```{r message=FALSE, warning=FALSE}
 
 News24_freq <- News24_tweets %>% group_by(date) %>% summarise(News24 = n())
 timesLIVE_freq <- TimesLIVE_tweets %>% group_by(date) %>% summarise(timesLIVE = n()) %>% select(timesLIVE)
@@ -694,9 +723,13 @@ Frequency_tweets <- bind_cols(News24_freq,timesLIVE_freq,Ewnupdate_freq,IOL_freq
 
 ```
 
+Example of output
+```{r}
+head(Frequency_tweets)
+```
 
 ### Retweet count
-```{r}
+```{r message=FALSE, warning=FALSE}
  
 News24_retweet <- News24_tweets %>% group_by(date) %>% summarise(News24 = sum(retweet_count)) 
 timesLIVE_retweet <- TimesLIVE_tweets %>% group_by(date) %>% summarise(timesLIVE = sum(retweet_count)) %>% select(timesLIVE)
@@ -709,9 +742,13 @@ SABC_retweet <- SABCNews_tweets %>% group_by(date) %>% summarise(SABC = sum(retw
 retweet_tweets <- bind_cols(News24_retweet,timesLIVE_retweet,Ewnupdate_retweet,IOL_retweet,eNCA_retweet,SABC_retweet)
 ```
 
+Example of output
+```{r}
+head(retweet_tweets)
+```
 
 ### Like count
-```{r}
+```{r message=FALSE, warning=FALSE}
 # like count
 News24_likes <- News24_tweets %>% group_by(date) %>% summarise(News24 = sum(favorite_count)) 
 timesLIVE_likes <- TimesLIVE_tweets %>% group_by(date) %>% summarise(timesLIVE = sum(favorite_count)) %>% select(timesLIVE) 
@@ -725,6 +762,10 @@ Likes_tweets <- bind_cols(News24_likes,timesLIVE_likes,Ewnupdate_likes,IOL_likes
 
 ```
 
+Example of output
+```{r}
+head(retweet_tweets)
+```
 
 ### Total number of tweets vs Covid tweets
 ```{r}
@@ -753,7 +794,12 @@ tweet_type <- c("General","Covid-related")
 tweet_count <- c(Other_tweets,CVD_tweets)
 
 Type_data <- data.frame(tweet_type,tweet_count)
-Type_data
+
+```
+
+Example of output
+```{r}
+head(Type_data)
 ```
 
 
@@ -767,9 +813,13 @@ RSA_tweeter <- c("Selected Media","Other")
 RSA_tweet_value <- c(Media_tweets,RSA_other_tweets)
 
 RSA_data <- data.frame(RSA_tweeter,RSA_tweet_value)
-RSA_data
+
 ```
 
+Example of output
+```{r}
+head(RSA_data)
+```
 
 ### Followers for selected news agency
 ```{r echo=TRUE}
@@ -782,9 +832,13 @@ SABC_followers <- tweets_za %>% filter(screen_name == "SABCNews") %>% head(1) %>
 
 Media <- c("News24","TimesLIVE","ewnupdates","IOL","eNCA","SABCNews")
 Followers_media <- data.frame(Media,rbind(News24_followers,TimesLIVE_followers,ewn_followers,IOL_followers,eNCA_followers,SABC_followers))
-Followers_media
+
 ```
 
+Example of output
+```{r}
+head(Followers_media)
+```
 
 ### Distribution and Percentage of total tweets across major cities
 ```{r}
@@ -807,6 +861,10 @@ cityCombined <- cityCombined %>% add_column(Percentage = (city_tweets/(sum(city_
 
 ```
 
+Example of output
+```{r}
+head(cityCombined)
+```
 
 ## 2.6 Data Export
 ```{r eval=FALSE}
