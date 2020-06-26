@@ -2,9 +2,10 @@
 title: "Data Extraction"
 output: html_notebook
 ---
+Jason Bruiners 19431236
+Wesley Small 19992084
 
-
-Table of Contents:
+# Table of Contents:
 
 1. Data Collection
 1.1 Tweet Collection
@@ -30,7 +31,7 @@ Table of Contents:
 
 
 # 1. Data Collection
-
+Data collected from Twitter's REST API via rtweet
 ```{r message=FALSE, warning=FALSE, include=FALSE}
 #install_github("mkearney/rtweet")
 
@@ -46,17 +47,17 @@ library(maps)
 ## 1.1 Tweet Collection
 
 ### Checking rate limits
+Rate limits were regularly checked for tweet collection
 ```{r}
-# see rate limits
 # The rate limit for the standard search API is 18,000 tweets per fifteen minutes. With a bearer token, the rate limit is 45,000 tweets per fifteen minutes. 
 rate_limits<-rate_limit()
 head(rate_limits[,1:4])
 ```
 
 
-### Collect first batch of tweets
+### Collect first batch of timeline tweets
 ```{r eval=FALSE, echo=TRUE, message=FALSE, warning=FALSE}
-#PULL FINAL VERSION ON MONDAY OR TUESDAY
+#Pull data for news agencies
 News24_tweets <- get_timelines(c("News24"), n = 3200, include_rts=FALSE)
 TimesLIVE_tweets <- get_timelines(c("TimesLIVE"), n = 3200, include_rts=FALSE)
 eNCA_tweets <- get_timelines(c("eNCA"), n = 3200, include_rts=FALSE)
@@ -64,8 +65,9 @@ eNCA_tweets <- get_timelines(c("eNCA"), n = 3200, include_rts=FALSE)
 ```
 
 
-### Collect second batch of tweets
+### Collect second batch of timeline tweets
 ```{r eval=FALSE, echo=TRUE, message=FALSE, warning=FALSE}
+#Pull data for news agencies
 IOL_tweets <- get_timelines(c("IOL"), n=3200, include_rts=FALSE)
 SABCNews_tweets <- get_timelines(c("SABCNews"), n=3200, include_rts=FALSE)
 ewnupdates_tweets <- get_timelines(c("ewnupdates"), n=3200, include_rts=FALSE)
@@ -88,7 +90,7 @@ mailandguardian_tweets <- get_timelines(c("mailandguardian"), n=3200, include_rt
 trend_tweets <- get_trends("South Africa")
 ```
 
-### Collect fourth batch of tweets
+### Collect fourth batch of locational tweets
 
 ```{r eval=FALSE, echo=TRUE, message=FALSE, warning=FALSE}
 #Define terms to search by
@@ -96,7 +98,7 @@ q1 <- "Covid OR Corona OR Covid-19 OR Covid19 OR Coronavirus OR SARS-CoV-2 OR SA
 q2 <- "OR #Covid OR #Corona OR #Covid-19 OR #Covid19 OR #Coronavirus OR #SARS-CoV-2 OR #SARS-CoV"
 q <- paste(q1,q2)
 
-#UPDATED DAILY
+#Updated daily over collection period from 13 June 2020 to 22 June 2020
 #Collecting tweets for South Africa
 tweets_za_22 <- search_tweets(q,geocode = lookup_coords("South Africa"), since="2020-06-22", until="2020-06-23", type="recent", include_rts=FALSE, n=18000)
 
@@ -113,7 +115,7 @@ tweets_pe_22 <- search_tweets(q,geocode = lookup_coords("Port Elizabeth"), since
 ```
 
 
-### Collect fifth batch of tweets
+### Collect profile data
 
 ```{r eval=FALSE, echo=TRUE, message=FALSE, warning=FALSE}
 #Retrieve profiles
@@ -145,8 +147,9 @@ ewnupdates_followers <- ewnupdates_profile$friends_count
 
 
 ## 1.2 Data Export
+Data was exported for use in transformation rmd
 ```{r eval=FALSE}
-#UPDATE DAILY
+#Updated daily over collection period from 13 June 2020 to 22 June 2020
 #Export Filtered Data for 22/06/2020
 write_rds(tweets_za_22, "Data/Raw_Filtered_Data/tweets_za_22.rds")
 write_rds(tweets_bloem_22, "Data/Raw_Filtered_Data/tweets_bloem_22.rds")
