@@ -1,7 +1,9 @@
 ---
-title: "Analysis and Visualisation"
+title: "Visualisation"
 output: html_notebook
 ---
+
+# 3. Data Visualisation 
 
 ```{r}
 # Libraries
@@ -15,7 +17,7 @@ library(dplyr)
 
 ```
 
-# Load extracted data 
+## 3.1 Data Loading 
 ```{r}
 # Sentiment Analysis
 afinn_global <- read_rds("Data/Final_Data/afinn_global.rds")
@@ -58,12 +60,15 @@ Frequency_tweets <- read_rds("Data/Final_Data/Frequency_tweets.rds")
 retweet_tweets <- read_rds("Data/Final_Data/retweet_tweets.rds")
 Likes_tweets <- read_rds("Data/Final_Data/Like_tweets.rds")
 Type_data <- read_rds("Data/Final_Data/Tweet_Type.rds")
+RSA_data <- read_rds("Data/Final_Data/RSA_data.rds")
+Followers_media <- read_rds("Data/Final_Data/Followers_media.rds")
 tweets_za <- read_rds("Data/Final_Data/tweets_za.rds")
 cityCombined <- read_rds("Data/Final_Data/cityCombined.rds")
 ```
 
 
-# Generating visuals
+# 3.2 Generating visuals
+
 ## Global Theme
 ```{r}
 t <- theme(
@@ -84,7 +89,7 @@ t <- theme(
 ```
 
 
-## Sentiment visuals
+## 3.3 Sentiment visuals
 ```{r}
 # Sentiment's theme
 sentiment_theme <- theme(
@@ -97,7 +102,7 @@ sentiment_theme <- theme(
   panel.grid.major.x=element_blank(), 
   panel.grid.minor=element_blank(),
   plot.background=element_rect(fill = "grey"),
-  plot.caption = element_text(colour ="black",face = "bold" ,hjust = +1),
+  plot.caption = element_text(colour ="black",face = "bold" ,hjust = 1),
   strip.text = element_text(face = "bold"),
   plot.title = element_text(size = 20, colour ="black",face = "bold" ,hjust = 0.5),
 )
@@ -152,9 +157,9 @@ ggplot(SABC_score, aes(x=value,y=count)) + geom_bar(stat = "identity", color = "
 ```
 
 
-## Topic Modelling visuals
-###  Latent Dirichlet Allocation 
-
+## 3.4 Topic Modelling visuals
+### 3.4.1 Latent Dirichlet Allocation 
+####  News24 LDA
 ```{r}
 News24_top_terms_LDA %>%
   mutate(term = reorder(term, beta)) %>%
@@ -281,7 +286,7 @@ global_top_terms_LDA %>%
 ```
 
 
-### Structural Topic Modelling
+### 3.4.2 Structural Topic Modelling
 
 ```{r}
 #News24 STM Plot
@@ -413,7 +418,7 @@ global_top_terms %>%
   )
 ```
 
-# Additional Analysis
+## 3.5 Additional visuals
 ```{r}
 # Additional's theme
 Other_theme <- theme(
@@ -447,10 +452,29 @@ ggplot(Likes_tweets, aes(x = date, y = News24)) + Other_theme + geom_line(color 
 #covid vs non covid tweets
 ggplot(Type_data, aes(x="", y=tweet_count, fill = tweet_type)) + geom_bar(stat = "identity", width = 1)+ coord_polar(theta="y", start = 0) + geom_text(aes(label = paste0(round(tweet_count/8901*100), "%")), position = position_stack(vjust=0.5)) + theme_void() %+replace% theme(plot.caption = element_text(colour ="black",hjust = -1),) + labs(x = NULL, y = NULL, fill = NULL, title = "Comparison of Covid Coverage by News Media", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
 
+
+```
+
+```{r}
+# Media Vs others
+ggplot(RSA_data, aes(x="", y=RSA_tweet_value, fill = RSA_tweeter)) + geom_bar(stat = "identity", width = 1)+ coord_polar(theta="y", start = 0) + geom_text(aes(label = paste0(RSA_tweet_value,"(", round(RSA_tweet_value/62594*100), "%", ")")), position = position_stack(vjust=0.5)) + theme_void() %+replace% theme(plot.caption = element_text(colour ="black",hjust = -1),) + labs(x = NULL, y = NULL, fill = NULL, title = "Selected Media Tweets In RSA", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
+
+```
+
+
+```{r}
+# follower count on 22nd
+ggplot(Followers_media, aes(x=Media,y=followers_count)) + geom_bar(stat = "identity", color = "black", fill = "red") + Other_theme + labs(x = NULL, y = NULL, title = "Follower Count", subtitle = "Latest update: 22 June", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
+
+```
+
+
+```{r}
 #distribution across provinces
 ggplot(cityCombined, aes(x=cityNames, y=city_tweets, fill = cityNames)) + geom_bar(stat = "identity", width = 1) + geom_text(aes(label = paste0(round(Percentage,digits = 1), "%")), position = position_stack(vjust=0.5)) + labs(x = NULL, y = NULL, fill = NULL, title = "Distribution of Covid related tweets across major cities", caption = "\nSource: Data collected from Twitter's REST API via rtweet")
 #scale_y_continuous(breaks = c(0.00, 0.005, 0.010, 0.015, 0.02),labels = c("0", ".05", ".01", ".015", ".02"))
 ```
+
 
 ```{r}
 #Map distribution of tweets across the country

@@ -3,9 +3,10 @@ title: "Data Transformation"
 output: html_notebook
 ---
 
-```{r}
-#install_github("mkearney/rtweet")
+# 2. Data Transformation
 
+
+```{r}
 #Packages
 library(usethis)
 library(devtools)
@@ -21,8 +22,9 @@ library(tm)
 library(stm)
 ```
 
-## Load extracted data 
+## 2.1 Data Loading
 ```{r}
+#Load timeline data
 News24_tweets <- read_rds("Data/Raw_Timeline_Data/News24_tweets.rds")
 TimesLIVE_tweets <- read_rds("Data/Raw_Timeline_Data/TimesLIVE_tweets.rds")
 eNCA_tweets <- read_rds("Data/Raw_Timeline_Data/eNCA_tweets.rds")
@@ -32,6 +34,7 @@ ewnupdates_tweets <- read_rds("Data/Raw_Timeline_Data/ewnupdates_tweets.rds")
 ```
 
 ```{r}
+#Load locational data
 tweets_za_13 <- read_rds("Data/Raw_Filtered_Data/tweets_za_13.rds")
 tweets_za_14 <- read_rds("Data/Raw_Filtered_Data/tweets_za_14.rds")
 tweets_za_15 <- read_rds("Data/Raw_Filtered_Data/tweets_za_15.rds")
@@ -143,8 +146,8 @@ tweets_pe_21 <- read_rds("Data/Raw_Filtered_Data/tweets_pe_21.rds")
 tweets_pe_22 <- read_rds("Data/Raw_Filtered_Data/tweets_pe_22.rds")
 ```
 
-# Bind Dataframes
 ```{r}
+# Bind Locational Dataframes
 tweets_za <-rbind(tweets_za_22,tweets_za_21,tweets_za_20,tweets_za_19,tweets_za_18,tweets_za_17,tweets_za_16,tweets_za_15,tweets_za_14,tweets_za_13)
 tweets_bloem <-rbind(tweets_bloem_22,tweets_bloem_21,tweets_bloem_20,tweets_bloem_19,tweets_bloem_18,tweets_bloem_17,tweets_bloem_16,tweets_bloem_15,tweets_bloem_14,tweets_bloem_13)
 tweets_cpt <-rbind(tweets_cpt_22,tweets_cpt_21,tweets_cpt_20,tweets_cpt_19,tweets_cpt_18,tweets_cpt_17,tweets_cpt_16,tweets_cpt_15,tweets_cpt_14,tweets_cpt_13)
@@ -159,6 +162,9 @@ tweets_pe <-rbind(tweets_pe_22,tweets_pe_21,tweets_pe_20,tweets_pe_19,tweets_pe_
 ```
 
 ```{r}
+#Export and import created to allow for loading of combined locational data
+#This is done so that the above chunck does not need to be run again
+
 #write_rds(tweets_za, "Data/Final_Data/tweets_za.rds")
 #write_rds(tweets_bloem, "Data/Final_Data/tweets_bloem.rds")
 #write_rds(tweets_cpt, "Data/Final_Data/tweets_cpt.rds")
@@ -184,12 +190,11 @@ tweets_pe <- read_rds("Data/Final_Data/tweets_pe.rds")
 ```
 
 
+## 2.2 Cleaning data
 
-# Performing transformations
-
-## cleaning data (text)
+### Initial Data Clean
 ```{r}
-#Separate date column
+#Separate date column & remove columns not used
 News24_tweets <- separate(News24_tweets, created_at, into=c("date","time"), sep=" ") %>% mutate(date = as.Date(date)) %>% select(date, time, text, source, favorite_count, retweet_count)
 TimesLIVE_tweets <- separate(TimesLIVE_tweets, created_at, into=c("date","time"), sep=" ") %>% mutate(date = as.Date(date)) %>% select(date, time, text, source, favorite_count, retweet_count)
 ewnupdates_tweets <- separate(ewnupdates_tweets, created_at, into=c("date","time"), sep=" ") %>% mutate(date = as.Date(date)) %>% select(date, time, text, source, favorite_count, retweet_count)
@@ -199,7 +204,6 @@ SABCNews_tweets <- separate(SABCNews_tweets, created_at, into=c("date","time"), 
 
 
 #Subset data into 3 week range 1 June - 21 June
-
 myfuncNews24 <- function(x,y){News24_tweets[News24_tweets$date >= x & News24_tweets$date <= y,]}
 myfunctimesLIVE <- function(x,y){TimesLIVE_tweets[TimesLIVE_tweets$date >= x & TimesLIVE_tweets$date <= y,]}
 myfuncEwnupdate <- function(x,y){ewnupdates_tweets[ewnupdates_tweets$date >= x & ewnupdates_tweets$date <= y,]}
@@ -221,7 +225,7 @@ SABCNews_tweets <- myfuncSABC(DATE1,DATE2)
 ```
 
 ```{r}
-
+#Function created to handle the cleaning of all the timeline dataframes
 data_cleaning <- function(x){
   
 x <- x %>% select(text)
@@ -244,7 +248,7 @@ x <- x %>% select(stripped_text)
 ```
 
 
-# AddItional cleaning per dataframe
+### Secondary cleaning per dataframe
 ```{r}
 #News Agency cleaning
 tweets.News24_clean <- data_cleaning(News24_tweets)
@@ -286,17 +290,18 @@ clean_tweets.SABCNews <- tweets.SABCNews_stem  %>% anti_join(stop_words)
 ```
 
 ```{r}
-#Global Data
+#Global Data across all media agencies
 global_cleaned <- rbind(tweets.SABCNews_clean,tweets.ewn_clean,tweets.IOL_clean,tweets.eNCA_clean,tweets.TimesLIVE_clean,tweets.News24_clean)
 
 global_tweets = rbind(SABCNews_tweets,eNCA_tweets,IOL_tweets,ewnupdates_tweets,TimesLIVE_tweets,News24_tweets)
 
+#Preparation for Sentiment Analysis - Tokenize & Stem
 Clean_tweets.global <- global_cleaned %>% unnest_tokens(word, stripped_text)
 Clean_tweets.global <- Clean_tweets.global  %>% anti_join(stop_words)
 ```
 
+## 2.3 Sentiment Analysis
 ```{r}
-# Sentiment Analysis
 
 # Global
 afinn_global <- Clean_tweets.global %>% inner_join(get_sentiments("afinn")) %>% count(word, value, sort = TRUE) %>% ungroup()
@@ -335,18 +340,15 @@ SABC_score <- afinn_SABCNews %>% group_by(value) %>% summarise(count = sum(n))
 
 ```
 
-# Topic Analysis
-## Individual Topic Analysis
-### LDA Topic Analysis
-```{r}
-# topic modeling using LDA
-# example on rpubs.com
+## 2.4 Topic Modeliing
+### 2.4.1 Latent Dirichlet Allocation Topic Modelling
 
+#### Create corpus datatypes
+```{r}
 corpusNews24 <- Corpus(VectorSource(tweets.News24_clean))
 corpusNews24 <- tm_map(corpusNews24, removeWords, stopwords("english"))  
 corpusNews24 <- tm_map(corpusNews24, removeNumbers)
 corpusNews24 <- tm_map(corpusNews24, stemDocument)
-#Remove search terms -->
 dtmNews24 = DocumentTermMatrix(corpusNews24)
 
 corpusTimesLIVE <- Corpus(VectorSource(tweets.TimesLIVE_clean))
@@ -387,7 +389,7 @@ dtmGlobal = DocumentTermMatrix(corpusGlobal)
 
 ```
 
-
+#### Running Latent Dirichlet Allocation Model
 ```{r}
 #LDA model with 16 topics selected
 News24_lda = LDA(dtmNews24, k = 16, method = 'Gibbs', control = list(nstart = 5, seed = list(1505,99,36,56,88), best = TRUE,thin = 500, burnin = 4000, iter = 2000))
@@ -411,7 +413,7 @@ SABCNews_lda = LDA(dtmSABCNews, k = 16, method = 'Gibbs', control = list(nstart 
 Global_lda = LDA(dtmGlobal, k = 16, method = 'Gibbs', control = list(nstart = 5, seed = list(1505,99,36,56,88), best = TRUE,thin = 500, burnin = 4000, iter = 2000))
 ```
 
-
+#### Final tidying of data
 ```{r}
 News24_topics_LDA <- tidy(News24_lda, matrix = "beta")
 TimesLIVE_topics_LDA <- tidy(TimesLIVE_lda, matrix = "beta")
@@ -494,7 +496,7 @@ Global_top_terms_LDA <- rbind(d[[1]],d[[2]],d[[3]],d[[4]],d[[5]],d[[6]],d[[7]],d
 
 ```
 
-#Additional Statistics:
+#### Additional Statistics:
 ```{r}
 
 #Topics found out by our model:
@@ -534,7 +536,9 @@ topicprob_Global = as.matrix(Global_lda@gamma)
 ```
 
 
-### STM Topic Modelling
+### 2.4.2 Structured Topic Modelling
+
+#### Data Preparation
 ```{r}
 processed_News24 <- textProcessor(tweets.News24_clean$stripped_text, metadata = News24_tweets)
 processed_TimesLIVE <- textProcessor(tweets.TimesLIVE_clean$stripped_text, metadata = TimesLIVE_tweets)
@@ -593,8 +597,9 @@ global_vocab <- out_global$vocab
 global_meta <-out_global$meta
 ```
 
-
+#### Find Best K value
 ```{r}
+#NO RUN
 global_findingk <- searchK(documents = global_docs, vocab = global_vocab, K = c(5:50),
  prevalence =~ date, data = global_meta, verbose=FALSE)
 ```
@@ -610,7 +615,7 @@ write_rds(global_findingk, "Data/Final_Data/global_findingk.rds")
 plot(global_findingk)
 ```
 
-
+#### Running STM Model
 ```{r}
 #Running STM per news agency
 
@@ -644,7 +649,7 @@ global_STM <- stm(documents = global_docs, vocab = global_vocab,
 
 ```
 
-
+#### Final tidying of data
 ```{r}
 News24_topics <- tidy(News24_STM, matrix = "beta")
 timesLIVE_topics <- tidy(timesLIVE_STM, matrix = "beta")
@@ -706,7 +711,7 @@ global_top_terms <-
 ```
 
 
-# Additional Analysis
+## 2.5 Additional Analysis
 ```{r}
 # Frequency of Tweets
 News24_freq <- News24_tweets %>% group_by(date) %>% summarise(News24 = n())
@@ -823,9 +828,8 @@ with(geocoded, points(lng, lat, pch = 20, cex = .75, col = "red"))
 ```
 
 
-## Done
 
-# Exporting transformation results
+## 2.6 Data Export
 
 ```{r}
 # Sentiment Analysis
@@ -872,7 +876,7 @@ write_rds(Followers_media,"Data/Final_Data/Followers_media.rds")
 write_rds(tweets_za,"Data/Final_Data/tweets_za.rds")
 write_rds(cityCombined,"Data/Final_Data/cityCombined.rds")
 
-
+#Add exports for STM & LDA's & Global K
 
 ```
 
