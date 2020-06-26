@@ -1,9 +1,8 @@
 ---
-title: "Data Transformation"
+title: "2. Data Transformation"
 output: html_notebook
 ---
 
-# 2. Data Transformation
 
 ```{r include=FALSE}
 #Packages

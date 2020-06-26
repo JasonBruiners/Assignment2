@@ -1,34 +1,10 @@
 ---
-title: "Data Extraction"
+title: "An analysis of COVID-19 media reports"
 output: html_notebook
 ---
 Jason Bruiners 19431236
+
 Wesley Small 19992084
-
-# Table of Contents:
-
-1. Data Collection
-1.1 Tweet Collection
-1.2 Data Export
-2. Data Transformation
-2.1 Data Loading
-2.2 Cleaning Data
-2.3 Sentiment Analysis
-2.4 Topic Modelling
-2.4.1 LDA Topic Modelling
-2.4.2 STM Topic Modelling
-2.5 Additional Analysis
-2.6 Data Export
-3. Data Visualisation
-3.1 Data Loading
-3.2 Generating visuals
-3.3 Sentiment visuals
-3.4 Topic Modelling visuals
-3.4.1 Latent Dirichlet Allocation 
-3.4.2 Structural Topic Modelling
-3.5 Additional visuals
-
-
 
 # 1. Data Collection
 Data collected from Twitter's REST API via rtweet
