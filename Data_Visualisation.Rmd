@@ -85,7 +85,7 @@ t <- theme(
 ```
 
 ## 3.1 Sentiment visuals
-#### Six news agencies were selected and their most frequent words and overall sentiment score was graphed
+Six news agencies were selected and their most frequent words and overall sentiment score was graphed
 ```{r include=FALSE}
 # Sentiment's theme
 sentiment_theme <- theme(
@@ -118,8 +118,8 @@ ggplot(global_score, aes(x=value,y=count)) + geom_bar(stat = "identity", color =
 
 ```
 
-## Sentement Analysis of topics
-##### Topics: covid, corona, covid19, coronavirus, sars cov 
+## 3.1.2 Sentement Analysis of topics
+Topics: covid, corona, covid19, coronavirus, sars cov 
 ```{r echo=FALSE, message=FALSE}
 # following performed wit following topics "covid|corona|covid 19|covid19|coronavirus|sars cov 2|sars cov"
 # News24
@@ -194,9 +194,9 @@ ggplot(SABC_score, aes(x=value,y=count)) + geom_bar(stat = "identity", color = "
 ```
 
 
-## 3.4 Topic Modelling visuals
-### 3.4.1 Structural Topic Modelling
-#### New24
+## 3.2 Topic Modelling visuals
+### 3.2.1 Structural Topic Modelling
+
 ```{r echo=FALSE}
 #News24 STM Plot
 News24_top_terms %>%
@@ -328,8 +328,8 @@ global_top_terms %>%
   )
 ```
 
-### 3.4.2 Latent Dirichlet Allocation 
-####  News24 LDA
+### 3.2.2 Latent Dirichlet Allocation 
+News24 LDA
 ```{r echo=FALSE}
 News24_top_terms_LDA %>%
   mutate(term = reorder(term, beta)) %>%
@@ -455,7 +455,7 @@ global_top_terms_LDA %>%
 
 ```
 
-## 3.5 Additional visuals
+## 3.3 Additional Visuals
 ```{r include=FALSE}
 # Additional's theme
 Other_theme <- theme(
